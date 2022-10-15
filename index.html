@@ -13,7 +13,7 @@
 		</article>
 
 		<script type="module">
-			import sdk from './src/index.js'
+			import sdk from './dist/sdk.esm.js'
 
 			sdk.findChannels(10).then(response => {
 				console.log(response.error, response.data)
