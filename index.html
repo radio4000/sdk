@@ -12,11 +12,19 @@
 			<p>Testing the @radio4000/sdk</p>
 		</article>
 
+		<ul id="channels"></ul>
+
 		<script type="module">
 			import sdk from './dist/sdk.esm.js'
 
+			const ul = document.querySelector('#channels')
 			sdk.findChannels(10).then(response => {
 				console.log(response.error, response.data)
+				for (const c of response.data) {
+					const li = document.createElement('li')
+					li.textContent = c.name
+					ul.appendChild(li)
+				}
 			})
 		</script>
 
