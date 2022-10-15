@@ -4,7 +4,7 @@ on:
   release:
     types: [created]
 jobs:
-  build:
+  publish_to_npm:
     runs-on: alpine-latest
     steps:
       - uses: actions/checkout@v2
