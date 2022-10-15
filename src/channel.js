@@ -36,10 +36,10 @@ export const deleteChannel = async ({id}) => {
 	return supabase.from('channels').delete().eq('id', id)
 }
 
-export const findChannelBySlug = async ({slug}) =>
+export const findChannelBySlug = async (slug) =>
 	supabase.from('channels').select(`*`).eq('slug', slug).single()
 
-export const findChannels = async ({limit}) =>
+export const findChannels = async (limit = 1000) =>
 	supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})
 
 export async function firebaseGetChannelBySlug(slug) {
