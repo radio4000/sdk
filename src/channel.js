@@ -1,6 +1,6 @@
 import {supabase} from './supabase-client'
 
-export const createChannel = async ({supabase, channel, user}) => {
+export const createChannel = async ({channel, user}) => {
 	const {name, slug} = channel
 	const {id: user_id} = user
 
@@ -24,13 +24,13 @@ export const createChannel = async ({supabase, channel, user}) => {
 	return {data: {channel: channelResponse.data, userChannel: userChannelResponse.data}}
 }
 
-export const updateChannel = async ({supabase, id, changes}) => {
+export const updateChannel = async ({id, changes}) => {
 	console.log('updating channel', id, changes)
 	const {name, slug, description} = changes
 	return supabase.from('channels').update({name, slug, description}).eq('id', id)
 }
 
-export const deleteChannel = async ({supabase, id}) => {
+export const deleteChannel = async ({id}) => {
 	if (!id) return
 	console.log('deleting channel', id)
 	return supabase.from('channels').delete().eq('id', id)

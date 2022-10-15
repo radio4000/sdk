@@ -1,17 +1,19 @@
-export const createTrack = async ({database, changes, channelId, userId}) => {
+import {supabase} from './supabase-client'
+
+export const createTrack = async ({changes, channelId, userId}) => {
 	const {url, title, description} = changes
 
 	if (!channelId) throw Error('Missing channel id')
 
 	// Create track
-	const {data: track, error} = await database
+	const {data: track, error} = await supabase
 		.from('tracks')
 		.insert({url, title, description})
 		.single()
 	if (error) return {error}
 
 	// Create junction row
-	const {error2} = await database
+	const {error2} = await supabase
 		.from('channel_track')
 		.insert({
 			track_id: track.id,
@@ -24,12 +26,12 @@ export const createTrack = async ({database, changes, channelId, userId}) => {
 	return {data: track}
 }
 
-export const updateTrack = async ({database, id, changes}) => {
+export const updateTrack = async ({id, changes}) => {
 	const {url, title, description} = changes
-	return database.from('tracks').update({url, title, description}).eq('id', id)
+	return supabase.from('tracks').update({url, title, description}).eq('id', id)
 }
 
-export const deleteTrack = async ({database, track}) => {
+export const deleteTrack = async ({track}) => {
 	if (!track.id) return
-	return database.from('tracks').delete().eq('id', track.id)
+	return supabase.from('tracks').delete().eq('id', track.id)
 }
