@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>R4 Playground</title>
+		<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	</head>
+	<body>
+
+		<article>
+			<p>Testing the @radio4000/sdk</p>
+		</article>
+
+		<script type="module">
+			//import sdk from './src/index.js'
+			import {findChannels} from './src/channel.js'
+
+			findChannels(10).then(what => {
+				console.log(what)
+			})
+		</script>
+
+	</body>
+</html>
