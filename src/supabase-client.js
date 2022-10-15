@@ -9,3 +9,4 @@ export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlI
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 	fetch: (...args) => fetch(...args)
 })
+

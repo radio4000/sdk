@@ -1,4 +1,4 @@
-import {supabase} from './supabase-client'
+import {supabase} from './supabase-client.js'
 
 export const createChannel = async ({channel, user}) => {
 	const {name, slug} = channel

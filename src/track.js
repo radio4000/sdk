@@ -1,4 +1,4 @@
-import {supabase} from './supabase-client'
+import {supabase} from './supabase-client.js'
 
 export const createTrack = async ({changes, channelId, userId}) => {
 	const {url, title, description} = changes
