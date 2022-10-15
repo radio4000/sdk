@@ -1,0 +1,2 @@
+# exclamation mark is to reverse the ignore from .gitignore
+!dist/
