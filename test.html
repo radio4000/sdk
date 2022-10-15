@@ -13,11 +13,10 @@
 		</article>
 
 		<script type="module">
-			//import sdk from './src/index.js'
-			import {findChannels} from './src/channel.js'
+			import sdk from './src/index.js'
 
-			findChannels(10).then(what => {
-				console.log(what)
+			sdk.findChannels(10).then(response => {
+				console.log(response.error, response.data)
 			})
 		</script>
 
