@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "JavaScript client for Radio4000 for the browser and node",
   "main": "src/index.js",
-  "browser": "dist/sdk.esm.js",
+  "module": "dist/sdk.esm.js",
   "type": "module",
   "private": false,
   "scripts": {
