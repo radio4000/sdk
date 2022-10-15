@@ -1,4 +1,4 @@
-import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+import {createClient} from '@supabase/supabase-js'
 
 // const SUPABASE_URL = process.ENV.SUPABASE_URL
 // const	SUPABASE_ANON_KEY = process.ENV.SUPABASE_ANON_KEY
