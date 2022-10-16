@@ -4,10 +4,8 @@
   "description": "JavaScript client for Radio4000 for the browser and node",
   "type": "module",
   "main": "src/index.js",
-  "module": "dist/sdk.esm.js",
-  "exports": {
-    "default": "./dist/sdk.esm.js"
-  },
+  "module": "dist/index.js",
+  "browser": "dist/index.js",
   "private": false,
   "scripts": {
     "dev": "esbuild src/index.js --bundle --format=esm --servedir=examples --outdir=examples",
