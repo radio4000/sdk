@@ -10,10 +10,18 @@
   },
   "private": false,
   "scripts": {
-    "dev": "esbuild src/index.js --bundle --format=esm --minify --servedir=. --outdir=.",
-    "build": "esbuild src/index.js --bundle --format=esm --minify --outfile=dist/sdk.esm.js",
+    "dev": "esbuild src/index.js --bundle --format=esm --servedir=examples --outdir=examples",
+    "build": "esbuild src/index.js --bundle --format=esm --minify --outfile=dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.15.11"
+  },
+  "author": "radio4000",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/radio4000/sdk.git"
@@ -26,13 +34,5 @@
     "radio4000",
     "supabase",
     "sdk"
-  ],
-  "author": "radio4000",
-  "license": "GPL-3.0-or-later",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.0.0"
-  },
-  "devDependencies": {
-    "esbuild": "^0.15.11"
-  }
+  ]
 }
