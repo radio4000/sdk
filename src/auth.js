@@ -8,11 +8,11 @@ export const signUp = async ({email, password}) => {
 }
 
 export const signIn = async ({email, password}) => {
-	console.log('signin', email, password)
+	console.log('sign in', email, password)
 	return supabase.auth.signInWithPassword({email, password})
 }
 
 export const signOut = async () => {
-	console.log('signout')
+	console.log('sign out')
 	return supabase.auth.signOut()
 }

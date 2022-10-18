@@ -1,13 +1,20 @@
 import {supabase} from './supabase-client.js'
 
 /**
- * Creates a new radio channel
+ * A channel
+ * @typedef {Object} Channel
+ * @property {string} name
+ * @property {string} slug - unique
+ * @property {string} [description]
+ */
+
+/**
+ * Creates a new radio channel and connects it to a user
  * @param {string} user_id
- * @param {{name: string, slug: string}} fields
+ * @param {Channel} fields
  * @return {Promise<object>} {data, error}
  */
 export const createChannel = async (user_id, {name, slug}) => {
-
 	// Throw an error if the slug is in use by the old Firebase database.
 	const queryFirebaseDb = await firebaseGetChannelBySlug(slug)
 	const isSlugTaken = Object.keys(queryFirebaseDb).length > 0
@@ -31,8 +38,11 @@ export const createChannel = async (user_id, {name, slug}) => {
 /**
  * Updates a channel
  * @param {string} id
- * @param {{name: string, slug: string, description: string}} changes - optional fields to update
- * @returns
+ * @param {object} changes - optional fields to update
+ * @param {string} [changes.name]
+ * @param {string} [changes.slug]
+ * @param {string} [changes.description]
+ * @returns {Promise}
  */
 export const updateChannel = async (id, changes) => {
 	console.log('updating channel', id, changes)
@@ -41,9 +51,9 @@ export const updateChannel = async (id, changes) => {
 }
 
 /**
- *
+ * Deletes a channel
  * @param {string} id
- * @returns
+ * @returns void
  */
 export const deleteChannel = async (id) => {
 	if (!id) return
@@ -51,11 +61,18 @@ export const deleteChannel = async (id) => {
 	return supabase.from('channels').delete().eq('id', id)
 }
 
-export const findChannelBySlug = async (slug) =>
-	supabase.from('channels').select(`*`).eq('slug', slug).single()
+export const findChannelBySlug = async (slug) => {
+	return supabase.from('channels').select(`*`).eq('slug', slug).single()
+}
 
-export const findChannels = async (limit = 1000) =>
-	supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})
+/**
+ *
+ * @param {number} limit
+ * @returns
+ */
+export const findChannels = async (limit = 1000) => {
+	return supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})
+}
 
 export async function firebaseGetChannelBySlug(slug) {
 	const res = await fetch(`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`)
