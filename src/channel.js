@@ -44,7 +44,7 @@ export const createChannel = async ({name, slug}) => {
  * @param {string} [changes.name]
  * @param {string} [changes.slug]
  * @param {string} [changes.description]
- * @returns {Promise}
+ * @returns {Promise<object>}
  */
 export const updateChannel = async (id, changes) => {
 	const {name, slug, description} = changes
@@ -66,9 +66,9 @@ export const findChannelBySlug = async (slug) => {
 }
 
 /**
- *
+ * Returns a list of channels.
  * @param {number} limit
- * @returns
+ * @returns {Promise<object>}
  */
 export const findChannels = async (limit = 1000) => {
 	return supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})

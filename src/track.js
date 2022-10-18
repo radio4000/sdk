@@ -42,13 +42,17 @@ export const createTrack = async (channelId, fields) => {
  * Updates a track
  * @param {string} id
  * @param {object} changes
- * @returns
+ * @returns {Promise}
  */
 export const updateTrack = async (id, changes) => {
 	const {url, title, description} = changes
 	return supabase.from('tracks').update({url, title, description}).eq('id', id)
 }
 
+/**
+ * Deletes a track
+ * @param {string} id
+ */
 export const deleteTrack = async (id) => {
 	if (!id) return
 	return supabase.from('tracks').delete().eq('id', id)
