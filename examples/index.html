@@ -18,8 +18,11 @@
 			// this "index.js" file is only present during `npm run dev`
 			import sdk from './index.js'
 
+			// For debugging
+			window.sdk = sdk
+
 			const ul = document.querySelector('#channels')
-			sdk.findChannels(10).then(response => {
+			sdk.findChannels(100).then(response => {
 				console.log(response.error, response.data)
 				for (const c of response.data) {
 					const li = document.createElement('li')
