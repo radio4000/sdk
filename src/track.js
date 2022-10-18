@@ -1,8 +1,8 @@
 import {supabase} from './supabase-client.js'
+import {getUser} from './user.js'
 
 /**
  * Creates a track and connects it to a user and channel.
- * @param {string} userId
  * @param {string} channelId
  * @param {object} fields
  * @param {string} fields.url
@@ -10,7 +10,7 @@ import {supabase} from './supabase-client.js'
  * @param {string} [fields.description]
  * @return {Promise}
  */
-export const createTrack = async (userId, channelId, fields) => {
+export const createTrack = async (channelId, fields) => {
 	const {url, title, description} = fields
 
 	if (!channelId) throw Error('Missing channel id')
@@ -24,12 +24,13 @@ export const createTrack = async (userId, channelId, fields) => {
 	if (error) return {error}
 
 	// Create junction row
+	const user = await getUser()
 	const {error2} = await supabase
 		.from('channel_track')
 		.insert({
 			track_id: track.id,
 			channel_id: channelId,
-			user_id: userId,
+			user_id: user.id,
 		})
 		.single()
 	if (error2) return {error}

@@ -1,4 +1,5 @@
 import {supabase} from './supabase-client.js'
+import {getUser} from './user.js'
 
 /**
  * A channel
@@ -10,11 +11,12 @@ import {supabase} from './supabase-client.js'
 
 /**
  * Creates a new radio channel and connects it to a user
- * @param {string} user_id
  * @param {Channel} fields
  * @return {Promise<object>} {data, error}
  */
-export const createChannel = async (user_id, {name, slug}) => {
+export const createChannel = async ({name, slug}) => {
+	const user = await getUser()
+
 	// Throw an error if the slug is in use by the old Firebase database.
 	const queryFirebaseDb = await firebaseGetChannelBySlug(slug)
 	const isSlugTaken = Object.keys(queryFirebaseDb).length > 0
@@ -28,7 +30,7 @@ export const createChannel = async (user_id, {name, slug}) => {
 
 	// Create junction table
 	const channel_id = channelRes.data.id
-	const userChannelRes = await supabase.from('user_channel').insert({user_id, channel_id}).single()
+	const userChannelRes = await supabase.from('user_channel').insert({user_id: user.id, channel_id}).single()
 	if (userChannelRes.error) return userChannelRes
 
 	// Return both records of the channel
