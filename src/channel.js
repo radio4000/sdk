@@ -47,7 +47,6 @@ export const createChannel = async ({name, slug}) => {
  * @returns {Promise}
  */
 export const updateChannel = async (id, changes) => {
-	console.log('updating channel', id, changes)
 	const {name, slug, description} = changes
 	return supabase.from('channels').update({name, slug, description}).eq('id', id)
 }
@@ -59,7 +58,6 @@ export const updateChannel = async (id, changes) => {
  */
 export const deleteChannel = async (id) => {
 	if (!id) return
-	console.log('deleting channel', id)
 	return supabase.from('channels').delete().eq('id', id)
 }
 
