@@ -8,9 +8,10 @@
   "browser": "dist/index.js",
   "private": false,
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "esbuild src/index.js --bundle --format=esm --servedir=examples --outdir=examples",
     "build": "esbuild src/index.js --bundle --format=esm --minify --outfile=dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-website": "esbuild src/index.js --bundle --format=esm --minify --outfile=index.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0"
