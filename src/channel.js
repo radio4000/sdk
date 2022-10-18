@@ -20,7 +20,10 @@ export const createChannel = async ({name, slug}) => {
 	// Throw an error if the slug is in use by the old Firebase database.
 	const queryFirebaseDb = await firebaseGetChannelBySlug(slug)
 	const isSlugTaken = Object.keys(queryFirebaseDb).length > 0
-	if (isSlugTaken) return {error: Error('Sorry. This channel slug is already taken by someone else.')}
+	if (isSlugTaken) return {
+		code: 'slug-exists-firebase',
+		error: Error('Sorry. This channel slug is already taken by someone else.')
+	}
 
 	// Create channel
 	const channelRes = await supabase.from('channels').insert({name, slug}).single().select()
