@@ -1,6 +1,6 @@
 {
   "name": "@radio4000/sdk",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "JavaScript client for Radio4000 for the browser and node",
   "type": "module",
   "main": "src/index.js",
