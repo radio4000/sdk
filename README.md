@@ -12,3 +12,11 @@ npm install
 # run local development server
 npm run dev
 ```
+
+# useage in browser
+
+```
+const sdk = window.sdk
+```
+
+You can use all available methods from there.
