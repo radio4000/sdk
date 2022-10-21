@@ -81,3 +81,17 @@ export async function firebaseGetChannelBySlug(slug) {
 	const res = await fetch(`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`)
 	return await res.json()
 }
+
+export const findUserChannels = async () => {
+	const user = await getUser()
+
+	if (user) {
+		return await supabase
+			.from('channels')
+			.select('*, user_channel!inner(user_id)')
+			.eq('user_channel.user_id', user.id)
+			.order('updated_at', { ascending: true })
+	} else {
+		return []
+	}
+}
