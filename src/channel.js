@@ -18,8 +18,7 @@ export const createChannel = async ({name, slug}) => {
 	const user = await getUser()
 
 	// Throw an error if the slug is in use by the old Firebase database.
-	const queryFirebaseDb = await findFirebaseChannelBySlug(slug)
-	const isSlugTaken = Object.keys(queryFirebaseDb).length > 0
+	const {data: isSlugTaken} = await findFirebaseChannelBySlug(slug)
 	if (isSlugTaken) return {
 		code: 'slug-exists-firebase',
 		message: 'Sorry. This channel slug is already taken by someone else.'
@@ -81,7 +80,8 @@ export async function findFirebaseChannelBySlug(slug) {
 	const res = await fetch(`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`)
 	const json = await res.json()
 	// Since we only expect a single record, we can do this.
-	return {data: Object.values(json)[0]}
+	const channel = Object.values(json)[0] || null
+	return {data: channel}
 }
 
 export const findUserChannels = async () => {
