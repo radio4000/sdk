@@ -2,7 +2,8 @@
 
 # @radio4000/sdk
 
-A JavaScript SDK to interact with [Radio4000](https://radio4000.com) through a browser or node.js.
+A JavaScript SDK to interact with [Radio4000](https://radio4000.com) through a browser or node.js.  
+It expects the SQL schema from [@radio4000/supabase](https://github.com/radio4000/supabase).
 
 ## Usage 
 
@@ -24,12 +25,44 @@ import sdk from '@radio4000/sdk'
 </script>
 ```
 
-
 ## API
 
-For all available methods, please see the source code for now: 
+For an up to date overview of available methods, please see the source code [src/index.js](https://github.com/radio4000/sdk/blob/main/src/index.js) for now.
+.
 
-- [src/index.js](https://github.com/radio4000/sdk/blob/main/src/index.js).
+- `sdk.supabase` - a pre-connected Supabase JS client to the R4 Supabase database
+
+### Authentication
+
+- `sdk.signUp({email, password})` - 
+- `sdk.signIn({email, password})` - 
+- `sdk.signOut()` - signs out any currently authenticated user
+
+### Account
+
+- `sdk.getUser()` - 
+- `sdk.deleteUser()` - deletes the currently authenticated user along with their "user channels"
+
+### Channels
+
+- `sdk.createChannel({name, slug})` - 
+- `sdk.updateChannel(id, changes)` 
+- `sdk.deleteChannel(id)` - 
+- `sdk.findChannels(limit)` - 
+- `sdk.findUserChannels()` - finds channels from the authenticated user
+- `sdk.findFirebaseChannelBySlug(slug)` - 
+- `sdk.findChannelBySlug(slug)` - 
+
+### Tracks
+
+- `sdk.findChannelTracks(slug)` - fetches maximum 3000 tracks by channel.slug
+- `sdk.createTrack(channelId, fields)` - 
+- `sdk.updateTrack(id, changes)` - 
+- `sdk.deleteTrack(id)` - 
+
+### Media provider
+
+- `sdk.providers()` - 
 
 ## Contributing and development
 
