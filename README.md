@@ -52,6 +52,7 @@ For an up to date overview of available methods, please see the source code [src
 - `sdk.findUserChannels()` - finds channels from the authenticated user
 - `sdk.findFirebaseChannelBySlug(slug)` - 
 - `sdk.findChannelBySlug(slug)` - 
+- `sdk.canEditChannel(id)`
 
 ### Tracks
 
@@ -59,6 +60,7 @@ For an up to date overview of available methods, please see the source code [src
 - `sdk.createTrack(channelId, fields)` - 
 - `sdk.updateTrack(id, changes)` - 
 - `sdk.deleteTrack(id)` - 
+- `sdk.canEditTrack(id)` - returns a promise boolean
 
 ### Media provider
 

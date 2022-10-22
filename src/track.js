@@ -60,3 +60,16 @@ export const deleteTrack = async (id) => {
 export const findTrack = async (id) => {
 	return supabase.from('tracks').select('*').single().eq('id', id)
 }
+
+/**
+ * Checks if current user can edit a track
+ * @param {string} track_id
+ * @returns {Promise<Boolean>}
+ */
+export async function canEditTrack(track_id) {
+	const {data: user} = await getUser()
+	if (!user) return false
+	const {data} = await supabase.from('channel_track').select('track_id, user_id').match({user_id: user.id, track_id})
+	if (data.length > 0) return true
+	return false
+}

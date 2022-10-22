@@ -28,7 +28,7 @@
 				console.log(response.error, response.data)
 				for (const c of response.data) {
 					const li = document.createElement('li')
-					li.textContent = c.name
+					li.textContent = c.name + ' ' + c.id
 					ul.appendChild(li)
 				}
 			})
