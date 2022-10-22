@@ -15,7 +15,7 @@ import {getUser} from './user.js'
  * @return {Promise<object>} {data, error}
  */
 export const createChannel = async ({name, slug}) => {
-	const user = await getUser()
+	const {data: user} = await getUser()
 
 	// Throw an error if the slug is in use by the old Firebase database.
 	const {data: isSlugTaken} = await findFirebaseChannelBySlug(slug)
@@ -87,7 +87,7 @@ export async function findFirebaseChannelBySlug(slug) {
 }
 
 export const findUserChannels = async () => {
-	const user = await getUser()
+	const {data: user} = await getUser()
 
 	if (user) {
 		return await supabase

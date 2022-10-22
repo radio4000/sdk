@@ -1,9 +1,8 @@
 import {supabase} from './supabase-client.js'
 
 export async function getUser() {
-	const {data, error} = await supabase.auth.getUser()
-	if (error) return {error}
-	return data.user
+	const {data: {user}, error} = await supabase.auth.getUser()
+	return {data: user, error}
 }
 
 // Will delete the currently authenticated user's "auth user" and any "user channels".

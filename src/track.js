@@ -24,7 +24,7 @@ export const createTrack = async (channelId, fields) => {
 	if (error) return {error}
 
 	// Create junction row
-	const user = await getUser()
+	const {data: user} = await getUser()
 	const {error2} = await supabase
 		.from('channel_track')
 		.insert({
