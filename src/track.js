@@ -13,7 +13,7 @@ import {getUser} from './user.js'
 export const createTrack = async (channelId, fields) => {
 	const {url, title, description} = fields
 
-	if (!channelId) throw Error('Missing channel id')
+	if (!channelId) return {error: {message: 'Missing channel id to create track'}}
 
 	// Create track
 	const {data: track, error} = await supabase
@@ -54,6 +54,6 @@ export const updateTrack = async (id, changes) => {
  * @param {string} id
  */
 export const deleteTrack = async (id) => {
-	if (!id) return
+	if (!id) return {error: {message: 'Missing track id to delete'}}
 	return supabase.from('tracks').delete().eq('id', id)
 }

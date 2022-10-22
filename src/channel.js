@@ -22,7 +22,7 @@ export const createChannel = async ({name, slug}) => {
 	const isSlugTaken = Object.keys(queryFirebaseDb).length > 0
 	if (isSlugTaken) return {
 		code: 'slug-exists-firebase',
-		error: Error('Sorry. This channel slug is already taken by someone else.')
+		message: 'Sorry. This channel slug is already taken by someone else.'
 	}
 
 	// Create channel
@@ -60,7 +60,7 @@ export const updateChannel = async (id, changes) => {
  * @returns void
  */
 export const deleteChannel = async (id) => {
-	if (!id) return
+	if (!id) return {error: {message: 'Missing ID to delete channel'}}
 	return supabase.from('channels').delete().eq('id', id)
 }
 
@@ -104,7 +104,7 @@ export const findUserChannels = async () => {
  * @returns {Promise<Object>} {data, error}
  */
 export async function findChannelTracks(slug) {
-	if (!slug) throw Error('Missing channel slug')
+	if (!slug) return {error: {message: 'Missing channel slug'}}
 	const {data, error } = await supabase
 		.from('channel_track')
 		.select(`
