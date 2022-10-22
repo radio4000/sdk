@@ -54,11 +54,9 @@ export const updateTrack = async (id, changes) => {
  * @param {string} id
  */
 export const deleteTrack = async (id) => {
-	if (!id) return
 	return supabase.from('tracks').delete().eq('id', id)
 }
 
 export const findTrack = async (id) => {
-	if (!id) throw 'Missing id paremeter'
 	return supabase.from('tracks').select('*').single().eq('id', id)
 }
