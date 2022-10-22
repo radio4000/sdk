@@ -20,8 +20,10 @@ export const createChannel = async ({name, slug}) => {
 	// Throw an error if the slug is in use by the old Firebase database.
 	const {data: isSlugTaken} = await findFirebaseChannelBySlug(slug)
 	if (isSlugTaken) return {
-		code: 'slug-exists-firebase',
-		message: 'Sorry. This channel slug is already taken by someone else.'
+		error: {
+			code: 'slug-exists-firebase',
+			message: 'Sorry. This channel slug is already taken by someone else.'
+		}
 	}
 
 	// Create channel
