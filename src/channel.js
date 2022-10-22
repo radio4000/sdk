@@ -77,9 +77,11 @@ export const findChannels = async (limit = 1000) => {
 	return supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})
 }
 
-export async function firebaseGetChannelBySlug(slug) {
+export async function findFirebaseChannelBySlug(slug) {
 	const res = await fetch(`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`)
-	return await res.json()
+	const json = await res.json()
+	// Since we only expect a single record, we can do this.
+	return {data: Object.values(json)[0]}
 }
 
 export const findUserChannels = async () => {
