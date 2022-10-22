@@ -14,7 +14,8 @@
     "build-website": "esbuild src/index.js --bundle --format=esm --minify --outfile=index.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.0.4"
+    "@supabase/supabase-js": "^2.0.4",
+    "media-url-parser": "^0.2.0"
   },
   "devDependencies": {
     "esbuild": "^0.15.12"
