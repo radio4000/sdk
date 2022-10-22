@@ -46,13 +46,13 @@ For an up to date overview of available methods, please see the source code [src
 ### Channels
 
 - `sdk.createChannel({name, slug})` - 
-- `sdk.updateChannel(id, changes)` 
-- `sdk.deleteChannel(id)` - 
-- `sdk.findChannels(limit)` - 
+- `sdk.updateChannel(id, changes)` - 
+- `sdk.deleteChannel(id)` - deletes a channel
+- `sdk.findChannels(limit)` - returns a list of channels
 - `sdk.findUserChannels()` - finds channels from the authenticated user
-- `sdk.findFirebaseChannelBySlug(slug)` - 
-- `sdk.findChannelBySlug(slug)` - 
-- `sdk.canEditChannel(id)`
+- `sdk.findFirebaseChannelBySlug(slug)` - returns the channel
+- `sdk.findChannelBySlug(slug)` - returns the channel
+- `sdk.canEditChannel(slug)` - returns a promise boolean
 
 ### Tracks
 
