@@ -98,31 +98,26 @@ export const findUserChannels = async () => {
 	}
 }
 
-export async function findChannelTracks(channelId) {
-	if (!channelId) throw Error('Missing channel id')
-	const res = await supabase
+/**
+ * Fetches tracks by channel slug
+ * @param {string} slug
+ * @returns {Promise<Object>} {data, error}
+ */
+export async function findChannelTracks(slug) {
+	if (!slug) throw Error('Missing channel slug')
+	const {data, error } = await supabase
 		.from('channel_track')
-		.select('id:track_id, created_at, track_id(url, title, description, tags)')
-		.limit(3000)
-		.eq('channel_id', channelId)
+		.select(`
+			channel_id!inner(
+				slug
+			),
+			track_id(
+				id, created_at, updated_at, title, url, description
+			)
+		`)
+		.eq('channel_id.slug', slug)
 		.order('created_at', { ascending: false })
-	if (res.data) {
-		res.data = serializeAllTracks(res.data)
-	}
-	return res
-}
-
-
-// Because of the nested query we get a track like this:
-// {id, track_id: {title, url...}}
-// This flattens it back.
-function serializeAllTracks(tracks) {
-	return tracks.map((track) => {
-		track.url = track.track_id.url
-		track.title = track.track_id.title
-		track.description = track.track_id.description
-		track.tags = track.track_id.tags
-		delete track.track_id
-		return track
-	})
+		.limit(3000)
+	const tracks = data.map((t) => t.track_id)
+	return {data: tracks, error}
 }
