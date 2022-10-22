@@ -18,7 +18,7 @@ export const createChannel = async ({name, slug}) => {
 	const user = await getUser()
 
 	// Throw an error if the slug is in use by the old Firebase database.
-	const queryFirebaseDb = await firebaseGetChannelBySlug(slug)
+	const queryFirebaseDb = await findFirebaseChannelBySlug(slug)
 	const isSlugTaken = Object.keys(queryFirebaseDb).length > 0
 	if (isSlugTaken) return {
 		code: 'slug-exists-firebase',
