@@ -78,9 +78,15 @@ export const findChannels = async (limit = 1000) => {
 	return supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})
 }
 
+/**
+ * Find a Firebase channel by "slug" property
+ * @param {string} slug
+ * @returns {Promise<Object>}
+ */
 export async function findFirebaseChannelBySlug(slug) {
 	const res = await fetch(`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`)
 	const json = await res.json()
+	if (json.error) return {error: {message: json.error}}
 	// Since we only expect a single record, we can do this.
 	const channel = Object.values(json)[0] || null
 	return {data: channel}
@@ -126,13 +132,17 @@ export async function findChannelTracks(slug) {
 
 /**
  * Checks if current user can edit a channel
- * @param {string} channel_id
+ * @param {string} slug
  * @returns {Promise<Boolean>}
  */
-export async function canEditChannel(channel_id) {
+export async function canEditChannel(slug) {
 	const {data: user} = await getUser()
 	if (!user) return false
-	const {data} = await supabase.from('user_channel').select('channel_id, user_id').match({user_id: user.id, channel_id})
-	if (data.length > 0) return true
+	const {data} = await supabase
+		.from('user_channel')
+		.select('user_id, channel_id!inner ( name, slug )')
+		.eq('channel_id.slug', slug)
+		.eq('user_id', user.id)
+	if (data?.length > 0) return true
 	return false
 }
