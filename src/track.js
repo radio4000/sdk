@@ -42,6 +42,9 @@ export const createTrack = async (channelId, fields) => {
  * Updates a track
  * @param {string} id
  * @param {object} changes
+ * @param {string} changes.url
+ * @param {string} changes.title
+ * @param {string} [changes.description]
  * @returns {Promise}
  */
 export const updateTrack = async (id, changes) => {
