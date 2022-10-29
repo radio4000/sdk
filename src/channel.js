@@ -10,9 +10,18 @@ import {getUser} from './user.js'
  */
 
 /**
+ * This is the type all async functions should return.
+ * @typedef {Object} ReturnObj - an object like: {data, error}
+ * @property {object} [data]
+ * @property {object} [error]
+ * @property {string} [error.code]
+ * @property {string} error.message
+ */
+
+/**
  * Creates a new radio channel and connects it to a user
  * @param {Channel} fields
- * @return {Promise<object>} {data, error}
+ * @returns {Promise<ReturnObj>}
  */
 export const createChannel = async ({name, slug}) => {
 	const {data: user} = await getUser()
@@ -27,7 +36,7 @@ export const createChannel = async ({name, slug}) => {
 	}
 
 	// Create channel
-	const channelRes = await supabase.from('channels').insert({name, slug}).single().select()
+	const channelRes = await supabase.from('channels').insert({name, slug}).select().single()
 
 	// Stop if the first query failed.
 	if (channelRes.error) return channelRes
@@ -48,7 +57,7 @@ export const createChannel = async ({name, slug}) => {
  * @param {string} [changes.name]
  * @param {string} [changes.slug]
  * @param {string} [changes.description]
- * @returns {Promise<object>}
+ * @returns {Promise<ReturnObj>}
  */
 export const updateChannel = async (id, changes) => {
 	const {name, slug, description} = changes
@@ -58,13 +67,18 @@ export const updateChannel = async (id, changes) => {
 /**
  * Deletes a channel
  * @param {string} id
- * @returns void
+ * @returns {Promise}
  */
 export const deleteChannel = async (id) => {
 	if (!id) return {error: {message: 'Missing ID to delete channel'}}
 	return supabase.from('channels').delete().eq('id', id)
 }
 
+/**
+ * Finds a channel by slug
+ * @param {string} slug
+ * @returns {Promise<ReturnObj>}
+ */
 export const findChannelBySlug = async (slug) => {
 	return supabase.from('channels').select(`*`).eq('slug', slug).single()
 }
@@ -72,7 +86,7 @@ export const findChannelBySlug = async (slug) => {
 /**
  * Returns a list of channels.
  * @param {number} limit
- * @returns {Promise<object>}
+ * @returns {Promise<ReturnObj>}
  */
 export const findChannels = async (limit = 1000) => {
 	return supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})
@@ -81,7 +95,7 @@ export const findChannels = async (limit = 1000) => {
 /**
  * Find a Firebase channel by "slug" property
  * @param {string} slug
- * @returns {Promise<Object>}
+ * @returns {Promise<ReturnObj>}
  */
 export async function findFirebaseChannelBySlug(slug) {
 	const res = await fetch(`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`)
@@ -92,24 +106,20 @@ export async function findFirebaseChannelBySlug(slug) {
 	return {data: channel}
 }
 
+/** Lists all channels from current user */
 export const findUserChannels = async () => {
 	const {data: user} = await getUser()
-
-	if (user) {
-		return await supabase
-			.from('channels')
-			.select('*, user_channel!inner(user_id)')
-			.eq('user_channel.user_id', user.id)
-			.order('updated_at', { ascending: true })
-	} else {
-		return []
-	}
+	return supabase
+		.from('channels')
+		.select('*, user_channel!inner(user_id)')
+		.eq('user_channel.user_id', user.id)
+		.order('updated_at', { ascending: true })
 }
 
 /**
  * Fetches tracks by channel slug
  * @param {string} slug
- * @returns {Promise<Object>} {data, error}
+ * @returns {Promise<ReturnObj>}
  */
 export async function findChannelTracks(slug) {
 	if (!slug) return {error: {message: 'Missing channel slug'}}

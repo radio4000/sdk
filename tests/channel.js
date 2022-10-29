@@ -1,6 +1,6 @@
 // Meant to be run in the local server.
 // const sdk = window.sdk
-import sdk from '../src/index'
+import sdk from '../src/index.js'
 
 /**
  * Tests a few SDK methods by running and chaining them. This should always work.
@@ -18,6 +18,6 @@ async function doTheTests(slug, {email, password}) {
 	const {data: updatedChannel} = await sdk.findChannelBySlug(slug)
 	console.log('same channel', channel.id === updatedChannel.id, )
 	console.log('name field was updated', updatedChannel.name === 'updated')
-	const {data: track} = sdk.createTrack(channel.id, {url: 'https://www.youtube.com/watch?v=dA55o_18a-g', title: 'My new track'})
+	const {data: track} = await sdk.createTrack(channel.id, {url: 'https://www.youtube.com/watch?v=dA55o_18a-g', title: 'My new track'})
 	console.log('track was created', track.title === 'My new track')
 }
