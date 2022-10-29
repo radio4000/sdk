@@ -13,8 +13,9 @@
     "start": "npm run dev",
     "dev": "esbuild src/index.js --bundle --format=esm --servedir=examples --outdir=examples",
     "build": "esbuild src/index.js --bundle --format=esm --minify --outfile=dist/index.js",
-    "build-website": "esbuild src/index.js --bundle --format=esm --minify --outfile=index.js",
-    "types": "tsc src/index.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types"
+    "build-website": "esbuild src/index.js --bundle --format=esm --minify --outfile=index.js; npm run docs",
+    "types": "tsc src/index.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types",
+    "docs": "npx typedoc src/index.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.4",
