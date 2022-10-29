@@ -1,3 +1,6 @@
 node_modules/
 dist/
 .log/
+
+# Ignore types as they are published with npm
+src/**/*.d.ts
