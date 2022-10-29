@@ -10,19 +10,10 @@ import {getUser} from './user.js'
  */
 
 /**
- * This is the type all async functions should return.
- * @typedef {Object} ReturnObj - an object like: {data, error}
- * @property {object} [data]
- * @property {object} [error]
- * @property {string} [error.code]
- * @property {string} error.message
- */
-
-/**
  * Creates a track and connects it to a user and channel.
  * @param {string} channelId
  * @param {Track} fields
- * @return {Promise<ReturnObj>}
+ * @return {Promise<import('./channel.js').ReturnObj>}
  */
 export const createTrack = async (channelId, fields) => {
 	const {url, title, description} = fields
@@ -56,7 +47,7 @@ export const createTrack = async (channelId, fields) => {
  * Updates a track
  * @param {string} id
  * @param {Track} changes
- * @returns {Promise<ReturnObj>}
+ * @return {Promise<import('./channel.js').ReturnObj>}
  */
 export const updateTrack = async (id, changes) => {
 	const {url, title, description} = changes

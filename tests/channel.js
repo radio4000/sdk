@@ -1,5 +1,4 @@
 // Meant to be run in the local server.
-// const sdk = window.sdk
 import sdk from '../src/index.js'
 
 /**

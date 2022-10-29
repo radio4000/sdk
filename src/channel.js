@@ -11,7 +11,7 @@ import {getUser} from './user.js'
 
 /**
  * This is the type all async functions should return.
- * @typedef {Object} ReturnObj - an object like: {data, error}
+ * @typedef {Object} ReturnObj
  * @property {object} [data]
  * @property {object} [error]
  * @property {string} [error.code]
