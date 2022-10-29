@@ -18,25 +18,46 @@
 
 		<script type="module">
 			// this "index.js" file is only present during `npm run dev`
-			import sdk from '../index.js'
-			import {findChannelBySlug} from '../index.js'
+			import sdk, {channel} from '../index.js'
+
 			// For debugging
 			window.sdk = sdk
-			window.findChannelBySlug = findChannelBySlug
 			console.log('The sdk is now available under window.sdk')
 
+			// Fetch and render some channels to test.
 			const ul = document.querySelector('#channels')
-			sdk.findChannels(100).then(response => {
+			channel.findChannels(100).then(response => {
 				console.log(response)
 				for (const c of response.data) {
 					const li = document.createElement('li')
 					li.textContent = c.name + ' @' + c.slug
 					ul.appendChild(li)
 				}
-
-				findChannelBySlug(response.data[0].slug).then(res => console.log(res))
+				// Testing it worked
+				channel.findChannelBySlug(response.data[0].slug).then(res => console.log(res))
 			})
 
+			/**
+			* Tests a few SDK methods by running and chaining them. This should always work.
+			* Creates a new channel, queries it by slug, updates the name and validates it worked.
+			* For now you need to pass it a user email and password.
+			*
+			* @param {string} slug - a new, unique slug for the channel to be created
+			*/
+			async function sdkTest(slug, email, password) {
+				console.log('testing')
+				const {data: {user}} = await sdk.auth.signIn({email, password})
+				await sdk.channel.createChannel({name: 'Radio Test', slug: slug})
+				const {data: channel} = await sdk.channel.findChannelBySlug(slug)
+				await sdk.channel.updateChannel(channel.id, {name: 'updated'})
+				const {data: updatedChannel} = await sdk.channel.findChannelBySlug(slug)
+				console.log('same channel', channel.id === updatedChannel.id, )
+				console.log('name field was updated', updatedChannel.name === 'updated')
+				const {data: track} = await sdk.track.createTrack(channel.id, {url: 'https://www.youtube.com/watch?v=dA55o_18a-g', title: 'My new track'})
+				console.log('track was created', track.title === 'My new track')
+				//await sdk.channel.delete(channel.id)
+			}
+			window.sdkTest = sdkTest
 		</script>
 
 	</body>
