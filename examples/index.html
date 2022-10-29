@@ -19,21 +19,24 @@
 		<script type="module">
 			// this "index.js" file is only present during `npm run dev`
 			import sdk from '../index.js'
-			import {createTrack} from '../index.js'
-
+			import {findChannelBySlug} from '../index.js'
 			// For debugging
 			window.sdk = sdk
-			window.createTrack = createTrack
+			window.findChannelBySlug = findChannelBySlug
+			console.log('The sdk is now available under window.sdk')
 
 			const ul = document.querySelector('#channels')
 			sdk.findChannels(100).then(response => {
-				console.log(response.error, response.data)
+				console.log(response)
 				for (const c of response.data) {
 					const li = document.createElement('li')
 					li.textContent = c.name + ' @' + c.slug
 					ul.appendChild(li)
 				}
+
+				findChannelBySlug(response.data[0].slug).then(res => console.log(res))
 			})
+
 		</script>
 
 	</body>

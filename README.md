@@ -13,7 +13,7 @@ All methods are available on the imported `sdk` module.
 
 ### With build system and NPM
 
-```js*
+```js
 import sdk, {createTrack} from '@radio4000/sdk'
 ```
 
@@ -27,7 +27,7 @@ import sdk, {createTrack} from '@radio4000/sdk'
 
 ## API
 
-For an up to date overview of available methods, please see the source code [src/index.js](https://github.com/radio4000/sdk/blob/main/src/index.js) for now.
+- https://radio4000.github.io/sdk/docs/
 
 ## Contributing and development
 
