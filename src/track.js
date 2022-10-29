@@ -40,7 +40,7 @@ export const createTrack = async (channelId, fields) => {
 		.single()
 	if (error2) return {error}
 
-	return {data: {hey: 42}}
+	return {data: track}
 }
 
 /**
