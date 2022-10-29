@@ -6,5 +6,18 @@
 	"include": [
 		"src/**/*",
 		"tests/**/*"
-	]
+	],
+	"typedocOptions": {
+		"entryPoints": [
+			"src"
+		],
+		"out": "dist/docs",
+		"hideGenerator": true,
+		// "includeVersion": true,
+		"readme": "none",
+		 "navigationLinks": {
+        "Source Code": "https://github.com/radio4000/sdk/",
+        "Examples": "https://radio4000.github.io/sdk/examples/"
+    }
+	}
 }
