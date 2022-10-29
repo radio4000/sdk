@@ -19,9 +19,11 @@
 		<script type="module">
 			// this "index.js" file is only present during `npm run dev`
 			import sdk from '../index.js'
+			import {createTrack} from '../index.js'
 
 			// For debugging
 			window.sdk = sdk
+			window.createTrack = createTrack
 
 			const ul = document.querySelector('#channels')
 			sdk.findChannels(100).then(response => {

@@ -1,40 +1,21 @@
-import { supabase } from './supabase-client.js'
-import { signUp, signIn, signOut } from './auth.js'
-import { getUser, deleteUser } from './user.js'
-import { createChannel, updateChannel, deleteChannel, findChannels, findChannelBySlug, findFirebaseChannelBySlug, findUserChannels, findChannelTracks, canEditChannel } from './channel.js'
-import { createTrack, updateTrack, deleteTrack, findTrack, canEditTrack } from './track.js'
-import providers from './providers/index.js'
+export {supabase} from './supabase-client.js'
 
-const sdk = {
-	/* supabase itself */
-	supabase,
+import * as auth from './auth.js'
+import * as user from './user.js'
+import * as channel from './channel.js'
+import * as track from './track.js'
+import * as providers from './providers/index.js'
 
-	/* authentication */
-	signUp, signIn, signOut,
-
-	/* user */
-	getUser, deleteUser,
-
-	/* channels */
-	createChannel,
-	updateChannel,
-	deleteChannel,
-	findChannels,
-	findUserChannels,
-	findFirebaseChannelBySlug,
-	findChannelBySlug,
-	findChannelTracks,
-	canEditChannel,
-
-	/* tracks */
-	createTrack,
-	updateTrack,
-	deleteTrack,
-	findTrack,
-	canEditTrack,
-
-	/* media providers */
-	providers,
+export default {
+	...auth,
+	...user,
+	...channel,
+	...track,
+	...providers
 }
 
-export default sdk
+export * from './auth.js'
+export * from './user.js'
+export * from './channel.js'
+export * from './track.js'
+export * from './providers/index.js'
