@@ -13,58 +13,21 @@ All methods are available on the imported `sdk` module.
 
 ### With build system and NPM
 
-```js
-import sdk from '@radio4000/sdk'
+```js*
+import sdk, {createTrack} from '@radio4000/sdk'
 ```
 
 ### With browser via CDN
 
 ```html
 <script type="module">
-  import sdk from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/dist/index.min.js'
+  import sdk, {createTrack} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/dist/index.min.js'
 </script>
 ```
 
 ## API
 
 For an up to date overview of available methods, please see the source code [src/index.js](https://github.com/radio4000/sdk/blob/main/src/index.js) for now.
-.
-
-- `sdk.supabase` - a pre-connected Supabase JS client to the R4 Supabase database
-
-### Authentication
-
-- `sdk.signUp({email, password})` - 
-- `sdk.signIn({email, password})` - 
-- `sdk.signOut()` - signs out any currently authenticated user
-
-### Account
-
-- `sdk.getUser()` - 
-- `sdk.deleteUser()` - deletes the currently authenticated user along with their "user channels"
-
-### Channels
-
-- `sdk.createChannel({name, slug})` - 
-- `sdk.updateChannel(id, changes)` - 
-- `sdk.deleteChannel(id)` - deletes a channel
-- `sdk.findChannels(limit)` - returns a list of channels
-- `sdk.findUserChannels()` - finds channels from the authenticated user
-- `sdk.findFirebaseChannelBySlug(slug)` - returns the channel
-- `sdk.findChannelBySlug(slug)` - returns the channel
-- `sdk.canEditChannel(slug)` - returns a promise boolean
-
-### Tracks
-
-- `sdk.findChannelTracks(slug)` - fetches maximum 3000 tracks by channel.slug
-- `sdk.createTrack(channelId, fields)` - 
-- `sdk.updateTrack(id, changes)` - 
-- `sdk.deleteTrack(id)` - 
-- `sdk.canEditTrack(id)` - returns a promise boolean
-
-### Media provider
-
-- `sdk.providers()` - 
 
 ## Contributing and development
 
@@ -76,3 +39,9 @@ cd radio4000-sdk
 npm install
 npm start
 ```
+
+### Generating docs from the source code
+
+Using [typedoc](https://github.com/TypeStrong/typedoc) we can generate API docs from the source code. It will output to `./docs`.
+
+- `npm run docs`

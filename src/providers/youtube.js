@@ -27,7 +27,7 @@ const fetchTitle = async function (ytid) {
 		throw data.error
 	}
 	if (!data.items.length) {
-		debug('Could not find title for track');
+		console.log('Could not find title for track');
 		return;
 	}
 

@@ -2,13 +2,18 @@ import {supabase} from './supabase-client.js'
 import {getUser} from './user.js'
 
 /**
+ * A track
+ * @typedef {Object} Track
+ * @property {string} url
+ * @property {string} title
+ * @property {string} [description]
+ */
+
+/**
  * Creates a track and connects it to a user and channel.
  * @param {string} channelId
- * @param {object} fields
- * @param {string} fields.url
- * @param {string} fields.title
- * @param {string} [fields.description]
- * @return {Promise}
+ * @param {Track} fields
+ * @return {Promise<import('./channel.js').ReturnObj>}
  */
 export const createTrack = async (channelId, fields) => {
 	const {url, title, description} = fields
@@ -19,13 +24,13 @@ export const createTrack = async (channelId, fields) => {
 	const {data: track, error} = await supabase
 		.from('tracks')
 		.insert({url, title, description})
-		.single()
 		.select()
+		.single()
 	if (error) return {error}
 
 	// Create junction row
 	const {data: user} = await getUser()
-	const {error2} = await supabase
+	const {error: error2} = await supabase
 		.from('channel_track')
 		.insert({
 			track_id: track.id,
@@ -41,11 +46,8 @@ export const createTrack = async (channelId, fields) => {
 /**
  * Updates a track
  * @param {string} id
- * @param {object} changes
- * @param {string} changes.url
- * @param {string} changes.title
- * @param {string} [changes.description]
- * @returns {Promise}
+ * @param {Track} changes
+ * @return {Promise<import('./channel.js').ReturnObj>}
  */
 export const updateTrack = async (id, changes) => {
 	const {url, title, description} = changes
@@ -55,13 +57,19 @@ export const updateTrack = async (id, changes) => {
 /**
  * Deletes a track
  * @param {string} id
+ * @returns {Promise<Object>}
  */
 export const deleteTrack = async (id) => {
 	return supabase.from('tracks').delete().eq('id', id)
 }
 
+/**
+ * Finds a track by id
+ * @param {string} id
+ * @returns {Promise<{ data?: Track, error? }>}
+ */
 export const findTrack = async (id) => {
-	return supabase.from('tracks').select('*').single().eq('id', id)
+	return supabase.from('tracks').select('*').eq('id', id).single()
 }
 
 /**
