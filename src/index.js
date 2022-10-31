@@ -4,23 +4,21 @@ import * as channels from './channels.js'
 import * as tracks from './tracks.js'
 
 export {mediaUrlParser} from 'media-url-parser'
-export {supabase} from './supabase-client.js'
+import supabase from './supabase-client.js'
 
 // `import sdk`
 export default {
+	supabase,
 	auth,
 	users,
 	channels,
 	tracks,
 	// `import {createTrack, createChannel...}` e.g. everything squashed together
-	// ...user,
-	// ...channel,
-	// ...track,
-
 }
 
 // `import {auth, track} from ...`
 export {
+	supabase,
 	auth,
 	users,
 	channels,
