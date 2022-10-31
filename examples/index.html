@@ -19,7 +19,7 @@
 		<script type="module">
 			// The `index.js` file is only present during `npm run dev`,
 			// meaning we are testing the compiled version here.
-			import sdk, {channel} from '../index.js'
+			import sdk, {channels} from '../index.js'
 
 			// For debugging
 			window.sdk = sdk
@@ -27,7 +27,7 @@
 
 			// Fetch and render some channels to test.
 			const ul = document.querySelector('#channels')
-			channel.readChannels(100).then(response => {
+			channels.readChannels(100).then(response => {
 				console.log(response)
 				for (const c of response.data) {
 					const li = document.createElement('li')
@@ -35,7 +35,7 @@
 					ul.appendChild(li)
 				}
 				// Testing it worked
-				channel.readChannel(response.data[0].slug).then(res => console.log(res))
+				channels.readChannel(response.data[0].slug).then(res => console.log(res))
 			})
 
 			/**
@@ -47,16 +47,26 @@
 			*/
 			async function sdkTest(slug, email, password) {
 				console.log('testing')
+
 				const {data: {user}} = await sdk.auth.signIn({email, password})
-				await sdk.channel.createChannel({name: 'Radio Test', slug: slug})
-				const {data: channel} = await sdk.channel.readChannel(slug)
-				await sdk.channel.updateChannel(channel.id, {name: 'updated'})
-				const {data: updatedChannel} = await sdk.channel.readChannel(slug)
+
+				await sdk.channels.createChannel({name: 'Radio Test', slug: slug})
+
+				const {data: channel} = await sdk.channels.readChannel(slug)
+
+				await sdk.channels.updateChannel(channel.id, {name: 'updated'})
+
+				const {data: updatedChannel} = await sdk.channels.readChannel(slug)
+
 				console.log('same channel', channel.id === updatedChannel.id, )
 				console.log('name field was updated', updatedChannel.name === 'updated')
-				const {data: track} = await sdk.track.createTrack(channel.id, {url: 'https://www.youtube.com/watch?v=dA55o_18a-g', title: 'My new track'})
+
+				const {data: track} = await sdk.tracks.createTrack(channel.id, {url: 'https://www.youtube.com/watch?v=dA55o_18a-g', title: 'My new track'})
+
 				console.log('track was created', track.title === 'My new track')
-				//await sdk.channel.delete(channel.id)
+
+				// @todo delete the channel and track + user
+				//await sdk.channels.delete(channel.id)
 			}
 			window.sdkTest = sdkTest
 		</script>
