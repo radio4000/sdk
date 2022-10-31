@@ -5,27 +5,31 @@
 A JavaScript SDK to interact with [Radio4000](https://radio4000.com) through a browser or node.js.  
 It expects the SQL schema from [@radio4000/supabase](https://github.com/radio4000/supabase).
 
+The SDK manages auth and full CRUD of users, channels and tracks.
+
 ## Usage 
 
 Depending on whether you have a build system or not, you can either import the module from NPM, from a CDN or download it locally.
 
-All methods are available on the imported `sdk` module.
-
-### With build system and NPM
-
-```js
-import sdk, {createTrack} from '@radio4000/sdk'
-```
+All methods are available both directly on the imported `sdk` module and grouped into modules `auth`, `users`, `channels` and `tracks`.
 
 ### With browser via CDN
 
 ```html
 <script type="module">
-  import sdk, {createTrack} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/dist/index.min.js'
+  import sdk, {createTrack} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
 </script>
 ```
 
+### With build system and NPM
+
+```js
+import sdk, {createTrack, auth, users, channels, tracks} from '@radio4000/sdk'
+```
+
 ## API
+
+This page is generated from the source code and gives you an overview of exactly what's available and how to use it.
 
 - https://radio4000.github.io/sdk/docs/
 
