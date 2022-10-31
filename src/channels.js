@@ -1,5 +1,5 @@
 import {supabase} from './supabase-client.js'
-import {getUser} from './user.js'
+import {readUser} from './users.js'
 
 /**
  * A channel
@@ -24,10 +24,10 @@ import {getUser} from './user.js'
  * @returns {Promise<ReturnObj>}
  */
 export const createChannel = async ({name, slug}) => {
-	const {data: user} = await getUser()
+	const {data: user} = await readUser()
 
 	// Throw an error if the slug is in use by the old Firebase database.
-	const {data: isSlugTaken} = await findFirebaseChannelBySlug(slug)
+	const {data: isSlugTaken} = await readFirebaseChannel(slug)
 	if (isSlugTaken) return {
 		error: {
 			code: 'slug-exists-firebase',
@@ -79,7 +79,7 @@ export const deleteChannel = async (id) => {
  * @param {string} slug
  * @returns {Promise<ReturnObj>}
  */
-export const findChannelBySlug = async (slug) => {
+export const readChannel = async (slug) => {
 	return supabase.from('channels').select(`*`).eq('slug', slug).single()
 }
 
@@ -88,7 +88,7 @@ export const findChannelBySlug = async (slug) => {
  * @param {number} limit
  * @returns {Promise<ReturnObj>}
  */
-export const findChannels = async (limit = 1000) => {
+export const readChannels = async (limit = 1000) => {
 	return supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})
 }
 
@@ -97,7 +97,7 @@ export const findChannels = async (limit = 1000) => {
  * @param {string} slug
  * @returns {Promise<ReturnObj>}
  */
-export async function findFirebaseChannelBySlug(slug) {
+export async function readFirebaseChannel(slug) {
 	const res = await fetch(`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`)
 	const json = await res.json()
 	if (json.error) return {error: {message: json.error}}
@@ -107,8 +107,8 @@ export async function findFirebaseChannelBySlug(slug) {
 }
 
 /** Lists all channels from current user */
-export const findUserChannels = async () => {
-	const {data: user} = await getUser()
+export const readUserChannels = async () => {
+	const {data: user} = await readUser()
 	return supabase
 		.from('channels')
 		.select('*, user_channel!inner(user_id)')
@@ -121,7 +121,7 @@ export const findUserChannels = async () => {
  * @param {string} slug
  * @returns {Promise<ReturnObj>}
  */
-export async function findChannelTracks(slug) {
+export async function readChannelTracks(slug) {
 	if (!slug) return {error: {message: 'Missing channel slug'}}
 	const {data, error } = await supabase
 		.from('channel_track')
@@ -146,7 +146,7 @@ export async function findChannelTracks(slug) {
  * @returns {Promise<Boolean>}
  */
 export async function canEditChannel(slug) {
-	const {data: user} = await getUser()
+	const {data: user} = await readUser()
 	if (!user) return false
 	const {data} = await supabase
 		.from('user_channel')

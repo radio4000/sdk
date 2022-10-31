@@ -1,5 +1,5 @@
 import {supabase} from './supabase-client.js'
-import {getUser} from './user.js'
+import {readUser} from './users.js'
 
 /**
  * A track
@@ -13,7 +13,7 @@ import {getUser} from './user.js'
  * Creates a track and connects it to a user and channel.
  * @param {string} channelId
  * @param {Track} fields
- * @return {Promise<import('./channel.js').ReturnObj>}
+ * @return {Promise<import('./channels.js').ReturnObj>}
  */
 export const createTrack = async (channelId, fields) => {
 	const {url, title, description} = fields
@@ -29,7 +29,7 @@ export const createTrack = async (channelId, fields) => {
 	if (error) return {error}
 
 	// Create junction row
-	const {data: user} = await getUser()
+	const {data: user} = await readUser()
 	const {error: error2} = await supabase
 		.from('channel_track')
 		.insert({
@@ -47,7 +47,7 @@ export const createTrack = async (channelId, fields) => {
  * Updates a track
  * @param {string} id
  * @param {Track} changes
- * @return {Promise<import('./channel.js').ReturnObj>}
+ * @return {Promise<import('./channels.js').ReturnObj>}
  */
 export const updateTrack = async (id, changes) => {
 	const {url, title, description} = changes
@@ -68,7 +68,7 @@ export const deleteTrack = async (id) => {
  * @param {string} id
  * @returns {Promise<{ data?: Track, error? }>}
  */
-export const findTrack = async (id) => {
+export const readTrack = async (id) => {
 	return supabase.from('tracks').select('*').eq('id', id).single()
 }
 
@@ -78,7 +78,7 @@ export const findTrack = async (id) => {
  * @returns {Promise<Boolean>}
  */
 export async function canEditTrack(track_id) {
-	const {data: user} = await getUser()
+	const {data: user} = await readUser()
 	if (!user) return false
 	const {data} = await supabase.from('channel_track').select('track_id, user_id').match({user_id: user.id, track_id})
 	if (data.length > 0) return true

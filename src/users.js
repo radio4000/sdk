@@ -4,7 +4,7 @@ import {supabase} from './supabase-client.js'
  * Gets the currently signed in user
  * @returns {Promise<{ data?: object, error?: object }>}
  */
-export async function getUser() {
+export async function readUser() {
 	const {data: {user}, error} = await supabase.auth.getUser()
 	return {data: user, error}
 }

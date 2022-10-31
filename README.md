@@ -14,14 +14,14 @@ All methods are available on the imported `sdk` module.
 ### With build system and NPM
 
 ```js
-import sdk, {createTrack} from '@radio4000/sdk'
+import sdk, {createTrack, auth, users, channels, tracks} from '@radio4000/sdk'
 ```
 
 ### With browser via CDN
 
 ```html
 <script type="module">
-  import sdk, {createTrack} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/dist/index.min.js'
+  import sdk, {createTrack} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
 </script>
 ```
 
