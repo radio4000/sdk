@@ -1,7 +1,7 @@
 import * as auth from './auth.js'
-import * as user from './users.js'
-import * as channel from './channels.js'
-import * as track from './tracks.js'
+import * as users from './users.js'
+import * as channels from './channels.js'
+import * as tracks from './tracks.js'
 
 export {mediaUrlParser} from 'media-url-parser'
 export {supabase} from './supabase-client.js'
@@ -9,9 +9,9 @@ export {supabase} from './supabase-client.js'
 // `import sdk`
 export default {
 	auth,
-	user,
-	channel,
-	track,
+	users,
+	channels,
+	tracks,
 	// `import {createTrack, createChannel...}` e.g. everything squashed together
 	// ...user,
 	// ...channel,
@@ -22,9 +22,9 @@ export default {
 // `import {auth, track} from ...`
 export {
 	auth,
-	user,
-	channel,
-	track,
+	users,
+	channels,
+	tracks,
 }
 
 export * from './auth.js'
