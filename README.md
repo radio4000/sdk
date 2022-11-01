@@ -26,13 +26,13 @@ This example can be copy pasted into any HTML page. We sign in, create a channel
   const {data: channel} = await sdk.channels.createChannel({
     name: 'My radio',
     slug: 'my-radio',
-		description: '...'
+    description: '...'
   })
 	
   const {data: track} = createTrack(channel.id, {
     url: 'http://...',
     title: 'Artist - Title',
-		description: '...'
+    description: '...'
   })
 </script>
 ```
