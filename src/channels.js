@@ -112,7 +112,7 @@ export const readUserChannels = async () => {
 	return supabase
 		.from('channels')
 		.select('*, user_channel!inner(user_id)')
-		.eq('user_channel.user_id', user.id)
+		.eq('user_channel.user_id', user?.id)
 		.order('updated_at', { ascending: true })
 }
 
