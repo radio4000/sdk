@@ -2,34 +2,52 @@
 
 # @radio4000/sdk
 
-A JavaScript SDK to interact with [Radio4000](https://radio4000.com) through a browser or node.js.  
-It expects the SQL schema from [@radio4000/supabase](https://github.com/radio4000/supabase).
+A JavaScript SDK to interact with [Radio4000](https://radio4000.com) via a browser or node.js.  
 
-The SDK manages auth and full CRUD of users, channels and tracks.
+It offers authentication as well as full create, read, update and delete of users, channels and tracks
 
 ## Usage 
 
-Depending on whether you have a build system or not, you can either import the module from NPM, from a CDN or download it locally.
+There are two ways to import the sdk. Use whichever you prefer.
 
-All methods are available both directly on the imported `sdk` module and grouped into modules `auth`, `users`, `channels` and `tracks`.
+- import the default `sdk` object, where all methods are grouped into the modules `auth`, `users`, `channels` and `tracks`.
+- import each method explicitly
 
 ### With browser via CDN
+
+This example can be copy pasted into any HTML page. We sign in, create a channel and a track.
 
 ```html
 <script type="module">
   import sdk, {createTrack} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
+	
+  sdk.auth.signIn({email: '', password: '')}
+	
+  const {data: channel} = await sdk.channels.createChannel({
+    name: 'My radio',
+    slug: 'my-radio',
+		description: '...'
+  })
+	
+  const {data: track} = createTrack(channel.id, {
+    url: 'http://...',
+    title: 'Artist - Title',
+		description: '...'
+  })
 </script>
 ```
 
-### With build system and NPM
+### With build system and npm
 
 ```js
-import sdk, {createTrack, auth, users, channels, tracks} from '@radio4000/sdk'
+import sdk, {readChannels} from '@radio4000/sdk'
+
+const {data: channels, error} = await readChannels()
+if (error) throw new Error(error)
+console.log(channels)
 ```
 
 ## API
-
-This page is generated from the source code and gives you an overview of exactly what's available and how to use it.
 
 - https://radio4000.github.io/sdk/docs/
 
