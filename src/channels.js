@@ -128,7 +128,7 @@ export const readUserChannels = async () => {
 		.from('channels')
 		.select('*, user_channel!inner(user_id)')
 		.eq('user_channel.user_id', user?.id)
-		.order('updated_at', { ascending: true })
+		.order('updated_at', {ascending: true})
 }
 
 /**
@@ -138,19 +138,21 @@ export const readUserChannels = async () => {
  */
 export async function readChannelTracks(slug) {
 	if (!slug) return {error: {message: 'Missing channel slug'}}
-	const {data, error } = await supabase
+	const {data, error} = await supabase
 		.from('channel_track')
-		.select(`
+		.select(
+			`
 			channel_id!inner(
 				slug
 			),
 			track_id(
 				id, created_at, updated_at, title, url, description
 			)
-		`)
+		`
+		)
 		.eq('channel_id.slug', slug)
-		.order('created_at', { ascending: false })
-		.limit(3000)
+		.order('created_at', {ascending: false})
+		.limit(5000)
 	const tracks = data.map((t) => t.track_id)
 	return {data: tracks, error}
 }
