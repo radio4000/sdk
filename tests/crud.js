@@ -5,7 +5,7 @@ const name = `Radio Test ${new Date().getTime()}`
 const slug = `radio-test-${new Date().getTime()}`
 
 const validCredentials = {
-	email: 'oskar@rough.dk',
+	email: 'equal.note8933@fastmail.com',
 	password: 'helloworld',
 }
 

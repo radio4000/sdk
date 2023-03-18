@@ -2,12 +2,12 @@ import test from 'ava'
 import sdk from '../src/index.js'
 
 const validCredentials = {
-	email: 'oskar@rough.dk',
+	email: 'equal.note8933@fastmail.com',
 	password: 'helloworld',
 }
 
 function fakeEmail() {
-	return `oskar+supabase-${new Date().getTime()}@rough.dk`
+	return `equal.note9033+supabase-${new Date().getTime()}@fastmail.com`
 }
 
 test('can sign up for a new account and email confirmation is required', async (t) => {
