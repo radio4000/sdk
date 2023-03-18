@@ -6,6 +6,7 @@ import {readUser} from './users.js'
  * @typedef {Object} Channel
  * @property {string} name
  * @property {string} slug - unique
+ * @property {string} [userId] - if not passed in we try to read the current user
  * @property {string} [description]
  */
 
@@ -23,15 +24,29 @@ import {readUser} from './users.js'
  * @param {Channel} fields
  * @returns {Promise<ReturnObj>}
  */
-export const createChannel = async ({name, slug}) => {
-	const {data: user} = await readUser()
-
+export const createChannel = async ({name, slug, userId}) => {
 	// Throw an error if the slug is in use by the old Firebase database.
 	const {data: isSlugTaken} = await readFirebaseChannel(slug)
-	if (isSlugTaken) return {
-		error: {
-			code: 'slug-exists-firebase',
-			message: 'Sorry. This channel slug is already taken by someone else.'
+	if (isSlugTaken)
+		return {
+			error: {
+				code: 'slug-exists-firebase',
+				message: 'Sorry. This channel slug is already taken by someone else.',
+			},
+		}
+
+	// If we don't have a user, try to read it from the current session.
+	if (!userId) {
+		const {data} = await readUser()
+		userId = data.user.id
+	}
+
+	if (!userId) {
+		return {
+			error: {
+				code: 'user-required',
+				message: 'A user is required to create a new channel',
+			},
 		}
 	}
 
@@ -43,7 +58,7 @@ export const createChannel = async ({name, slug}) => {
 
 	// Create junction table
 	const channel_id = channelRes.data.id
-	const userChannelRes = await supabase.from('user_channel').insert({user_id: user.id, channel_id}).single()
+	const userChannelRes = await supabase.from('user_channel').insert({user_id: userId, channel_id}).single()
 	if (userChannelRes.error) return userChannelRes
 
 	// Return both records of the channel
