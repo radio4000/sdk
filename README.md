@@ -10,7 +10,7 @@ It offers authentication as well as full create, read, update and delete of user
 
 There are two ways to import the sdk. Use whichever you prefer.
 
-- import the default `sdk` object, where all methods are grouped into the modules `auth`, `users`, `channels` and `tracks`.
+- import the default `sdk` object. Here all methods are grouped into the modules `auth`, `users`, `channels` and `tracks`.
 - import each method explicitly
 
 ### With browser via CDN
@@ -23,13 +23,15 @@ This example can be copy pasted into any HTML page. We sign in, create a channel
 	
   sdk.auth.signIn({email: '', password: '')}
 	
-  const {data: channel} = await sdk.channels.createChannel({
+  const {data: channel, error} = await sdk.channels.createChannel({
     name: 'My radio',
     slug: 'my-radio',
     description: '...'
   })
 	
-  const {data: track} = createTrack(channel.id, {
+	if (!error) throw new Error(error.message)
+	
+  const {data: track} = await createTrack(channel.id, {
     url: 'http://...',
     title: 'Artist - Title',
     description: '...'
@@ -47,7 +49,7 @@ if (error) throw new Error(error)
 console.log(channels)
 ```
 
-## API
+## API Documentation
 
 - https://radio4000.github.io/sdk/docs/
 
@@ -55,7 +57,7 @@ console.log(channels)
 
 If you'd like to help out, clone the repository, install dependencies and start the local server. The SDK itself is in the `./src` folder and the playground is in `./examples`.
 
-```bash
+```shell
 git clone git@github.com:radio4000/sdk.git radio4000-sdk
 cd radio4000-sdk
 npm install
@@ -66,4 +68,13 @@ npm start
 
 Using [typedoc](https://github.com/TypeStrong/typedoc) we can generate API docs from the source code. It will output to `./docs`.
 
-- `npm run docs`
+```shell
+npm run docs
+```
+
+## Generate types from database schema
+
+```shell
+npx supabase login
+npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID > database.types.ts`
+```
