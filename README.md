@@ -64,6 +64,15 @@ npm install
 npm start
 ```
 
+## Environment variables
+
+This SDK connects to the main Radio4000 PostgreSQL database via Supabase. 
+
+1. `cp .env.example .env`
+2. Fill out the `.env` file
+
+> Note that the Supabase URL + (anon) Key are public.
+
 ### Generating docs from the source code
 
 Using [typedoc](https://github.com/TypeStrong/typedoc) we can generate API docs from the source code. It will output to `./docs`.
