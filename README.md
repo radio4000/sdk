@@ -71,7 +71,7 @@ This SDK connects to the main Radio4000 PostgreSQL database via Supabase.
 1. `cp .env.example .env`
 2. Fill out the `.env` file
 
-> Note that the Supabase URL + (anon) Key are public.
+> Note that the Supabase URL + (anon) Key are public, because we have postgres row policies in place.
 
 ### Generating docs from the source code
 
