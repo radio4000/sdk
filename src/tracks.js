@@ -6,6 +6,8 @@ import {readUser} from './users.js'
  * @typedef {Object} Track
  * @property {string} url
  * @property {string} title
+ * @property {string} [updated_at]
+ * @property {string} [created_at]
  * @property {string} [description]
  */
 

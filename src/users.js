@@ -2,10 +2,14 @@ import {supabase} from './supabase-client.js'
 
 /**
  * Gets the currently signed in user
+ * @param {string} [jwtToken]
  * @returns {Promise<{ data?: object, error?: object }>}
  */
-export async function readUser() {
-	const {data: {user}, error} = await supabase.auth.getUser()
+export async function readUser(jwtToken) {
+	const {
+		data: {user},
+		error,
+	} = await supabase.auth.getUser(jwtToken)
 	return {data: user, error}
 }
 

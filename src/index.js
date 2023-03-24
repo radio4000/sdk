@@ -17,13 +17,7 @@ export default {
 }
 
 // `import {auth, track} from ...`
-export {
-	supabase,
-	auth,
-	users,
-	channels,
-	tracks,
-}
+export {supabase, auth, users, channels, tracks}
 
 export * from './auth.js'
 export * from './users.js'
