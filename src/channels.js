@@ -76,7 +76,8 @@ export const createChannel = async ({name, slug, userId}) => {
  */
 export const updateChannel = async (id, changes) => {
 	const {name, slug, description} = changes
-	return supabase.from('channels').update({name, slug, description}).eq('id', id)
+	const response = await supabase.from('channels').update({name, slug, description}).eq('id', id)
+	return response
 }
 
 /**
