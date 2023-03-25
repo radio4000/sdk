@@ -125,7 +125,6 @@ test('can not write to data we are not supposed to', async (t) => {
 	t.is(updatedChannel2.name, 'This should update')
 
 	const {data: updateData, error} = await sdk.channels.updateChannel(channel.id, {name: 'This should not update'})
-	console.log(updateData, error)
 
 	const {data: updatedChannel} = await sdk.channels.readChannel(channel.slug)
 	t.is(updatedChannel.name, 'Valid 1', 'name did not update')
