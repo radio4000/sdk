@@ -1,5 +1,14 @@
 import test from 'ava'
-import sdk from '../src/index.js'
+import createSdk from '../src/index.js'
+import {createClient} from '@supabase/supabase-js'
+
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
+	auth: {
+		persistSession: false
+	}
+}
+
+const sdk = createSdk(supabase)
 
 // If it's a fresh database, uncomment these lines.
 // Then run the file, confirm the mail, comment out again.
