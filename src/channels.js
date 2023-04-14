@@ -176,3 +176,24 @@ export async function canEditChannel(slug) {
 	if (data?.length > 0) return true
 	return false
 }
+
+/**
+ * Uploads an image file to Cloudinary
+ * @param {string} file
+ * @param {string} [tags]
+ * @returns {Promise}
+ */
+export async function createImage(file, tags) {
+	const cloudinaryCloudName = 'radio4000'
+	const cloudinaryUploadPreset = 'tc44ivjo'
+
+	const formData = new FormData()
+	formData.append('upload_preset', cloudinaryUploadPreset)
+	formData.append('file', file)
+	if (tags) formData.append('tags', tags)
+
+	return fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/auto/upload`, {
+		method: 'POST',
+		body: formData,
+	})
+}
