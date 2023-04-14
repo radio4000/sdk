@@ -72,11 +72,15 @@ export const createChannel = async ({name, slug, userId}) => {
  * @param {string} [changes.name]
  * @param {string} [changes.slug]
  * @param {string} [changes.description]
+ * @param {string} [changes.url]
+ * @param {number} [changes.longitude]
+ * @param {number} [changes.latitude]
  * @returns {Promise<ReturnObj>}
  */
 export const updateChannel = async (id, changes) => {
-	const {name, slug, description} = changes
-	const response = await supabase.from('channels').update({name, slug, description}).eq('id', id)
+	// Extract the keys so we're sure which fields update.
+	const {name, slug, description, url, longitude, latitude} = changes
+	const response = await supabase.from('channels').update({name, slug, description, url, longitude, latitude}).eq('id', id)
 	return response
 }
 
@@ -141,16 +145,14 @@ export async function readChannelTracks(slug) {
 	if (!slug) return {error: {message: 'Missing channel slug'}}
 	const {data, error} = await supabase
 		.from('channel_track')
-		.select(
-			`
+		.select(`
 			channel_id!inner(
 				slug
 			),
 			track_id(
 				id, created_at, updated_at, title, url, description
 			)
-		`
-		)
+		`)
 		.eq('channel_id.slug', slug)
 		.order('created_at', {ascending: false})
 		.limit(5000)
