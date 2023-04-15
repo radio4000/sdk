@@ -73,11 +73,15 @@ export const createChannel = async ({name, slug, userId}) => {
  * @param {string} [changes.name]
  * @param {string} [changes.slug]
  * @param {string} [changes.description]
+ * @param {string} [changes.url]
+ * @param {number} [changes.longitude]
+ * @param {number} [changes.latitude]
  * @returns {Promise<ReturnObj>}
  */
 export const updateChannel = async (id, changes) => {
-	const {name, slug, description} = changes
-	const response = await supabase.from('channels').update({name, slug, description}).eq('id', id)
+	// Extract the keys so we're sure which fields update.
+	const {name, slug, description, url, longitude, latitude} = changes
+	const response = await supabase.from('channels').update({name, slug, description, url, longitude, latitude}).eq('id', id)
 	return response
 }
 
@@ -157,16 +161,14 @@ export async function readChannelTracks(slug) {
 	if (!slug) return {error: {message: 'Missing channel slug'}}
 	const {data, error} = await supabase
 		.from('channel_track')
-		.select(
-			`
+		.select(`
 			channel_id!inner(
 				slug
 			),
 			track_id(
 				id, created_at, updated_at, title, url, description
 			)
-		`
-		)
+		`)
 		.eq('channel_id.slug', slug)
 		.order('created_at', {ascending: false})
 		.limit(5000)
@@ -189,4 +191,25 @@ export async function canEditChannel(slug) {
 		.eq('user_id', user.id)
 	if (data?.length > 0) return true
 	return false
+}
+
+/**
+ * Uploads an image file to Cloudinary
+ * @param {string} file
+ * @param {string} [tags]
+ * @returns {Promise}
+ */
+export async function createImage(file, tags) {
+	const cloudinaryCloudName = 'radio4000'
+	const cloudinaryUploadPreset = 'tc44ivjo'
+
+	const formData = new FormData()
+	formData.append('upload_preset', cloudinaryUploadPreset)
+	formData.append('file', file)
+	if (tags) formData.append('tags', tags)
+
+	return fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/auto/upload`, {
+		method: 'POST',
+		body: formData,
+	})
 }

@@ -13,9 +13,25 @@ There are two ways to import the sdk. Use whichever you prefer.
 - import the default `sdk` object. Here all methods are grouped into the modules `auth`, `users`, `channels` and `tracks`.
 - import each method explicitly
 
+You can see exactly what's possible here:
+
+- https://radio4000.github.io/sdk/docs/
+
 ### With browser via CDN
 
-This example can be copy pasted into any HTML page. We sign in, create a channel and a track.
+This example can be copy pasted into any HTML page. We read the latest five channels created.
+
+```html
+<script type="module">
+  import sdk from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
+
+  const {data: channels, error} = await sdk.channels.readChannels(5)
+  if (error) throw new Error(error.message)
+  console.log(channels)
+</script>
+```
+
+Here's another, where we sign in (use your own credentials), create a channel and a track.
 
 ```html
 <script type="module">
@@ -29,8 +45,8 @@ This example can be copy pasted into any HTML page. We sign in, create a channel
     description: '...'
   })
 
-	if (!error) throw new Error(error.message)
-
+  if (error) throw new Error(error.message)
+	
   const {data: track} = await createTrack(channel.id, {
     url: 'http://...',
     title: 'Artist - Title',
@@ -48,10 +64,6 @@ const {data: channels, error} = await readChannels()
 if (error) throw new Error(error)
 console.log(channels)
 ```
-
-## API Documentation
-
-- https://radio4000.github.io/sdk/docs/
 
 ## Contributing and development
 
