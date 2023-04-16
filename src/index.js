@@ -3,8 +3,10 @@ import * as users from './users.js'
 import * as channels from './channels.js'
 import * as tracks from './tracks.js'
 
-export default function createSdk(supabaseClient) {
-	if (!supabase) throw Error('Pass in a Supabase client')
+export let supabase
+
+export function createSdk(supabaseClient) {
+	if (!supabaseClient) throw Error('Pass in a Supabase client')
 
 	supabase = supabaseClient
 
@@ -12,25 +14,17 @@ export default function createSdk(supabaseClient) {
 		auth,
 		users,
 		channels,
-		tracks
+		tracks,
+		supabase,
 	}
 }
 
-// // `import sdk`
-// export default {
-// 	supabase,
-// 	auth,
-// 	users,
-// 	channels,
-// 	tracks,
-// 	// `import {createTrack, createChannel...}` e.g. everything squashed together
-// }
-
-// // `import {auth, track} from ...`
-// export {supabase, auth, users, channels, tracks}
-
-// export * from './auth.js'
-// export * from './users.js'
-// export * from './channels.js'
-// export * from './tracks.js'
-// export {mediaUrlParser} from 'media-url-parser'
+/*
+import {createClient} from '@supabase/supabase-js'
+const supabaseClient = createClient(
+	'https://myjhnqgfwqtcicnvcwcj.supabase.co',
+	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTQxNTQ3MiwiZXhwIjoxOTU2OTkxNDcyfQ.gySR3Lv-m_CIj2Eyx6kfyOdwwMXEOFOgeHSjADqcM4Y'
+)
+const defaultSdk = createSdk(supabaseClient)
+export default defaultSdk
+*/

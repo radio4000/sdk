@@ -1,4 +1,4 @@
-import {supabase} from './supabase-client.js'
+import {supabase} from './index.js'
 import {readUser} from './users.js'
 
 /**
