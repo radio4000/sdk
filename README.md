@@ -15,7 +15,7 @@ There are two ways to import the sdk. Use whichever you prefer.
 
 You can see exactly what's possible here:
 
-- https://radio4000.github.io/sdk/docs/
+- https://sdk.radio4000.github.io/docs/
 
 ### With browser via CDN
 
