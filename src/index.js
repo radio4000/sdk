@@ -3,6 +3,9 @@ import * as users from './users.js'
 import * as channels from './channels.js'
 import * as tracks from './tracks.js'
 
+/**
+ * @type {import('@supabase/supabase-js').SupabaseClient}
+ */
 export let supabase
 
 export function createSdk(supabaseClient) {
