@@ -85,14 +85,6 @@ This SDK connects to the main Radio4000 PostgreSQL database via Supabase.
 
 > Note that the Supabase URL + (anon) Key are public, because we have postgres row policies in place.
 
-### Generating docs from the source code
-
-Using [typedoc](https://github.com/TypeStrong/typedoc) we can generate API docs from the source code. It will output to `./docs`.
-
-```shell
-npm run docs
-```
-
 ## Generate types from database schema
 
 ```shell

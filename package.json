@@ -6,12 +6,12 @@
   "main": "src/index.js",
   "module": "src/index.js",
   "browser": "src/index.js",
-  "types": "src/index.d.ts",
+  "types": "dist/index.d.ts",
   "private": false,
   "scripts": {
+    "dev": "npx serve --watch",
     "test": "ava",
-    "types": "tsc src/index.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types",
-    "docs": "npx typedoc src"
+    "types": "tsc src/index.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types"
   },
   "dependencies": {
     "media-url-parser": "^0.2.4"
