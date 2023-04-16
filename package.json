@@ -9,7 +9,7 @@
   "types": "dist/index.d.ts",
   "private": false,
   "scripts": {
-    "dev": "npx serve --watch",
+    "dev": "npx serve",
     "test": "ava",
     "types": "tsc src/index.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types"
   },

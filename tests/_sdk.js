@@ -11,6 +11,6 @@ const r4 = createClient(url, key, {
 })
 
 // Create the SDK.
-const defaultSdk = createSdk(r4)
+const sdk = createSdk(r4)
 
-export default defaultSdk
+export {sdk}
