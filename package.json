@@ -22,7 +22,6 @@
   "devDependencies": {
     "@types/node": "^18.15.8",
     "ava": "^5.2.0",
-    "dotenv": "^16.0.3",
     "typescript": "^5.0.2"
   },
   "author": "radio4000",
@@ -39,10 +38,5 @@
     "radio4000",
     "supabase",
     "sdk"
-  ],
-  "ava": {
-    "require": [
-      "dotenv/config"
-    ]
-  }
+  ]
 }
