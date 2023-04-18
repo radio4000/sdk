@@ -8,16 +8,15 @@
   "module": "./dist/sdk.js",
   "exports": {
     ".": {
-      "types": "./dist/types",
       "import": "./dist/sdk.js",
       "require": "./dist/sdk.cjs"
     }
   },
-  "types": "dist/sdk.d.ts",
+  "types": "dist/types/main.d.ts",
   "private": false,
   "scripts": {
     "dev": "vite --port 3999",
-    "build": "vite build; npm run build-website",
+    "build": "vite build; npm run types; npm run build-website",
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
     "test": "ava",
