@@ -56,6 +56,20 @@ if (error) throw new Error(error)
 console.log(channels)
 ```
 
+### Using your own Supabase instance
+
+You're not limited to use the default Radio4000 supabase database. 
+
+Supply your own like this:
+
+```js
+import {createClient} from '@supabase/supabase-js'
+import {createSdk} from '@radio4000/sdk'
+
+const supabase = createClient(url, key)
+const sdk = createSdk(supabase)
+```
+
 ## Contributing and development
 
 If you'd like to help out, clone the repository, install dependencies and start the local server. The SDK itself is in the `./src` folder and the playground is in `./examples`.
