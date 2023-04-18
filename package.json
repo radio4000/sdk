@@ -8,6 +8,7 @@
   "module": "./dist/sdk.js",
   "exports": {
     ".": {
+      "types": "./dist/types",
       "import": "./dist/sdk.js",
       "require": "./dist/sdk.cjs"
     }
@@ -16,7 +17,8 @@
   "private": false,
   "scripts": {
     "dev": "vite --port 3999",
-    "build": "vite build",
+    "build": "vite build; npm run build-website",
+    "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
     "test": "ava",
     "types": "tsc src/main.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types"
