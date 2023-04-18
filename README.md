@@ -67,7 +67,7 @@ npm install
 npm start
 ```
 
-## Environment variables
+### Environment variables
 
 This SDK connects to the main Radio4000 PostgreSQL database via Supabase. 
 
@@ -76,9 +76,19 @@ This SDK connects to the main Radio4000 PostgreSQL database via Supabase.
 
 > Note that the Supabase URL + (anon) Key are public, because we have postgres row policies in place.
 
-## Generate types from database schema
+### Generate types from database schema
 
 ```shell
 npx supabase login
-npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID > database.types.ts`
+npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID > src/database.types.ts
 ```
+
+### Build system
+
+We use [vite](https://vitejs.dev/) in library mode to bundle the project. We output two files:
+
+- dist/sdk.js (esm, good for browsers)
+- dist/sdk.cjs.js (good for nodejs)
+
+Our package.json defines the `main`, `module` and `exports` fields to specify which file should be loaded in which environment. 
+
