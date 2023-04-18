@@ -10,7 +10,7 @@
   "module": "./dist/sdk.js",
   "exports": {
     ".": {
-      "types": "dist/types/main.d.ts",
+      "types": "./dist/types/main.d.ts",
       "import": "./dist/sdk.js",
       "require": "./dist/sdk.cjs"
     }
