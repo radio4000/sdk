@@ -2,19 +2,17 @@
   "name": "@radio4000/sdk",
   "version": "0.2.0",
   "description": "JavaScript client for Radio4000 for the browser and node",
-
   "type": "module",
   "files": ["dist"],
-  "main": "./dist/sdk.cjs.js",
+  "main": "./dist/sdk.cjs",
   "module": "./dist/sdk.js",
   "exports": {
     ".": {
       "import": "./dist/sdk.js",
-      "require": "./dist/sdk.cjs.js"
+      "require": "./dist/sdk.cjs"
     }
   },
   "types": "dist/sdk.d.ts",
-
   "private": false,
   "scripts": {
     "dev": "vite --port 3999",
@@ -24,8 +22,8 @@
     "types": "tsc src/main.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types"
   },
   "dependencies": {
-    "media-url-parser": "^0.2.4",
-    "@supabase/supabase-js": "^2.12.1"
+    "@supabase/supabase-js": "^2.12.1",
+    "media-url-parser": "^0.2.4"
   },
   "devDependencies": {
     "@types/node": "^18.15.8",
