@@ -10,11 +10,11 @@
   "module": "./dist/sdk.js",
   "exports": {
     ".": {
+      "types": "dist/types/main.d.ts",
       "import": "./dist/sdk.js",
       "require": "./dist/sdk.cjs"
     }
   },
-  "types": "dist/types/main.d.ts",
   "private": false,
   "scripts": {
     "dev": "vite --port 3999",
