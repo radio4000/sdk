@@ -51,30 +51,39 @@ export interface Database {
       }
       channels: {
         Row: {
+          coordinates: unknown | null
           created_at: string | null
           description: string | null
           id: string
           image: string | null
+          latitude: number | null
+          longitude: number | null
           name: string
           slug: string
           updated_at: string | null
           url: string | null
         }
         Insert: {
+          coordinates?: unknown | null
           created_at?: string | null
           description?: string | null
           id?: string
           image?: string | null
+          latitude?: number | null
+          longitude?: number | null
           name: string
           slug: string
           updated_at?: string | null
           url?: string | null
         }
         Update: {
+          coordinates?: unknown | null
           created_at?: string | null
           description?: string | null
           id?: string
           image?: string | null
+          latitude?: number | null
+          longitude?: number | null
           name?: string
           slug?: string
           updated_at?: string | null
@@ -167,7 +176,7 @@ export interface Database {
           content: string
           prefix: string
         }
-        Returns: string[]
+        Returns: unknown
       }
     }
     Enums: {
