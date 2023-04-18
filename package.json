@@ -2,31 +2,36 @@
   "name": "@radio4000/sdk",
   "version": "0.2.0",
   "description": "JavaScript client for Radio4000 for the browser and node",
+
   "type": "module",
-  "main": "src/index.js",
-  "module": "dist/index.js",
-  "browser": "dist/index.js",
-  "types": "src/index.d.ts",
+  "files": ["dist"],
+  "main": "./dist/sdk.cjs.js",
+  "module": "./dist/sdk.js",
+  "exports": {
+    ".": {
+      "import": "./dist/sdk.js",
+      "require": "./dist/sdk.cjs.js"
+    }
+  },
+  "types": "dist/sdk.d.ts",
+
   "private": false,
   "scripts": {
+    "dev": "vite --port 3999",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "ava",
-    "start": "npm run dev",
-    "dev": "esbuild src/index.js --bundle --format=esm --servedir=examples --outdir=examples",
-    "build": "esbuild src/index.js --bundle --format=esm --minify --outfile=dist/index.js",
-    "build-website": "esbuild src/index.js --bundle --format=esm --minify --outfile=index.js; npm run docs",
-    "types": "tsc src/index.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types",
-    "docs": "npx typedoc src"
+    "types": "tsc src/main.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.12.1",
-    "media-url-parser": "^0.2.4"
+    "media-url-parser": "^0.2.4",
+    "@supabase/supabase-js": "^2.12.1"
   },
   "devDependencies": {
     "@types/node": "^18.15.8",
     "ava": "^5.2.0",
-    "dotenv": "^16.0.3",
-    "esbuild": "^0.17.13",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "vite": "^4.2.1"
   },
   "author": "radio4000",
   "license": "GPL-3.0-or-later",
@@ -42,10 +47,5 @@
     "radio4000",
     "supabase",
     "sdk"
-  ],
-  "ava": {
-    "require": [
-      "dotenv/config"
-    ]
-  }
+  ]
 }

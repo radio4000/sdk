@@ -8,22 +8,13 @@ It offers authentication as well as full create, read, update and delete of user
 
 ## Usage 
 
-There are two ways to import the sdk. Use whichever you prefer.
-
-- import the default `sdk` object. Here all methods are grouped into the modules `auth`, `users`, `channels` and `tracks`.
-- import each method explicitly
-
-You can see exactly what's possible here:
-
-- https://sdk.radio4000.github.io/docs/
-
 ### With browser via CDN
 
 This example can be copy pasted into any HTML page. We read the latest five channels created.
 
 ```html
 <script type="module">
-  import sdk from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
+  import {sdk} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
 
   const {data: channels, error} = await sdk.channels.readChannels(5)
   if (error) throw new Error(error.message)
@@ -35,7 +26,7 @@ Here's another, where we sign in (use your own credentials), create a channel an
 
 ```html
 <script type="module">
-  import sdk, {createTrack} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
+  import {sdk} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
 	
   sdk.auth.signIn({email: '', password: '')}
 	
@@ -47,7 +38,7 @@ Here's another, where we sign in (use your own credentials), create a channel an
 
   if (error) throw new Error(error.message)
 	
-  const {data: track} = await createTrack(channel.id, {
+  const {data: track} = await sdk.tracks.createTrack(channel.id, {
     url: 'http://...',
     title: 'Artist - Title',
     description: '...'
@@ -58,9 +49,9 @@ Here's another, where we sign in (use your own credentials), create a channel an
 ### With build system and npm
 
 ```js
-import sdk, {readChannels} from '@radio4000/sdk'
+import {sdk} from '@radio4000/sdk'
 
-const {data: channels, error} = await readChannels()
+const {data: channels, error} = await sdk.channels.readChannels()
 if (error) throw new Error(error)
 console.log(channels)
 ```
@@ -76,7 +67,7 @@ npm install
 npm start
 ```
 
-## Environment variables
+### Environment variables
 
 This SDK connects to the main Radio4000 PostgreSQL database via Supabase. 
 
@@ -85,17 +76,19 @@ This SDK connects to the main Radio4000 PostgreSQL database via Supabase.
 
 > Note that the Supabase URL + (anon) Key are public, because we have postgres row policies in place.
 
-### Generating docs from the source code
-
-Using [typedoc](https://github.com/TypeStrong/typedoc) we can generate API docs from the source code. It will output to `./docs`.
-
-```shell
-npm run docs
-```
-
-## Generate types from database schema
+### Generate types from database schema
 
 ```shell
 npx supabase login
-npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID > database.types.ts`
+npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID > src/database.types.ts
 ```
+
+### Build system
+
+We use [vite](https://vitejs.dev/) in library mode to bundle the project. We output two files:
+
+- dist/sdk.js (esm, good for browsers)
+- dist/sdk.cjs.js (good for nodejs)
+
+Our package.json defines the `main`, `module` and `exports` fields to specify which file should be loaded in which environment. 
+

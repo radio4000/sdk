@@ -1,4 +1,4 @@
-import {supabase} from './supabase-client.js'
+import {supabase} from './main.js'
 
 /**
  * Gets the currently signed in user
