@@ -1,4 +1,4 @@
-import {supabase} from './supabase-client.js'
+import {supabase} from './main.js'
 import {readUser} from './users.js'
 import {getBrowsePageParams} from './utils.js'
 
