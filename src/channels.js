@@ -1,4 +1,4 @@
-import {supabase} from './index.js'
+import {supabase} from './main.js'
 import {readUser} from './users.js'
 
 /**

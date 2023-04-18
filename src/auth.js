@@ -1,4 +1,4 @@
-import {supabase} from './index.js'
+import {supabase} from './main.js'
 
 // Three wrappers around the auth methods from Supabase.
 

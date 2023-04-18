@@ -1,5 +1,5 @@
 import test from 'ava'
-import sdk from './_sdk.js'
+import {sdk} from './_sdk-test.js'
 
 // These tests are written with .serial. The order is important,
 // as we create a new channel, add a track and crud it.

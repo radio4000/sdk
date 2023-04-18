@@ -14,7 +14,7 @@ This example can be copy pasted into any HTML page. We read the latest five chan
 
 ```html
 <script type="module">
-  import sdk from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
+  import {sdk} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
 
   const {data: channels, error} = await sdk.channels.readChannels(5)
   if (error) throw new Error(error.message)
@@ -26,7 +26,7 @@ Here's another, where we sign in (use your own credentials), create a channel an
 
 ```html
 <script type="module">
-  import sdk from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
+  import {sdk} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
 	
   sdk.auth.signIn({email: '', password: '')}
 	
@@ -49,7 +49,7 @@ Here's another, where we sign in (use your own credentials), create a channel an
 ### With build system and npm
 
 ```js
-import sdk from '@radio4000/sdk'
+import {sdk} from '@radio4000/sdk'
 
 const {data: channels, error} = await sdk.channels.readChannels()
 if (error) throw new Error(error)

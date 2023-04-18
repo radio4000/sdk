@@ -1,5 +1,5 @@
 import test from 'ava'
-import sdk from './_sdk.js'
+import {sdk} from './_sdk-test.js'
 
 // If it's a fresh database, uncomment these lines.
 // Then run the file, confirm the mail, comment out again.

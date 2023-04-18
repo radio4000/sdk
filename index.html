@@ -17,16 +17,17 @@
 		<ul id="channels"></ul>
 
 		<script type="module">
-			/*
-			import {createClient} from ' https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
-			import {createSdk} from './src/index.js'
-			const supabaseClient = createClient(
-				'https://myjhnqgfwqtcicnvcwcj.supabase.co',
-				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTQxNTQ3MiwiZXhwIjoxOTU2OTkxNDcyfQ.gySR3Lv-m_CIj2Eyx6kfyOdwwMXEOFOgeHSjADqcM4Y'
-			)
-			const sdk = createSdk(supabaseClient)
-			*/
-			import {sdk} from './src/index.js'
+			// We can set up our own sdk, if we want.
+			// import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+			// import {createSdk} from './src/main.js'
+			// const supabaseClient = createClient(
+			// 	'https://myjhnqgfwqtcicnvcwcj.supabase.co',
+			// 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTQxNTQ3MiwiZXhwIjoxOTU2OTkxNDcyfQ.gySR3Lv-m_CIj2Eyx6kfyOdwwMXEOFOgeHSjADqcM4Y'
+			// )
+			// const sdk = createSdk(supabaseClient)
+
+			// Or we can use the one we provide as convenience.
+			import {sdk} from './src/main.js'
 
 			// For debugging
 			window.sdk = sdk
