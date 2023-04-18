@@ -1,9 +1,11 @@
 {
   "name": "@radio4000/sdk",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "JavaScript client for Radio4000 for the browser and node",
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/sdk.cjs",
   "module": "./dist/sdk.js",
   "exports": {
