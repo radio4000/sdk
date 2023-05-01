@@ -6,13 +6,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/sdk.cjs",
   "module": "./dist/sdk.js",
+  "types": "./dist/types/main.d.ts",
   "exports": {
     ".": {
       "types": "./dist/types/main.d.ts",
-      "import": "./dist/sdk.js",
-      "require": "./dist/sdk.cjs"
+      "import": "./dist/sdk.js"
     }
   },
   "private": false,
