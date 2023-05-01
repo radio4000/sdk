@@ -1,12 +1,16 @@
 {
+	"include": [
+		"src/**/*"
+	],
 	"compilerOptions": {
 		"allowJs": true,
 		"checkJs": true,
 		"esModuleInterop": true,
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		// "declarationMap": true,
+		"moduleResolution": "nodenext",
+		"outDir": "./dist/types",
 		"target": "ES2020"
 	},
-	"include": [
-		"src/**/*",
-		"tests/**/*"
-	]
 }
