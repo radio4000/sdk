@@ -18,14 +18,14 @@ import {readUser} from './users.js'
  * @return {Promise<import('./channels.js').ReturnObj>}
  */
 export const createTrack = async (channelId, fields) => {
-	const {url, title, description} = fields
+	const {url, title, description, discogs_url} = fields
 
 	if (!channelId) throw Error('Missing channel id')
 
 	// Create track
 	const {data: track, error} = await supabase
 		.from('tracks')
-		.insert({url, title, description})
+		.insert({url, title, description, discogs_url})
 		.select()
 		.single()
 	if (error) return {error}
