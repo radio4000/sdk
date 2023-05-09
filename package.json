@@ -7,13 +7,13 @@
     "dist"
   ],
   "module": "./dist/sdk.js",
-  "types": "./dist/types/main.d.ts",
   "exports": {
     ".": {
       "types": "./dist/types/main.d.ts",
       "import": "./dist/sdk.js"
     }
   },
+  "types": "./dist/types/main.d.ts",
   "private": false,
   "scripts": {
     "dev": "vite --port 3999",
