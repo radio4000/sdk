@@ -208,7 +208,7 @@ export async function createImage(file, tags) {
 export const followChannel = async (followerId, channelId) => {
 	const response = await supabase
 		.from('followers')
-		.insert([{ followerId, channelId }])
+		.insert([{ follower_id: followerId, channel_id: channelId }])
 	return response;
 };
 
