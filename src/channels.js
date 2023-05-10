@@ -198,7 +198,6 @@ export async function createImage(file, tags) {
 	})
 }
 
-
 /**
  * Make a channel follow another channel
  * @param {string} followerId - ID of the channel following another channel
@@ -209,8 +208,8 @@ export const followChannel = async (followerId, channelId) => {
 	const response = await supabase
 		.from('followers')
 		.insert([{ follower_id: followerId, channel_id: channelId }])
-	return response;
-};
+	return response
+}
 
 /**
  * Make a channel unfollow another channel
@@ -224,7 +223,7 @@ export const unfollowChannel = async (followerId, channelId) => {
 		.delete()
 		.eq('follower_id', followerId)
 		.eq('channel_id', channelId);
-	return response;
+	return response
 };
 
 /**
@@ -243,7 +242,7 @@ export const readFollowers = async (channelId) => {
 		.select(select)
 		.eq('channel_id', channelId);
 	return unwrapResponse(response, 'follower_id')
-};
+}
 
 /**
  * Get a list of channels that a specific channel follows
@@ -266,14 +265,14 @@ export const readFollowings = async (channelId) => {
 /**
  * When doing joins, supabase returns an array of objects with the table name as property.
  * This function unwraps the response and returns an array of the property values.
- * @param {Object} response - response from supabase
- * @param {string} prop - property to unwrap
- * @returns
+ * @param {ReturnObj} response - response from supabase
+ * @param {string} prop - property to unwrap, or take, on each item
+ * @returns {ReturnObj}
  */
 function unwrapResponse(response, prop) {
 	if (!response.error && response.data.length) {
 		return {
-			data: response.data.map(item => item[prop])
+			data: response.data.map((item) => item[prop]),
 		}
 	}
 	return response
