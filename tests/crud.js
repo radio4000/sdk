@@ -64,6 +64,7 @@ test.serial('can create, update and delete track', async (t) => {
 	const updatedAt = track.updated_at
 	const {error: updateError} = await sdk.tracks.updateTrack(track.id, {
 		url: 'https://radio4000.com',
+		discogs_url: 'https://radio4000.com',
 		title: 'updated',
 		description: 'updated',
 	})
@@ -71,6 +72,7 @@ test.serial('can create, update and delete track', async (t) => {
 
 	const {data: updated} = await sdk.tracks.readTrack(track.id)
 	t.is(updated.url, 'https://radio4000.com')
+	t.is(updated.discogs_url, 'https://radio4000.com')
 	t.is(updated.title, 'updated')
 	t.is(updated.description, 'updated')
 	t.not(updated.updated_at, updatedAt, 'updated timestamp was updated')
@@ -81,15 +83,15 @@ test.serial('can create, update and delete track', async (t) => {
 })
 
 test.serial('can read and delete own channel', async (t) => {
-	let {data} = await sdk.channels.readUserChannels()
+	const {data} = await sdk.channels.readUserChannels()
 	const len = data.length
 
 	await sdk.channels.deleteChannel(data[0].id)
 
-	let {error} = await sdk.channels.readChannel(data[0].slug)
+	const {error} = await sdk.channels.readChannel(data[0].slug)
 	t.is(error.code, 'PGRST116')
 
-	let {data: newChannels} = await sdk.channels.readUserChannels()
+	const {data: newChannels} = await sdk.channels.readUserChannels()
 	t.is(newChannels.length, len - 1)
 })
 
