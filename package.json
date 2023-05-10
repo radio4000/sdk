@@ -6,15 +6,14 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/sdk.cjs",
   "module": "./dist/sdk.js",
   "exports": {
     ".": {
       "types": "./dist/types/main.d.ts",
-      "import": "./dist/sdk.js",
-      "require": "./dist/sdk.cjs"
+      "import": "./dist/sdk.js"
     }
   },
+  "types": "./dist/types/main.d.ts",
   "private": false,
   "scripts": {
     "dev": "vite --port 3999",
@@ -22,7 +21,7 @@
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
     "test": "ava",
-    "types": "tsc src/main.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types"
+    "types": "tsc"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.12.1",
@@ -31,7 +30,7 @@
   "devDependencies": {
     "@types/node": "^18.15.8",
     "ava": "^5.2.0",
-    "typescript": "^5.0.2",
+    "typescript": "^5.0.4",
     "vite": "^4.2.1"
   },
   "author": "radio4000",
