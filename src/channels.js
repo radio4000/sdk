@@ -242,7 +242,7 @@ export const readFollowers = async (channelId) => {
 		.from('followers')
 		.select(select)
 		.eq('channel_id', channelId);
-	return response;
+	return unwrapResponse(response, 'follower_id')
 };
 
 /**
@@ -260,5 +260,23 @@ export const readFollowings = async (channelId) => {
 		.from('followers')
 		.select(select)
 		.eq('follower_id', channelId);
-	return response;
-};
+	console.log(response)
+	if (response.length) return {data: response.map(item => item.channel_id)}
+	return unwrapResponse(response, 'channel_id')
+}
+
+/**
+ * When doing joins, supabase returns an array of objects with the table name as property.
+ * This function unwraps the response and returns an array of the property values.
+ * @param {Object} response - response from supabase
+ * @param {string} prop - property to unwrap
+ * @returns
+ */
+function unwrapResponse(response, prop) {
+	if (!response.error && response.data.length) {
+		return {
+			data: response.data.map(item => item[prop])
+		}
+	}
+	return response
+}
