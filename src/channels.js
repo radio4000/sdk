@@ -197,3 +197,73 @@ export async function createImage(file, tags) {
 		body: formData,
 	})
 }
+
+
+/**
+ * Make a channel follow another channel
+ * @param {string} followerChannelId - ID of the channel following another channel
+ * @param {string} followingChannelId - ID of the channel being followed
+ * @returns {Promise<ReturnObj>}
+ */
+export const followChannel = async (followerChannelId, followingChannelId) => {
+	const response = await supabase
+		.from('channel_follow')
+		.insert([
+			{
+				follower_channel_id: followerChannelId,
+				following_channel_id: followingChannelId
+			}
+		]);
+	return response;
+};
+
+/**
+ * Make a channel unfollow another channel
+ * @param {string} followerChannelId - ID of the channel unfollowing another channel
+ * @param {string} followingChannelId - ID of the channel being unfollowed
+ * @returns {Promise<ReturnObj>}
+ */
+export const unfollowChannel = async (followerChannelId, followingChannelId) => {
+	const response = await supabase
+		.from('channel_follow')
+		.delete()
+		.eq('follower_channel_id', followerChannelId)
+		.eq('following_channel_id', followingChannelId);
+	return response;
+};
+
+/**
+ * Get a list of channels following a specific channel
+ * @param {string} channelId - ID of the channel to get the list of followers
+ * @returns {Promise<ReturnObj>}
+ */
+export const readFollowers = async (channelId) => {
+	const select = `
+		follower_channel_id (
+			id, name, slug, description, created_at, image, url
+		)
+	`
+	const response = await supabase
+		.from('channel_follow')
+		.select(select)
+		.eq('following_channel_id', channelId);
+	return response;
+};
+
+/**
+ * Get a list of channels that a specific channel follows
+ * @param {string} channelId - ID of the channel to get the list of followed channels
+ * @returns {Promise<ReturnObj>}
+ */
+export const readFollowings = async (channelId) => {
+	const select = `
+		following_channel_id (
+			id, name, slug, description, created_at, image, url
+		)
+	`
+	const response = await supabase
+		.from('channel_follow')
+		.select(select)
+		.eq('follower_channel_id', channelId);
+	return response;
+};

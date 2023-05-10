@@ -39,7 +39,10 @@
 				console.log(response)
 				for (const c of response.data) {
 					const li = document.createElement('li')
+					const input = document.createElement('input')
+					input.value = c.id
 					li.textContent = c.name + ' @' + c.slug
+					li.append(input)
 					ul.appendChild(li)
 				}
 				// Testing it worked
@@ -47,12 +50,12 @@
 			})
 
 			/**
-			* Tests a few SDK methods by running and chaining them. This should always work.
-			* Creates a new channel, queries it by slug, updates the name and validates it worked.
-			* For now you need to pass it a user email and password.
-			*
-			* @param {string} slug - a new, unique slug for the channel to be created
-			*/
+			 * Tests a few SDK methods by running and chaining them. This should always work.
+			 * Creates a new channel, queries it by slug, updates the name and validates it worked.
+			 * For now you need to pass it a user email and password.
+			 *
+			 * @param {string} slug - a new, unique slug for the channel to be created
+			 */
 			async function sdkTest(slug, email, password) {
 				console.log('testing')
 
