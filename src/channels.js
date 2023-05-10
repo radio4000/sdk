@@ -201,34 +201,29 @@ export async function createImage(file, tags) {
 
 /**
  * Make a channel follow another channel
- * @param {string} followerChannelId - ID of the channel following another channel
- * @param {string} followingChannelId - ID of the channel being followed
+ * @param {string} followerId - ID of the channel following another channel
+ * @param {string} channelId - ID of the channel being followed
  * @returns {Promise<ReturnObj>}
  */
-export const followChannel = async (followerChannelId, followingChannelId) => {
+export const followChannel = async (followerId, channelId) => {
 	const response = await supabase
-		.from('channel_follow')
-		.insert([
-			{
-				follower_channel_id: followerChannelId,
-				following_channel_id: followingChannelId
-			}
-		]);
+		.from('followers')
+		.insert([{ followerId, channelId }])
 	return response;
 };
 
 /**
  * Make a channel unfollow another channel
- * @param {string} followerChannelId - ID of the channel unfollowing another channel
- * @param {string} followingChannelId - ID of the channel being unfollowed
+ * @param {string} followerId - ID of the channel unfollowing another channel
+ * @param {string} channelId - ID of the channel being unfollowed
  * @returns {Promise<ReturnObj>}
  */
-export const unfollowChannel = async (followerChannelId, followingChannelId) => {
+export const unfollowChannel = async (followerId, channelId) => {
 	const response = await supabase
-		.from('channel_follow')
+		.from('followers')
 		.delete()
-		.eq('follower_channel_id', followerChannelId)
-		.eq('following_channel_id', followingChannelId);
+		.eq('follower_id', followerId)
+		.eq('channel_id', channelId);
 	return response;
 };
 
@@ -239,14 +234,14 @@ export const unfollowChannel = async (followerChannelId, followingChannelId) => 
  */
 export const readFollowers = async (channelId) => {
 	const select = `
-		follower_channel_id (
+		follower_id (
 			id, name, slug, description, created_at, image, url
 		)
 	`
 	const response = await supabase
-		.from('channel_follow')
+		.from('followers')
 		.select(select)
-		.eq('following_channel_id', channelId);
+		.eq('channel_id', channelId);
 	return response;
 };
 
@@ -257,13 +252,13 @@ export const readFollowers = async (channelId) => {
  */
 export const readFollowings = async (channelId) => {
 	const select = `
-		following_channel_id (
+		channel_id (
 			id, name, slug, description, created_at, image, url
 		)
 	`
 	const response = await supabase
-		.from('channel_follow')
+		.from('followers')
 		.select(select)
-		.eq('follower_channel_id', channelId);
+		.eq('follower_id', channelId);
 	return response;
 };
