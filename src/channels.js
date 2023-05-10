@@ -197,3 +197,83 @@ export async function createImage(file, tags) {
 		body: formData,
 	})
 }
+
+/**
+ * Make a channel follow another channel
+ * @param {string} followerId - ID of the channel following another channel
+ * @param {string} channelId - ID of the channel being followed
+ * @returns {Promise<ReturnObj>}
+ */
+export const followChannel = async (followerId, channelId) => {
+	const response = await supabase
+		.from('followers')
+		.insert([{ follower_id: followerId, channel_id: channelId }])
+	return response
+}
+
+/**
+ * Make a channel unfollow another channel
+ * @param {string} followerId - ID of the channel unfollowing another channel
+ * @param {string} channelId - ID of the channel being unfollowed
+ * @returns {Promise<ReturnObj>}
+ */
+export const unfollowChannel = async (followerId, channelId) => {
+	const response = await supabase
+		.from('followers')
+		.delete()
+		.eq('follower_id', followerId)
+		.eq('channel_id', channelId);
+	return response
+};
+
+/**
+ * Get a list of channels following a specific channel
+ * @param {string} channelId - ID of the channel to get the list of followers
+ * @returns {Promise<ReturnObj>}
+ */
+export const readFollowers = async (channelId) => {
+	const select = `
+		follower_id (
+			id, name, slug, description, created_at, image, url
+		)
+	`
+	const response = await supabase
+		.from('followers')
+		.select(select)
+		.eq('channel_id', channelId);
+	return unwrapResponse(response, 'follower_id')
+}
+
+/**
+ * Get a list of channels that a specific channel follows
+ * @param {string} channelId - ID of the channel to get the list of followed channels
+ * @returns {Promise<ReturnObj>}
+ */
+export const readFollowings = async (channelId) => {
+	const select = `
+		channel_id (
+			id, name, slug, description, created_at, image, url
+		)
+	`
+	const response = await supabase
+		.from('followers')
+		.select(select)
+		.eq('follower_id', channelId);
+	return unwrapResponse(response, 'channel_id')
+}
+
+/**
+ * When doing joins, supabase returns an array of objects with the table name as property.
+ * This function unwraps the response and returns an array of the property values.
+ * @param {ReturnObj} response - response from supabase
+ * @param {string} prop - property to unwrap, or take, on each item
+ * @returns {ReturnObj}
+ */
+function unwrapResponse(response, prop) {
+	if (!response.error && response.data.length) {
+		return {
+			data: response.data.map((item) => item[prop]),
+		}
+	}
+	return response
+}
