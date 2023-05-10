@@ -260,8 +260,6 @@ export const readFollowings = async (channelId) => {
 		.from('followers')
 		.select(select)
 		.eq('follower_id', channelId);
-	console.log(response)
-	if (response.length) return {data: response.map(item => item.channel_id)}
 	return unwrapResponse(response, 'channel_id')
 }
 
