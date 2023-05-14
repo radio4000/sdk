@@ -13,16 +13,19 @@ export interface Database {
         Row: {
           created_at: string | null
           id: string
+          theme: string | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           id: string
+          theme?: string | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
+          theme?: string | null
           updated_at?: string | null
         }
       }
@@ -54,6 +57,7 @@ export interface Database {
           coordinates: unknown | null
           created_at: string | null
           description: string | null
+          fts: unknown | null
           id: string
           image: string | null
           latitude: number | null
@@ -67,6 +71,7 @@ export interface Database {
           coordinates?: unknown | null
           created_at?: string | null
           description?: string | null
+          fts?: unknown | null
           id?: string
           image?: string | null
           latitude?: number | null
@@ -80,6 +85,7 @@ export interface Database {
           coordinates?: unknown | null
           created_at?: string | null
           description?: string | null
+          fts?: unknown | null
           id?: string
           image?: string | null
           latitude?: number | null
@@ -90,11 +96,29 @@ export interface Database {
           url?: string | null
         }
       }
+      followers: {
+        Row: {
+          channel_id: string
+          created_at: string | null
+          follower_id: string
+        }
+        Insert: {
+          channel_id: string
+          created_at?: string | null
+          follower_id: string
+        }
+        Update: {
+          channel_id?: string
+          created_at?: string | null
+          follower_id?: string
+        }
+      }
       tracks: {
         Row: {
           created_at: string | null
           description: string | null
           discogs_url: string | null
+          fts: unknown | null
           id: string
           mentions: string[] | null
           tags: string[] | null
@@ -106,6 +130,7 @@ export interface Database {
           created_at?: string | null
           description?: string | null
           discogs_url?: string | null
+          fts?: unknown | null
           id?: string
           mentions?: string[] | null
           tags?: string[] | null
@@ -117,6 +142,7 @@ export interface Database {
           created_at?: string | null
           description?: string | null
           discogs_url?: string | null
+          fts?: unknown | null
           id?: string
           mentions?: string[] | null
           tags?: string[] | null
@@ -143,23 +169,6 @@ export interface Database {
           created_at?: string | null
           updated_at?: string | null
           user_id?: string
-        }
-      }
-      users: {
-        Row: {
-          created_at: string | null
-          id: string
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id: string
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          updated_at?: string | null
         }
       }
     }
