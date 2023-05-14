@@ -30,7 +30,9 @@
   "devDependencies": {
     "@types/node": "^18.15.8",
     "ava": "^5.2.0",
+    "eslint": "^8.40.0",
     "typescript": "^5.0.4",
+    "prettier": "^2.8.8",
     "vite": "^4.2.1"
   },
   "author": "radio4000",
@@ -47,5 +49,11 @@
     "radio4000",
     "supabase",
     "sdk"
-  ]
+  ],
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "printWidth": 120
+  }
 }
