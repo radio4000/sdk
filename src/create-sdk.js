@@ -2,9 +2,10 @@ import * as auth from './auth.js'
 import * as users from './users.js'
 import * as channels from './channels.js'
 import * as tracks from './tracks.js'
-import { SupabaseClient } from '@supabase/supabase-js'
 
 export let supabase
+
+/** @typedef {import('@supabase/supabase-js').SupabaseClient} SupabaseClient */
 
 /** @typedef {Object} SDK
  * @property {typeof auth} auth
