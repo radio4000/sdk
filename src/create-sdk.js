@@ -2,6 +2,7 @@ import * as auth from './auth.js'
 import * as users from './users.js'
 import * as channels from './channels.js'
 import * as tracks from './tracks.js'
+import * as browse from './browse.js'
 
 export let supabase
 
@@ -14,7 +15,7 @@ export let supabase
  * @property {typeof tracks} tracks
  * @property {SupabaseClient} supabase
 
-/**
+	 /**
  * Creates a new SDK instance with the given Supabase client.
  * @param {SupabaseClient} supabaseClient
  * @returns {SDK}
@@ -30,5 +31,6 @@ export function createSdk(supabaseClient) {
 		channels,
 		tracks,
 		supabase,
+		browse,
 	}
 }
