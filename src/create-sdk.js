@@ -14,7 +14,7 @@ export let supabase
  * @property {typeof channels} channels
  * @property {typeof tracks} tracks
  * @property {SupabaseClient} supabase
- * @property {typeof Object} browse
+ * @property {Object} browse
 
 	 /**
  * Creates a new SDK instance with the given Supabase client.
