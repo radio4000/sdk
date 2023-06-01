@@ -145,14 +145,16 @@ export async function readChannelTracks(slug) {
 	if (!slug) return {error: {message: 'Missing channel slug'}}
 	const {data, error} = await supabase
 		.from('channel_track')
-		.select(`
+		.select(
+			`
 			channel_id!inner(
 				slug
 			),
 			track_id(
 				id, created_at, updated_at, title, url, description
 			)
-		`)
+		`
+		)
 		.eq('channel_id.slug', slug)
 		.order('created_at', {ascending: false})
 		.limit(5000)
@@ -205,9 +207,7 @@ export async function createImage(file, tags) {
  * @returns {Promise<ReturnObj>}
  */
 export const followChannel = async (followerId, channelId) => {
-	const response = await supabase
-		.from('followers')
-		.insert([{ follower_id: followerId, channel_id: channelId }])
+	const response = await supabase.from('followers').insert([{follower_id: followerId, channel_id: channelId}])
 	return response
 }
 
@@ -218,13 +218,9 @@ export const followChannel = async (followerId, channelId) => {
  * @returns {Promise<ReturnObj>}
  */
 export const unfollowChannel = async (followerId, channelId) => {
-	const response = await supabase
-		.from('followers')
-		.delete()
-		.eq('follower_id', followerId)
-		.eq('channel_id', channelId);
+	const response = await supabase.from('followers').delete().eq('follower_id', followerId).eq('channel_id', channelId)
 	return response
-};
+}
 
 /**
  * Get a list of channels following a specific channel
@@ -234,13 +230,14 @@ export const unfollowChannel = async (followerId, channelId) => {
 export const readFollowers = async (channelId) => {
 	const select = `
 		follower_id (
-			id, name, slug, description, created_at, image, url
+			id, name, slug, description, created_at, updated_at, image, url
 		)
 	`
 	const response = await supabase
 		.from('followers')
 		.select(select)
-		.eq('channel_id', channelId);
+		.eq('channel_id', channelId)
+		.order('updated_at', {ascending: false, foreignTable: 'follower_id'})
 	return unwrapResponse(response, 'follower_id')
 }
 
@@ -252,13 +249,14 @@ export const readFollowers = async (channelId) => {
 export const readFollowings = async (channelId) => {
 	const select = `
 		channel_id (
-			id, name, slug, description, created_at, image, url
+			id, name, slug, description, created_at, updated_at, image, url
 		)
 	`
 	const response = await supabase
 		.from('followers')
 		.select(select)
-		.eq('follower_id', channelId);
+		.eq('follower_id', channelId)
+		.order('updated_at', {ascending: false, foreignTable: 'channel_id'})
 	return unwrapResponse(response, 'channel_id')
 }
 
