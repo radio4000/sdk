@@ -9,6 +9,7 @@ import {readUser} from './users.js'
  * @property {string} [updated_at]
  * @property {string} [created_at]
  * @property {string} [description]
+ * @property {string} [discogs_url]
  */
 
 /**
@@ -18,14 +19,14 @@ import {readUser} from './users.js'
  * @return {Promise<import('./channels.js').ReturnObj>}
  */
 export const createTrack = async (channelId, fields) => {
-	const {url, title, description} = fields
+	const {url, title, description, discogs_url} = fields
 
 	if (!channelId) throw Error('Missing channel id')
 
 	// Create track
 	const {data: track, error} = await supabase
 		.from('tracks')
-		.insert({url, title, description})
+		.insert({url, title, description, discogs_url})
 		.select()
 		.single()
 	if (error) return {error}
@@ -52,8 +53,8 @@ export const createTrack = async (channelId, fields) => {
  * @return {Promise<import('./channels.js').ReturnObj>}
  */
 export const updateTrack = async (id, changes) => {
-	const {url, title, description} = changes
-	return supabase.from('tracks').update({url, title, description}).eq('id', id)
+	const {url, title, description, discogs_url} = changes
+	return supabase.from('tracks').update({url, title, description, discogs_url}).eq('id', id)
 }
 
 /**

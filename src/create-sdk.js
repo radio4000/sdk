@@ -2,9 +2,25 @@ import * as auth from './auth.js'
 import * as users from './users.js'
 import * as channels from './channels.js'
 import * as tracks from './tracks.js'
+import * as browse from './browse.js'
 
 export let supabase
 
+/** @typedef {import('@supabase/supabase-js').SupabaseClient} SupabaseClient */
+
+/** @typedef {Object} SDK
+ * @property {typeof auth} auth
+ * @property {typeof users} users
+ * @property {typeof channels} channels
+ * @property {typeof tracks} tracks
+ * @property {SupabaseClient} supabase
+ * @property {Object} browse
+
+	 /**
+ * Creates a new SDK instance with the given Supabase client.
+ * @param {SupabaseClient} supabaseClient
+ * @returns {SDK}
+ */
 export function createSdk(supabaseClient) {
 	if (!supabaseClient) throw Error('Pass in a Supabase client')
 
@@ -16,5 +32,6 @@ export function createSdk(supabaseClient) {
 		channels,
 		tracks,
 		supabase,
+		browse,
 	}
 }

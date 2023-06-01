@@ -1,20 +1,19 @@
 {
   "name": "@radio4000/sdk",
-  "version": "0.3.4",
+  "version": "0.4.2",
   "description": "JavaScript client for Radio4000 for the browser and node",
   "type": "module",
   "files": [
     "dist"
   ],
-  "main": "./dist/sdk.cjs",
   "module": "./dist/sdk.js",
   "exports": {
     ".": {
       "types": "./dist/types/main.d.ts",
-      "import": "./dist/sdk.js",
-      "require": "./dist/sdk.cjs"
+      "import": "./dist/sdk.js"
     }
   },
+  "types": "./dist/types/main.d.ts",
   "private": false,
   "scripts": {
     "dev": "vite --port 3999",
@@ -22,7 +21,7 @@
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
     "test": "ava",
-    "types": "tsc src/main.js --allowJs --declaration --emitDeclarationOnly --outDir dist/types"
+    "types": "tsc"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.12.1",
@@ -31,7 +30,9 @@
   "devDependencies": {
     "@types/node": "^18.15.8",
     "ava": "^5.2.0",
-    "typescript": "^5.0.2",
+    "eslint": "^8.40.0",
+    "typescript": "^5.0.4",
+    "prettier": "^2.8.8",
     "vite": "^4.2.1"
   },
   "author": "radio4000",
@@ -48,5 +49,11 @@
     "radio4000",
     "supabase",
     "sdk"
-  ]
+  ],
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "printWidth": 120
+  }
 }
