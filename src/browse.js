@@ -45,7 +45,7 @@ export const supabaseOperators = Object.keys(supabaseOperatorsTable)
  */
 export async function query({page = 1, limit = 1, table = '', select = '', orderBy = '', orderConfig = {}, filters = []}) {
 	const {from, to, limitResults} = getBrowseParams({page, limit})
-	let query = supabase.from(table).select(select).limit(limitResults).order(orderBy, orderConfig).range(from, to)
+	let query = supabase.from(table).select(select)
 
 	/*
 		 add filters to the query,
@@ -78,6 +78,10 @@ export async function query({page = 1, limit = 1, table = '', select = '', order
 				query = query[filter.operator](filter.column, filter.value || null)
 			}
 		})
+
+	// After filters we add order, range and limit. In that order.
+	query = query.order(orderBy, orderConfig).range(from, to).limit(limitResults)
+
 	return query
 }
 
