@@ -43,7 +43,15 @@ export const supabaseOperators = Object.keys(supabaseOperatorsTable)
 	 (query params ->) components-attributes -> supbase-query
 	 this does not render the list, just browses it
  */
-export async function query({page = 1, limit = 1, table = '', select = '', orderBy = '', orderConfig = {}, filters = []}) {
+export async function query({
+	page = 1,
+	limit = 1,
+	table = '',
+	select = '',
+	orderBy = '',
+	orderConfig = {},
+	filters = [],
+}) {
 	const {from, to, limitResults} = getBrowseParams({page, limit})
 	let query = supabase.from(table).select(select)
 

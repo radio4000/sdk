@@ -3,7 +3,7 @@ import {readUser} from './users.js'
 
 /**
  * A channel
- * @typedef {Object} Channel
+ * @typedef {object} Channel
  * @property {string} name
  * @property {string} slug - unique
  * @property {string} [userId] - if not passed in we try to read the current user
@@ -12,8 +12,8 @@ import {readUser} from './users.js'
 
 /**
  * This is the type all async functions should return.
- * @typedef {Object} ReturnObj
- * @property {object} [data]
+ * @typedef {object} ReturnObj
+ * @property {Object} [data]
  * @property {object} [error]
  * @property {string} [error.code]
  * @property {string} error.message
@@ -80,7 +80,10 @@ export const createChannel = async ({name, slug, userId}) => {
 export const updateChannel = async (id, changes) => {
 	// Extract the keys so we're sure which fields update.
 	const {name, slug, description, url, longitude, latitude} = changes
-	const response = await supabase.from('channels').update({name, slug, description, url, longitude, latitude}).eq('id', id)
+	const response = await supabase
+		.from('channels')
+		.update({name, slug, description, url, longitude, latitude})
+		.eq('id', id)
 	return response
 }
 
@@ -145,14 +148,16 @@ export async function readChannelTracks(slug) {
 	if (!slug) return {error: {message: 'Missing channel slug'}}
 	const {data, error} = await supabase
 		.from('channel_track')
-		.select(`
+		.select(
+			`
 			channel_id!inner(
 				slug
 			),
 			track_id(
 				id, created_at, updated_at, title, url, description
 			)
-		`)
+		`
+		)
 		.eq('channel_id.slug', slug)
 		.order('created_at', {ascending: false})
 		.limit(5000)
@@ -205,9 +210,7 @@ export async function createImage(file, tags) {
  * @returns {Promise<ReturnObj>}
  */
 export const followChannel = async (followerId, channelId) => {
-	const response = await supabase
-		.from('followers')
-		.insert([{ follower_id: followerId, channel_id: channelId }])
+	const response = await supabase.from('followers').insert([{follower_id: followerId, channel_id: channelId}])
 	return response
 }
 
@@ -218,13 +221,9 @@ export const followChannel = async (followerId, channelId) => {
  * @returns {Promise<ReturnObj>}
  */
 export const unfollowChannel = async (followerId, channelId) => {
-	const response = await supabase
-		.from('followers')
-		.delete()
-		.eq('follower_id', followerId)
-		.eq('channel_id', channelId);
+	const response = await supabase.from('followers').delete().eq('follower_id', followerId).eq('channel_id', channelId)
 	return response
-};
+}
 
 /**
  * Get a list of channels following a specific channel
@@ -237,10 +236,7 @@ export const readFollowers = async (channelId) => {
 			id, name, slug, description, created_at, image, url
 		)
 	`
-	const response = await supabase
-		.from('followers')
-		.select(select)
-		.eq('channel_id', channelId);
+	const response = await supabase.from('followers').select(select).eq('channel_id', channelId)
 	return unwrapResponse(response, 'follower_id')
 }
 
@@ -255,10 +251,7 @@ export const readFollowings = async (channelId) => {
 			id, name, slug, description, created_at, image, url
 		)
 	`
-	const response = await supabase
-		.from('followers')
-		.select(select)
-		.eq('follower_id', channelId);
+	const response = await supabase.from('followers').select(select).eq('follower_id', channelId)
 	return unwrapResponse(response, 'channel_id')
 }
 
