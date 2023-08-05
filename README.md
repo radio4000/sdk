@@ -14,7 +14,7 @@ This example can be copy pasted into any HTML page. We read the latest five chan
 
 ```html
 <script type="module">
-  import {sdk} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
+  import {sdk} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/+esm'
 
   const {data: channels, error} = await sdk.channels.readChannels(5)
   if (error) throw new Error(error.message)
@@ -26,7 +26,7 @@ Here's another, where we sign in (use your own credentials), create a channel an
 
 ```html
 <script type="module">
-  import {sdk} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk'
+  import {sdk} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/+esm'
 	
   sdk.auth.signIn({email: '', password: '')}
 	
@@ -101,8 +101,10 @@ npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID > src/databas
 
 We use [vite](https://vitejs.dev/) in library mode to bundle the project. We output two files:
 
-- dist/sdk.js (esm, good for browsers)
-- dist/sdk.cjs.js (good for nodejs)
+- dist/sdk.js (esm, good for browsers and newer node.js)
 
 Our package.json defines the `main`, `module` and `exports` fields to specify which file should be loaded in which environment. 
 
+## How to release a new version
+
+Create a new, tagged release via the github.com website UI. That will trigger the GitHub action to publish to NPM.
