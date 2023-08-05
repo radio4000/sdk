@@ -104,3 +104,7 @@ We use [vite](https://vitejs.dev/) in library mode to bundle the project. We out
 - dist/sdk.js (esm, good for browsers and newer node.js)
 
 Our package.json defines the `main`, `module` and `exports` fields to specify which file should be loaded in which environment. 
+
+## How to release a new version
+
+Create a new, tagged release via the github.com website UI. That will trigger the GitHub action to publish to NPM.
