@@ -4,14 +4,14 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>@radio4000/sdk</title>
-		<link rel="icon" href="data:;base64,ivborw0kggo=">
+		<link rel="icon" href="data:;base64,ivborw0kggo=" />
 	</head>
 	<body>
-
 		<article>
 			<p>
-				Testing the <a href="https://github.com/radio4000/sdk">@radio4000/sdk</a>.
-				Try it out in the browser console under `window.sdk`.</p>
+				Testing the <a href="https://github.com/radio4000/sdk">@radio4000/sdk</a>. Try it out in the browser console
+				under `window.sdk`.
+			</p>
 		</article>
 
 		<ul id="channels"></ul>
@@ -35,8 +35,12 @@
 
 			// Fetch and render some channels to test.
 			const ul = document.querySelector('#channels')
-			sdk.channels.readChannels(100).then(response => {
+			sdk.channels.readChannels(100).then((response) => {
 				console.log(response)
+
+				if (!response?.data) {
+					return
+				}
 				for (const c of response.data) {
 					const li = document.createElement('li')
 					const input = document.createElement('input')
@@ -46,7 +50,7 @@
 					ul.appendChild(li)
 				}
 				// Testing it worked
-				sdk.channels.readChannel(response.data[0].slug).then(res => console.log(res))
+				sdk.channels.readChannel(response.data[0].slug).then((res) => console.log(res))
 			})
 
 			/**
@@ -59,7 +63,9 @@
 			async function sdkTest(slug, email, password) {
 				console.log('testing')
 
-				const {data: {user}} = await sdk.auth.signIn({email, password})
+				const {
+					data: {user},
+				} = await sdk.auth.signIn({email, password})
 
 				await sdk.channels.createChannel({name: 'Radio Test', slug: slug})
 
@@ -69,10 +75,13 @@
 
 				const {data: updatedChannel} = await sdk.channels.readChannel(slug)
 
-				console.log('same channel', channel.id === updatedChannel.id, )
+				console.log('same channel', channel.id === updatedChannel.id)
 				console.log('name field was updated', updatedChannel.name === 'updated')
 
-				const {data: track} = await sdk.tracks.createTrack(channel.id, {url: 'https://www.youtube.com/watch?v=dA55o_18a-g', title: 'My new track'})
+				const {data: track} = await sdk.tracks.createTrack(channel.id, {
+					url: 'https://www.youtube.com/watch?v=dA55o_18a-g',
+					title: 'My new track',
+				})
 
 				console.log('track was created', track.title === 'My new track')
 
@@ -83,6 +92,5 @@
 		</script>
 
 		<p>See the <a href="/docs">full documentation</a>.</p>
-
 	</body>
 </html>
