@@ -2,9 +2,10 @@
 import {createClient} from '@supabase/supabase-js'
 import {createSdk} from './create-sdk.js'
 
-const {VITE_SUPABASE_URL, VITE_SUPABASE_KEY} = import.meta.env
+export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+export const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY
 
-const supabase = createClient(VITE_SUPABASE_URL, VITE_SUPABASE_KEY)
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 /**
  * The default Radio4000 SDK connects to the main Supabase project.

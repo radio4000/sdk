@@ -1,3 +1,4 @@
-import sdk from './sdk-default.js'
+import sdk, {SUPABASE_URL, SUPABASE_KEY} from './sdk-default.js'
+
 export {supabase, createSdk} from './create-sdk.js'
-export {sdk}
+export {sdk, SUPABASE_URL, SUPABASE_KEY}
