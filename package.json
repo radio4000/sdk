@@ -1,11 +1,9 @@
 {
   "name": "@radio4000/sdk",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "JavaScript client for Radio4000 for the browser and node",
   "type": "module",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "module": "./dist/sdk.js",
   "exports": {
     ".": {
@@ -45,11 +43,7 @@
     "url": "https://github.com/radio4000/sdk/issues"
   },
   "homepage": "https://github.com/radio4000/sdk#readme",
-  "keywords": [
-    "radio4000",
-    "supabase",
-    "sdk"
-  ],
+  "keywords": ["radio4000", "supabase", "sdk"],
   "prettier": {
     "semi": false,
     "singleQuote": true,
