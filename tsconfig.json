@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
     "target": "ES2022",
     "useDefineForClassFields": true,
     "module": "ESNext",
@@ -14,13 +12,21 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "esModuleInterop": true,   
 
     /* Linting */
     "strict": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+      
+    /* JSDoc Types */
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true,
+		"emitDeclarationOnly": true,
+		"outDir": "./dist/types"
   },
   "include": ["src/**/*"]
 }
