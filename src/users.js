@@ -1,7 +1,7 @@
 import {supabase} from './main.js'
 
 /**
- * Gets the currently signed in user
+ * Fetches the currently signed in user
  * @param {string} [jwtToken]
  * @returns {Promise<{ data?: object, error?: object }>}
  */

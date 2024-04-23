@@ -166,18 +166,19 @@ export async function readChannelTracks(slug) {
 }
 
 /**
- * Checks if current user can edit a channel
+ * Checks if the local session user can edit a channel
  * @param {string} slug
  * @returns {Promise<Boolean>}
  */
 export async function canEditChannel(slug) {
-	const {data: user} = await readUser()
-	if (!user) return false
+	const {data: {session}} = await supabase.auth.getSession()
+	if (!session?.user) return false
+	// const {data: user} = await readUser()
 	const {data} = await supabase
 		.from('user_channel')
 		.select('user_id, channel_id!inner ( name, slug )')
 		.eq('channel_id.slug', slug)
-		.eq('user_id', user.id)
+		.eq('user_id', session.user.id)
 	if (data?.length > 0) return true
 	return false
 }
