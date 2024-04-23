@@ -11,8 +11,7 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "esModuleInterop": true,   
+    "esModuleInterop": true,
 
     /* Linting */
     "strict": false,
@@ -20,12 +19,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "types": ["vite/client"],
-      
+
     /* JSDoc Types */
     "allowJs": true,
     "checkJs": true,
     "declaration": true,
 		"emitDeclarationOnly": true,
+		"noEmit": false,
 		"outDir": "./dist/types"
   },
   "include": ["src/**/*"]
