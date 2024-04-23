@@ -6,6 +6,7 @@ import * as browse from './browse.js'
 
 export let supabase
 
+
 /** @typedef {import('@supabase/supabase-js').SupabaseClient} SupabaseClient */
 
 /** @typedef {Object} SDK
