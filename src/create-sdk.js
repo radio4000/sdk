@@ -4,10 +4,8 @@ import * as channels from './channels.js'
 import * as tracks from './tracks.js'
 import * as browse from './browse.js'
 
-export let supabase
-
-
 /** @typedef {import('@supabase/supabase-js').SupabaseClient} SupabaseClient */
+export let supabase
 
 /** @typedef {Object} SDK
  * @property {typeof auth} auth
@@ -17,7 +15,7 @@ export let supabase
  * @property {SupabaseClient} supabase
  * @property {Object} browse
 
-	 /**
+/**
  * Creates a new SDK instance with the given Supabase client.
  * @param {SupabaseClient} supabaseClient
  * @returns {SDK}
