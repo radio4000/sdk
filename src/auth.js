@@ -5,8 +5,8 @@ import {supabase} from './main.js'
 /**
  * @param {{email: string, password: string}} param0
  */
-export const signUp = async ({email, password}) => {
-	return supabase.auth.signUp({email, password})
+export const signUp = async ({email, password, options = {}}) => {
+	return supabase.auth.signUp({email, password, options})
 }
 
 export const signIn = async ({email, password}) => {
