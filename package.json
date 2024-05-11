@@ -22,7 +22,7 @@
     "types": "tsc"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.42.4",
+    "@supabase/supabase-js": "^2.43.1",
     "media-url-parser": "^0.2.4"
   },
   "devDependencies": {
