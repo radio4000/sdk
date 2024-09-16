@@ -1,5 +1,6 @@
 import {supabase} from './main.js'
 import {readUser} from './users.js'
+import {getBrowsePageParams} from './utils.js'
 
 /**
  * A channel
@@ -113,6 +114,21 @@ export const readChannel = async (slug) => {
  */
 export const readChannels = async (limit = 1000) => {
 	return supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})
+}
+
+/**
+ * Returns a paginated list of channels.
+ * @returns {Promise<ReturnObj>}
+ */
+
+export const browseChannels = async ({page, limit}) => {
+	const { from, to, limitResults } = getBrowsePageParams({ page, limit })
+	return supabase
+		.from('channels')
+		.select('*')
+		.limit(limitResults)
+		.order('created_at', {ascending: true})
+		.range(from, to)
 }
 
 /**

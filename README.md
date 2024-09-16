@@ -2,11 +2,11 @@
 
 # @radio4000/sdk
 
-A JavaScript SDK to interact with [Radio4000](https://radio4000.com) via a browser or node.js.  
+A JavaScript SDK to interact with [Radio4000](https://radio4000.com) via a browser or node.js.
 
 It offers authentication as well as full create, read, update and delete of users, channels and tracks
 
-## Usage 
+## Usage
 
 ### With browser via CDN
 
@@ -28,8 +28,8 @@ Here's another, where we sign in (use your own credentials), create a channel an
 <script type="module">
   import {sdk} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/+esm'
 	
-  sdk.auth.signIn({email: '', password: '')}
-	
+  sdk.auth.signIn({email: '', password: ''})
+
   const {data: channel, error} = await sdk.channels.createChannel({
     name: 'My radio',
     slug: 'my-radio',
@@ -83,7 +83,7 @@ npm start
 
 ### Environment variables
 
-This SDK connects to the main Radio4000 PostgreSQL database via Supabase. 
+This SDK connects to the main Radio4000 PostgreSQL database via Supabase.
 
 1. `cp .env.example .env`
 2. Fill out the `.env` file
