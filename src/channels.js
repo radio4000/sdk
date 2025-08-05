@@ -142,27 +142,17 @@ export const readUserChannels = async () => {
 /**
  * Fetches tracks by channel slug
  * @param {string} slug
+ * @param {number} limit - default 5000
  * @returns {Promise<ReturnObj>}
  */
-export async function readChannelTracks(slug) {
+export async function readChannelTracks(slug, limit = 5000) {
 	if (!slug) return {error: {message: 'Missing channel slug'}}
-	const {data, error} = await supabase
-		.from('channel_track')
-		.select(
-			`
-			channel_id!inner(
-				slug
-			),
-			track_id(
-				id, created_at, updated_at, title, url, description
-			)
-		`
-		)
-		.eq('channel_id.slug', slug)
+	return supabase
+		.from('channel_tracks')
+		.select('*')
+		.eq('slug', slug)
 		.order('created_at', {ascending: false})
-		.limit(5000)
-	const tracks = data.map((t) => t.track_id)
-	return {data: tracks, error}
+		.limit(limit)
 }
 
 /**
