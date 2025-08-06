@@ -14,4 +14,3 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 const sdk = createSdk(supabase)
 
 export default sdk
-
