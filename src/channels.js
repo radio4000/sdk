@@ -82,7 +82,7 @@ export const deleteChannel = async (id) => {
  * @param {string} slug
  */
 export const readChannel = async (slug) => {
-	return supabase.from('channels').select(`*`).eq('slug', slug).single()
+	return supabase.from('channels').select('*').eq('slug', slug).single()
 }
 
 /**

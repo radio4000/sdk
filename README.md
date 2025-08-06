@@ -98,26 +98,26 @@ Further development tips at the bottom.
   │   └── deleteUser() → Promise
   │
   ├── channels/
-  │   ├── createChannel({name, slug, userId?}) → Promise<ReturnObj>
-  │   ├── updateChannel(id, changes) → Promise<ReturnObj>
+  │   ├── createChannel({name, slug, userId?}) → Promise<SupabaseResponse>
+  │   ├── updateChannel(id, changes) → Promise<SupabaseResponse>
   │   ├── deleteChannel(id) → Promise
-  │   ├── readChannel(slug) → Promise<ReturnObj>
-  │   ├── readChannels(limit?) → Promise<ReturnObj>
-  │   ├── readChannelTracks(slug, limit?) → Promise<ReturnObj>
+  │   ├── readChannel(slug) → Promise<SupabaseResponse>
+  │   ├── readChannels(limit?) → Promise<SupabaseResponse>
+  │   ├── readChannelTracks(slug, limit?) → Promise<SupabaseResponse>
   │   ├── readUserChannels() → Promise
-  │   ├── readFirebaseChannel(slug) → Promise<ReturnObj>
+  │   ├── readFirebaseChannel(slug) → Promise<SupabaseResponse>
   │   ├── canEditChannel(slug) → Promise<Boolean>
   │   ├── createImage(file, tags?) → Promise
-  │   ├── followChannel(followerId, channelId) → Promise<ReturnObj>
-  │   ├── unfollowChannel(followerId, channelId) → Promise<ReturnObj>
-  │   ├── readFollowers(channelId) → Promise<ReturnObj>
-  │   └── readFollowings(channelId) → Promise<ReturnObj>
+  │   ├── followChannel(followerId, channelId) → Promise<SupabaseResponse>
+  │   ├── unfollowChannel(followerId, channelId) → Promise<SupabaseResponse>
+  │   ├── readFollowers(channelId) → Promise<SupabaseResponse>
+  │   └── readFollowings(channelId) → Promise<SupabaseResponse>
   │
   ├── tracks/
-  │   ├── createTrack(channelId, fields) → Promise<ReturnObj>
-  │   ├── updateTrack(id, changes) → Promise<ReturnObj>
+  │   ├── createTrack(channelId, fields) → Promise<SupabaseResponse>
+  │   ├── updateTrack(id, changes) → Promise<SupabaseResponse>
   │   ├── deleteTrack(id) → Promise
-  │   ├── readTrack(id) → Promise<{data?, error?}>
+  │   ├── readTrack(id) → Promise<SupabaseResponse>
   │   └── canEditTrack(track_id) → Promise<Boolean>
   │
   ├── browse/
@@ -130,7 +130,7 @@ Further development tips at the bottom.
   Types:
     • Channel: {name: string, slug: string, userId?: string, description?: string}
     • Track: {url: string, title: string, description?: string, discogs_url?: string}
-    • ReturnObj: {data?: Object, error?: {code?: string, message: string}}
+    • SupabaseResponse: {data?: Object, error?: {code?: string, message: string}} (properly typed via Supabase)
 ```
 
 ### Environment variables
