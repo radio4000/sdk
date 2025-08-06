@@ -5,6 +5,7 @@ import {createSdk} from './create-sdk.js'
 export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 export const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY
 
+/** @type {import('@supabase/supabase-js').SupabaseClient<import('./database.types.js').Database>} */
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 /**

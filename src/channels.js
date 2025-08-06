@@ -2,27 +2,14 @@ import {supabase} from './main.js'
 import {readUser} from './users.js'
 
 /**
- * A channel
- * @typedef {object} Channel
- * @property {string} name
- * @property {string} slug - unique
- * @property {string} [userId] - if not passed in we try to read the current user
- * @property {string} [description]
- */
-
-/**
- * This is the type all async functions should return.
- * @typedef {object} ReturnObj
- * @property {Object} [data]
- * @property {object} [error]
- * @property {string} [error.code]
- * @property {string} error.message
+ * @typedef {import('./types.d.ts').CreateChannelParams} CreateChannelParams
+ * @typedef {import('./types.d.ts').UpdateChannelParams} UpdateChannelParams
+ * @typedef {import('./types.d.ts').FirebaseChannelResult} FirebaseChannelResult
  */
 
 /**
  * Creates a new radio channel and connects it to a user
- * @param {Channel} fields
- * @returns {Promise<ReturnObj>}
+ * @param {CreateChannelParams} fields
  */
 export const createChannel = async ({name, slug, userId}) => {
 	// Throw an error if the slug is in use by the old Firebase database.
@@ -68,14 +55,7 @@ export const createChannel = async ({name, slug, userId}) => {
 /**
  * Updates a channel
  * @param {string} id
- * @param {object} changes - optional fields to update
- * @param {string} [changes.name]
- * @param {string} [changes.slug]
- * @param {string} [changes.description]
- * @param {string} [changes.url]
- * @param {number} [changes.longitude]
- * @param {number} [changes.latitude]
- * @returns {Promise<ReturnObj>}
+ * @param {UpdateChannelParams} changes - optional fields to update
  */
 export const updateChannel = async (id, changes) => {
 	// Extract the keys so we're sure which fields update.
@@ -100,7 +80,6 @@ export const deleteChannel = async (id) => {
 /**
  * Finds a channel by slug
  * @param {string} slug
- * @returns {Promise<ReturnObj>}
  */
 export const readChannel = async (slug) => {
 	return supabase.from('channels').select(`*`).eq('slug', slug).single()
@@ -109,7 +88,6 @@ export const readChannel = async (slug) => {
 /**
  * Returns a list of channels.
  * @param {number} limit
- * @returns {Promise<ReturnObj>}
  */
 export const readChannels = async (limit = 1000) => {
 	return supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})
@@ -118,7 +96,7 @@ export const readChannels = async (limit = 1000) => {
 /**
  * Find a Firebase channel by "slug" property
  * @param {string} slug
- * @returns {Promise<ReturnObj>}
+ * @returns {Promise<FirebaseChannelResult>}
  */
 export async function readFirebaseChannel(slug) {
 	const res = await fetch(`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`)
@@ -143,7 +121,6 @@ export const readUserChannels = async () => {
  * Fetches tracks by channel slug
  * @param {string} slug
  * @param {number} limit - default 5000
- * @returns {Promise<ReturnObj>}
  */
 export async function readChannelTracks(slug, limit = 5000) {
 	if (!slug) return {error: {message: 'Missing channel slug'}}
@@ -198,7 +175,6 @@ export async function createImage(file, tags) {
  * Make a channel follow another channel
  * @param {string} followerId - ID of the channel following another channel
  * @param {string} channelId - ID of the channel being followed
- * @returns {Promise<ReturnObj>}
  */
 export const followChannel = async (followerId, channelId) => {
 	const response = await supabase.from('followers').insert([{follower_id: followerId, channel_id: channelId}])
@@ -209,7 +185,6 @@ export const followChannel = async (followerId, channelId) => {
  * Make a channel unfollow another channel
  * @param {string} followerId - ID of the channel unfollowing another channel
  * @param {string} channelId - ID of the channel being unfollowed
- * @returns {Promise<ReturnObj>}
  */
 export const unfollowChannel = async (followerId, channelId) => {
 	const response = await supabase.from('followers').delete().eq('follower_id', followerId).eq('channel_id', channelId)
@@ -219,7 +194,6 @@ export const unfollowChannel = async (followerId, channelId) => {
 /**
  * Get a list of channels following a specific channel
  * @param {string} channelId - ID of the channel to get the list of followers
- * @returns {Promise<ReturnObj>}
  */
 export const readFollowers = async (channelId) => {
 	const select = `
@@ -234,7 +208,6 @@ export const readFollowers = async (channelId) => {
 /**
  * Get a list of channels that a specific channel follows
  * @param {string} channelId - ID of the channel to get the list of followed channels
- * @returns {Promise<ReturnObj>}
  */
 export const readFollowings = async (channelId) => {
 	const select = `
@@ -249,9 +222,8 @@ export const readFollowings = async (channelId) => {
 /**
  * When doing joins, supabase returns an array of objects with the table name as property.
  * This function unwraps the response and returns an array of the property values.
- * @param {ReturnObj} response - response from supabase
+ * @param {object} response - response from supabase
  * @param {string} prop - property to unwrap, or take, on each item
- * @returns {ReturnObj}
  */
 function unwrapResponse(response, prop) {
 	if (!response.error && response.data.length) {
