@@ -12,12 +12,12 @@ function fakeEmail() {
 
 const invalidCredentials = {
 	email: fakeEmail(),
-	password: 'pass123',
+	password: 'pass123'
 }
 
 const validCredentials = {
 	email: 'equal.note8933@fastmail.com',
-	password: 'pass123',
+	password: 'pass123'
 }
 
 test.serial('can catch wrong auth credentials', async (t) => {
@@ -61,7 +61,7 @@ test.serial('can sign in', async (t) => {
 test.serial('can read current user', async (t) => {
 	const {
 		data: {user},
-		error,
+		error
 	} = await sdk.auth.signIn(validCredentials)
 	if (error) {
 		t.fail(error.message)

@@ -3,9 +3,7 @@
   "version": "0.4.13",
   "description": "JavaScript client for Radio4000 for the browser and node",
   "type": "module",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "module": "./dist/sdk.js",
   "exports": {
     ".": {
@@ -21,7 +19,7 @@
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
     "types": "tsc",
-    "lint": "biome ci src",
+    "lint": "biome ci",
     "test": "ava"
   },
   "dependencies": {
@@ -45,9 +43,5 @@
     "url": "https://github.com/radio4000/sdk/issues"
   },
   "homepage": "https://github.com/radio4000/sdk#readme",
-  "keywords": [
-    "radio4000",
-    "supabase",
-    "sdk"
-  ]
+  "keywords": ["radio4000", "supabase", "sdk"]
 }
