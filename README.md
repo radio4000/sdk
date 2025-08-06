@@ -6,9 +6,7 @@ A JavaScript SDK to interact with [Radio4000](https://radio4000.com) via a brows
 
 It offers authentication as well as full create, read, update and delete of users, channels and tracks
 
-## Usage 
-
-### With browser via CDN
+## Browser usage via CDN
 
 This example can be copy pasted into any HTML page. We read the latest five channels created.
 
@@ -46,7 +44,7 @@ Here's another, where we sign in (use your own credentials), create a channel an
 </script>
 ```
 
-### With build system and npm
+## Usage with a build system
 
 ```js
 import {sdk} from '@radio4000/sdk'
@@ -81,6 +79,60 @@ npm install
 npm start
 ```
 
+Further development tips at the bottom.
+
+## Overview
+
+```
+ Radio4000 SDK
+  │
+  ├── createSdk(supabaseClient) → SDK
+  │
+  ├── auth/
+  │   ├── signUp({email, password, options?}) → Promise
+  │   ├── signIn({email, password, options?}) → Promise
+  │   └── signOut() → Promise
+  │
+  ├── users/
+  │   ├── readUser(jwtToken?) → Promise<{data?, error?}>
+  │   └── deleteUser() → Promise
+  │
+  ├── channels/
+  │   ├── createChannel({name, slug, userId?}) → Promise<SupabaseResponse>
+  │   ├── updateChannel(id, changes) → Promise<SupabaseResponse>
+  │   ├── deleteChannel(id) → Promise
+  │   ├── readChannel(slug) → Promise<SupabaseResponse>
+  │   ├── readChannels(limit?) → Promise<SupabaseResponse>
+  │   ├── readChannelTracks(slug, limit?) → Promise<SupabaseResponse>
+  │   ├── readUserChannels() → Promise
+  │   ├── readFirebaseChannel(slug) → Promise<SupabaseResponse>
+  │   ├── canEditChannel(slug) → Promise<Boolean>
+  │   ├── createImage(file, tags?) → Promise
+  │   ├── followChannel(followerId, channelId) → Promise<SupabaseResponse>
+  │   ├── unfollowChannel(followerId, channelId) → Promise<SupabaseResponse>
+  │   ├── readFollowers(channelId) → Promise<SupabaseResponse>
+  │   └── readFollowings(channelId) → Promise<SupabaseResponse>
+  │
+  ├── tracks/
+  │   ├── createTrack(channelId, fields) → Promise<SupabaseResponse>
+  │   ├── updateTrack(id, changes) → Promise<SupabaseResponse>
+  │   ├── deleteTrack(id) → Promise
+  │   ├── readTrack(id) → Promise<SupabaseResponse>
+  │   └── canEditTrack(track_id) → Promise<Boolean>
+  │
+  ├── browse/
+  │   ├── query({page?, limit?, table?, select?, orderBy?, orderConfig?, filters?}) → Promise
+  │   ├── supabaseOperators: Array<string>
+  │   └── supabaseOperatorsTable: Object
+  │
+  └── supabase (Supabase client instance)
+
+  Types:
+    • Channel: {name: string, slug: string, userId?: string, description?: string}
+    • Track: {url: string, title: string, description?: string, discogs_url?: string}
+    • SupabaseResponse: {data?: Object, error?: {code?: string, message: string}} (properly typed via Supabase)
+```
+
 ### Environment variables
 
 This SDK connects to the main Radio4000 PostgreSQL database via Supabase. 
@@ -108,3 +160,4 @@ Our package.json defines the `main`, `module` and `exports` fields to specify wh
 ## How to release a new version
 
 Create a new, tagged release via the github.com website UI. That will trigger the GitHub action to publish to NPM.
+

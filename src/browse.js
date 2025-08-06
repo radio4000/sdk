@@ -53,7 +53,7 @@ export async function query({
 	filters = [],
 }) {
 	const {from, to, limitResults} = getBrowseParams({page, limit})
-	let query = supabase.from(table).select(select)
+	let query = supabase.from(/** @type {any} */ (table)).select(select)
 
 	/*
 		 add filters to the query,

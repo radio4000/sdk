@@ -2,21 +2,14 @@ import {supabase} from './main.js'
 import {readUser} from './users.js'
 
 /**
- * A track
- * @typedef {Object} Track
- * @property {string} url
- * @property {string} title
- * @property {string} [updated_at]
- * @property {string} [created_at]
- * @property {string} [description]
- * @property {string} [discogs_url]
+ * @typedef {import('./types.d.ts').CreateTrackParams} CreateTrackParams
+ * @typedef {import('./types.d.ts').UpdateTrackParams} UpdateTrackParams
  */
 
 /**
  * Creates a track and connects it to a user and channel.
  * @param {string} channelId
- * @param {Track} fields
- * @return {Promise<import('./channels.js').ReturnObj>}
+ * @param {CreateTrackParams} fields
  */
 export const createTrack = async (channelId, fields) => {
 	const {url, title, description, discogs_url} = fields
@@ -49,8 +42,7 @@ export const createTrack = async (channelId, fields) => {
 /**
  * Updates a track
  * @param {string} id
- * @param {Track} changes
- * @return {Promise<import('./channels.js').ReturnObj>}
+ * @param {UpdateTrackParams} changes
  */
 export const updateTrack = async (id, changes) => {
 	const {url, title, description, discogs_url} = changes
@@ -69,10 +61,9 @@ export const deleteTrack = async (id) => {
 /**
  * Finds a track by id
  * @param {string} id
- * @returns {Promise<{ data?: Track, error? }>}
  */
 export const readTrack = async (id) => {
-	return supabase.from('tracks').select('*').eq('id', id).single()
+	return supabase.from('channel_tracks').select('*').eq('id', id).single()
 }
 
 /**
