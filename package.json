@@ -20,19 +20,19 @@
     "build": "vite build; npm run types; npm run build-website",
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
-    "test": "ava",
-    "types": "tsc"
+    "types": "tsc",
+    "lint": "biome ci src",
+    "test": "ava"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",
     "media-url-parser": "^0.2.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.0.6",
     "@types/node": "^24.2.0",
     "ava": "^6.4.1",
-    "eslint": "^9.32.0",
     "typescript": "^5.9.2",
-    "prettier": "^3.6.2",
     "vite": "^7.0.6"
   },
   "author": "radio4000",
@@ -49,11 +49,5 @@
     "radio4000",
     "supabase",
     "sdk"
-  ],
-  "prettier": {
-    "semi": false,
-    "singleQuote": true,
-    "bracketSpacing": false,
-    "printWidth": 120
-  }
+  ]
 }
