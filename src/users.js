@@ -8,7 +8,7 @@ import {supabase} from './main.js'
 export async function readUser(jwtToken) {
 	const {
 		data: {user},
-		error,
+		error
 	} = await supabase.auth.getUser(jwtToken)
 	return {data: user, error}
 }

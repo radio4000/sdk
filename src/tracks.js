@@ -31,7 +31,7 @@ export const createTrack = async (channelId, fields) => {
 		.insert({
 			track_id: track.id,
 			channel_id: channelId,
-			user_id: user.id,
+			user_id: user.id
 		})
 		.single()
 	if (error2) return {error}
@@ -74,7 +74,10 @@ export const readTrack = async (id) => {
 export async function canEditTrack(track_id) {
 	const {data: user} = await readUser()
 	if (!user) return false
-	const {data} = await supabase.from('channel_track').select('track_id, user_id').match({user_id: user.id, track_id})
+	const {data} = await supabase
+		.from('channel_track')
+		.select('track_id, user_id')
+		.match({user_id: user.id, track_id})
 	if (data.length > 0) return true
 	return false
 }
