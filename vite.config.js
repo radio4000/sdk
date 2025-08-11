@@ -9,7 +9,7 @@ export default defineConfig({
 			name: 'radio4000Sdk',
 			// the proper extensions will be added
 			fileName: 'sdk',
-			formats: ['es'],
+			formats: ['es']
 		},
 		rollupOptions: {
 			// We don't do this, because we want supabase-js inside our own bundle for ease.
@@ -22,6 +22,6 @@ export default defineConfig({
 			// 		['@supabase/supabase-js']: 'supabase',
 			// 	},
 			// },
-		},
-	},
+		}
+	}
 })

@@ -1,8 +1,8 @@
 import * as auth from './auth.js'
-import * as users from './users.js'
+import * as browse from './browse.js'
 import * as channels from './channels.js'
 import * as tracks from './tracks.js'
-import * as browse from './browse.js'
+import * as users from './users.js'
 
 /** @typedef {import('@supabase/supabase-js').SupabaseClient<import('./database.types.js').Database>} SupabaseClient */
 
@@ -34,6 +34,6 @@ export function createSdk(supabaseClient) {
 		channels,
 		tracks,
 		supabase,
-		browse,
+		browse
 	}
 }

@@ -18,8 +18,8 @@ export const createChannel = async ({name, slug, userId}) => {
 		return {
 			error: {
 				code: 'slug-exists-firebase',
-				message: 'Sorry. This channel slug is already taken by someone else.',
-			},
+				message: 'Sorry. This channel slug is already taken by someone else.'
+			}
 		}
 
 	// If we don't have a user, try to read it from the current session.
@@ -32,8 +32,8 @@ export const createChannel = async ({name, slug, userId}) => {
 		return {
 			error: {
 				code: 'user-required',
-				message: 'A user is required to create a new channel',
-			},
+				message: 'A user is required to create a new channel'
+			}
 		}
 	}
 
@@ -45,7 +45,10 @@ export const createChannel = async ({name, slug, userId}) => {
 
 	// Create junction table
 	const channel_id = channelRes.data.id
-	const userChannelRes = await supabase.from('user_channel').insert({user_id: userId, channel_id}).single()
+	const userChannelRes = await supabase
+		.from('user_channel')
+		.insert({user_id: userId, channel_id})
+		.single()
 	if (userChannelRes.error) return userChannelRes
 
 	// Return both records of the channel
@@ -99,7 +102,9 @@ export const readChannels = async (limit = 1000) => {
  * @returns {Promise<FirebaseChannelResult>}
  */
 export async function readFirebaseChannel(slug) {
-	const res = await fetch(`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`)
+	const res = await fetch(
+		`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`
+	)
 	const json = await res.json()
 	if (json.error) return {error: {message: json.error}}
 	// Since we only expect a single record, we can do this.
@@ -138,7 +143,9 @@ export async function readChannelTracks(slug, limit = 5000) {
  * @returns {Promise<Boolean>}
  */
 export async function canEditChannel(slug) {
-	const {data: {session}} = await supabase.auth.getSession()
+	const {
+		data: {session}
+	} = await supabase.auth.getSession()
 	if (!session?.user) return false
 	// const {data: user} = await readUser()
 	const {data} = await supabase
@@ -167,7 +174,7 @@ export async function createImage(file, tags) {
 
 	return fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/auto/upload`, {
 		method: 'POST',
-		body: formData,
+		body: formData
 	})
 }
 
@@ -177,7 +184,9 @@ export async function createImage(file, tags) {
  * @param {string} channelId - ID of the channel being followed
  */
 export const followChannel = async (followerId, channelId) => {
-	const response = await supabase.from('followers').insert([{follower_id: followerId, channel_id: channelId}])
+	const response = await supabase
+		.from('followers')
+		.insert([{follower_id: followerId, channel_id: channelId}])
 	return response
 }
 
@@ -187,7 +196,11 @@ export const followChannel = async (followerId, channelId) => {
  * @param {string} channelId - ID of the channel being unfollowed
  */
 export const unfollowChannel = async (followerId, channelId) => {
-	const response = await supabase.from('followers').delete().eq('follower_id', followerId).eq('channel_id', channelId)
+	const response = await supabase
+		.from('followers')
+		.delete()
+		.eq('follower_id', followerId)
+		.eq('channel_id', channelId)
 	return response
 }
 
@@ -228,7 +241,7 @@ export const readFollowings = async (channelId) => {
 function unwrapResponse(response, prop) {
 	if (!response.error && response.data.length) {
 		return {
-			data: response.data.map((item) => item[prop]),
+			data: response.data.map((item) => item[prop])
 		}
 	}
 	return response
