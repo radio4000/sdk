@@ -67,6 +67,7 @@ export const updateChannel = async (id, changes) => {
 		.from('channels')
 		.update({name, slug, description, url, longitude, latitude})
 		.eq('id', id)
+		.select()
 	return response
 }
 
