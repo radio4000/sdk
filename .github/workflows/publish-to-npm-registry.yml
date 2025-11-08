@@ -17,8 +17,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-      - run: npm run lint
+        with:
+          node-version: 20
+          cache: "npm"
       - run: npm ci
+      - uses: biomejs/setup-biome@v2
+        with:
+          version: latest
+      - run: npm run lint
       - run: npm run types
       - run: npm run build
       - uses: JS-DevTools/npm-publish@v3
