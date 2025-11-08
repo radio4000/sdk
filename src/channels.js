@@ -94,7 +94,11 @@ export const readChannel = async (slug) => {
  * @param {number} limit
  */
 export const readChannels = async (limit = 1000) => {
-	return supabase.from('channels_with_tracks').select('*').limit(limit).order('created_at', {ascending: true})
+	return supabase
+		.from('channels_with_tracks')
+		.select('*')
+		.limit(limit)
+		.order('created_at', {ascending: true})
 }
 
 /**
