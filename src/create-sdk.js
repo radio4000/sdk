@@ -1,6 +1,7 @@
 import * as auth from './auth.js'
 import * as browse from './browse.js'
 import * as channels from './channels.js'
+import * as search from './search.js'
 import * as tracks from './tracks.js'
 import * as users from './users.js'
 
@@ -14,6 +15,7 @@ export let supabase
  * @property {typeof users} users
  * @property {typeof channels} channels
  * @property {typeof tracks} tracks
+ * @property {typeof search} search
  * @property {SupabaseClient} supabase
  * @property {Object} browse
  */
@@ -33,6 +35,7 @@ export function createSdk(supabaseClient) {
 		users,
 		channels,
 		tracks,
+		search,
 		supabase,
 		browse
 	}
