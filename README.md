@@ -120,6 +120,11 @@ Further development tips at the bottom.
   │   ├── readTrack(id) → Promise<SupabaseResponse>
   │   └── canEditTrack(track_id) → Promise<Boolean>
   │
+  ├── search/
+  │   ├── searchChannels(query, {limit?}) → Promise<{data?, error?}>
+  │   ├── searchTracks(query, {limit?}) → Promise<{data?, error?}>
+  │   └── searchAll(query, {limit?}) → Promise<{data: {channels, tracks}, error?}>
+  │
   ├── browse/
   │   ├── query({page?, limit?, table?, select?, orderBy?, orderConfig?, filters?}) → Promise
   │   ├── supabaseOperators: Array<string>
