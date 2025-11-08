@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest'
+import {expect, test} from 'vitest'
 import {sdk} from './_sdk-test.js'
 
 // These tests are written with .serial. The order is important,

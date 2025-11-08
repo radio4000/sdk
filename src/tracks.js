@@ -46,7 +46,11 @@ export const createTrack = async (channelId, fields) => {
  */
 export const updateTrack = async (id, changes) => {
 	const {url, title, description, discogs_url} = changes
-	return supabase.from('tracks').update({url, title, description, discogs_url}).eq('id', id).select()
+	return supabase
+		.from('tracks')
+		.update({url, title, description, discogs_url})
+		.eq('id', id)
+		.select()
 }
 
 /**

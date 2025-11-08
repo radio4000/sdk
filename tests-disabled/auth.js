@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest'
+import {expect, test} from 'vitest'
 import {sdk} from './_sdk-test.js'
 
 // If it's a fresh database, uncomment these lines.
