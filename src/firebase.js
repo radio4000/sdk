@@ -75,7 +75,10 @@ export function parseChannel(firebaseChannel) {
 		source: 'v1',
 		created_at: new Date(firebaseChannel.created || firebaseChannel.created_at).toISOString(),
 		updated_at: new Date(
-			firebaseChannel.updated || firebaseChannel.updated_at || firebaseChannel.created || firebaseChannel.created_at
+			firebaseChannel.updated ||
+				firebaseChannel.updated_at ||
+				firebaseChannel.created ||
+				firebaseChannel.created_at
 		).toISOString()
 	}
 }
@@ -104,7 +107,10 @@ export function parseTrack(firebaseTrack, channelId, channelSlug) {
 		mentions: mentions.length > 0 ? mentions : null,
 		created_at: new Date(firebaseTrack.created || firebaseTrack.created_at).toISOString(),
 		updated_at: new Date(
-			firebaseTrack.updated || firebaseTrack.updated_at || firebaseTrack.created || firebaseTrack.created_at
+			firebaseTrack.updated ||
+				firebaseTrack.updated_at ||
+				firebaseTrack.created ||
+				firebaseTrack.created_at
 		).toISOString()
 	}
 }

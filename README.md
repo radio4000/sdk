@@ -147,6 +147,9 @@ Further development tips at the bottom.
   │   ├── supabaseOperators: Array<string>
   │   └── supabaseOperatorsTable: Object
   │
+  ├── utils/
+  │   └── extractTokens(str) → {mentions: string[], tags: string[]}
+  │
   └── supabase (Supabase client instance)
 
   Types:

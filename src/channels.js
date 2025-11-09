@@ -1,3 +1,4 @@
+import * as firebase from './firebase.js'
 import {supabase} from './main.js'
 import {readUser} from './users.js'
 
@@ -100,7 +101,6 @@ export const readChannels = async (limit = 1000) => {
 		.limit(limit)
 		.order('created_at', {ascending: true})
 }
-
 
 /** Lists all channels from current user */
 export const readUserChannels = async () => {
@@ -236,4 +236,3 @@ function unwrapResponse(response, prop) {
 	}
 	return response
 }
-
