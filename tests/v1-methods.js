@@ -1,15 +1,9 @@
-import {createClient} from '@supabase/supabase-js'
 import {describe, expect, test} from 'vitest'
-import {createSdk} from '../src/create-sdk.js'
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
-const sdk = createSdk(supabase)
+import * as firebase from '../src/firebase.js'
 
 describe('Firebase v1 methods', () => {
-	test('sdk.firebase.readChannel returns raw Firebase data with firebase_id', async () => {
-		const {data: channel, error} = await sdk.firebase.readChannel('detecteve')
+	test('firebase.readChannel returns raw Firebase data with firebase_id', async () => {
+		const {data: channel, error} = await firebase.readChannel('detecteve')
 
 		expect(error).toBeUndefined()
 		expect(channel).toBeDefined()
@@ -29,8 +23,8 @@ describe('Firebase v1 methods', () => {
 		expect(channel.updated).toBeDefined()
 	})
 
-	test('sdk.firebase.readTracks with slug returns raw Firebase tracks', async () => {
-		const {data: tracks, error} = await sdk.firebase.readTracks({slug: 'detecteve'})
+	test('firebase.readTracks with slug returns raw Firebase tracks', async () => {
+		const {data: tracks, error} = await firebase.readTracks({slug: 'detecteve'})
 
 		expect(error).toBeUndefined()
 		expect(tracks).toBeDefined()
@@ -53,10 +47,10 @@ describe('Firebase v1 methods', () => {
 		expect(firstTrack.created).toBeDefined()
 	})
 
-	test('sdk.firebase.readTracks with firebaseId returns same data as slug', async () => {
-		const {data: channel} = await sdk.firebase.readChannel('detecteve')
-		const {data: tracksBySlug} = await sdk.firebase.readTracks({slug: 'detecteve'})
-		const {data: tracksByFbId} = await sdk.firebase.readTracks({
+	test('firebase.readTracks with firebaseId returns same data as slug', async () => {
+		const {data: channel} = await firebase.readChannel('detecteve')
+		const {data: tracksBySlug} = await firebase.readTracks({slug: 'detecteve'})
+		const {data: tracksByFbId} = await firebase.readTracks({
 			firebaseId: channel.firebase_id
 		})
 
@@ -64,10 +58,10 @@ describe('Firebase v1 methods', () => {
 		expect(tracksBySlug[0].id).toBe(tracksByFbId[0].id)
 	})
 
-	test('sdk.firebase.parseChannel converts raw Firebase to v2 format', async () => {
-		const {data: rawChannel} = await sdk.firebase.readChannel('detecteve')
+	test('firebase.parseChannel converts raw Firebase to v2 format', async () => {
+		const {data: rawChannel} = await firebase.readChannel('detecteve')
 
-		const parsed = sdk.firebase.parseChannel(rawChannel)
+		const parsed = firebase.parseChannel(rawChannel)
 
 		expect(parsed.id).toBeDefined()
 		expect(parsed.firebase_id).toBe(rawChannel.firebase_id)
@@ -79,11 +73,11 @@ describe('Firebase v1 methods', () => {
 		expect(parsed.updated_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
 	})
 
-	test('sdk.firebase.parseTrack converts raw Firebase to v2 format', async () => {
-		const {data: rawChannel} = await sdk.firebase.readChannel('detecteve')
-		const {data: rawTracks} = await sdk.firebase.readTracks({slug: 'detecteve'})
+	test('firebase.parseTrack converts raw Firebase to v2 format', async () => {
+		const {data: rawChannel} = await firebase.readChannel('detecteve')
+		const {data: rawTracks} = await firebase.readTracks({slug: 'detecteve'})
 
-		const parsed = sdk.firebase.parseTrack(rawTracks[0], 'test-channel-uuid', 'detecteve')
+		const parsed = firebase.parseTrack(rawTracks[0], 'test-channel-uuid', 'detecteve')
 
 		expect(parsed.id).toBeDefined()
 		expect(parsed.firebase_id).toBe(rawTracks[0].id)
