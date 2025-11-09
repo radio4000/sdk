@@ -1,5 +1,5 @@
 /**
- * @typedef {import('./types.d.ts').FirebaseChannelResult} FirebaseChannelResult
+ * @typedef {import('./types.ts').FirebaseChannelResult} FirebaseChannelResult
  */
 
 import {extractTokens} from './utils.js'

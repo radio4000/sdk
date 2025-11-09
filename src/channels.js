@@ -3,9 +3,9 @@ import {supabase} from './main.js'
 import {readUser} from './users.js'
 
 /**
- * @typedef {import('./types.d.ts').CreateChannelParams} CreateChannelParams
- * @typedef {import('./types.d.ts').UpdateChannelParams} UpdateChannelParams
- * @typedef {import('./types.d.ts').FirebaseChannelResult} FirebaseChannelResult
+ * @typedef {import('./types.ts').CreateChannelParams} CreateChannelParams
+ * @typedef {import('./types.ts').UpdateChannelParams} UpdateChannelParams
+ * @typedef {import('./types.ts').FirebaseChannelResult} FirebaseChannelResult
  */
 
 /**
