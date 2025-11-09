@@ -60,7 +60,7 @@ export interface FirebaseChannel {
 
 // Return type for Firebase operations
 export type FirebaseChannelResult =
-	| {data: FirebaseChannel | null; error?: never}
+	| {data: (FirebaseChannel & {firebase_id: string}) | null; error?: never}
 	| {data?: never; error: {message: string}}
 
 // SDK instance type
@@ -69,6 +69,7 @@ export interface SDK {
 	users: typeof import('./users.js')
 	channels: typeof import('./channels.js')
 	tracks: typeof import('./tracks.js')
+	firebase: typeof import('./firebase.js')
 	browse: typeof import('./browse.js')
 	supabase: import('@supabase/supabase-js').SupabaseClient<Database>
 }

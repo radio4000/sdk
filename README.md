@@ -56,7 +56,7 @@ console.log(channels)
 
 ### Using your own Supabase instance
 
-You're not limited to use the default Radio4000 supabase database. 
+You're not limited to use the default Radio4000 supabase database.
 
 Supply your own like this:
 
@@ -66,6 +66,18 @@ import {createSdk} from '@radio4000/sdk'
 
 const supabase = createClient(url, key)
 const sdk = createSdk(supabase)
+```
+
+### Working with Firebase v1 data
+
+If you need to access legacy Firebase v1 data, use the `sdk.firebase` namespace:
+
+```js
+import {sdk} from '@radio4000/sdk'
+const {data: channel} = await sdk.firebase.readChannel('detecteve')
+const {data: tracks} = await sdk.firebase.readTracks({slug: 'detecteve'})
+const channel = sdk.firebase.parseChannel(channel)
+const track = sdk.firebase.parseTrack(tracks[0], channelId, 'detecteve')
 ```
 
 ## Contributing and development
@@ -105,7 +117,6 @@ Further development tips at the bottom.
   │   ├── readChannels(limit?) → Promise<SupabaseResponse>
   │   ├── readChannelTracks(slug, limit?) → Promise<SupabaseResponse>
   │   ├── readUserChannels() → Promise
-  │   ├── readFirebaseChannel(slug) → Promise<SupabaseResponse>
   │   ├── canEditChannel(slug) → Promise<Boolean>
   │   ├── createImage(file, tags?) → Promise
   │   ├── followChannel(followerId, channelId) → Promise<SupabaseResponse>
@@ -119,6 +130,12 @@ Further development tips at the bottom.
   │   ├── deleteTrack(id) → Promise
   │   ├── readTrack(id) → Promise<SupabaseResponse>
   │   └── canEditTrack(track_id) → Promise<Boolean>
+  │
+  ├── firebase/
+  │   ├── readChannel(slug) → Promise<{data?, error?}>
+  │   ├── readTracks({slug?, firebaseId?}) → Promise<{data?, error?}>
+  │   ├── parseChannel(rawChannel) → v2Channel
+  │   └── parseTrack(rawTrack, channelId, channelSlug) → v2Track
   │
   ├── search/
   │   ├── searchChannels(query, {limit?}) → Promise<{data?, error?}>
