@@ -68,18 +68,6 @@ const supabase = createClient(url, key)
 const sdk = createSdk(supabase)
 ```
 
-### Working with Firebase v1 data
-
-If you need to access legacy Firebase v1 data, use the `sdk.firebase` namespace:
-
-```js
-import {sdk} from '@radio4000/sdk'
-const {data: channel} = await sdk.firebase.readChannel('detecteve')
-const {data: tracks} = await sdk.firebase.readTracks({slug: 'detecteve'})
-const channel = sdk.firebase.parseChannel(channel)
-const track = sdk.firebase.parseTrack(tracks[0], channelId, 'detecteve')
-```
-
 ## Contributing and development
 
 If you'd like to help out, clone the repository, install dependencies and start the local server. The SDK itself is in the `./src` folder and the playground is in `./examples`.
