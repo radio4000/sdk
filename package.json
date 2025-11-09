@@ -21,7 +21,7 @@
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
     "types": "tsc",
-    "lint": "biome ci",
+    "lint": "biome check --write",
     "test": "vitest"
   },
   "dependencies": {
