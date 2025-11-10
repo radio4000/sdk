@@ -43,6 +43,7 @@ export interface UpdateTrackParams {
 
 // A channel as it looks in our v1 Firebase legacy database
 export interface FirebaseChannel {
+	id: string
 	body?: string
 	channelPublic?: string
 	coordinatesLatitude?: number
@@ -60,7 +61,7 @@ export interface FirebaseChannel {
 
 // Return type for Firebase operations
 export type FirebaseChannelResult =
-	| {data: (FirebaseChannel & {firebase_id: string}) | null; error?: never}
+	| {data: FirebaseChannel | null; error?: never}
 	| {data?: never; error: {message: string}}
 
 // SDK instance type

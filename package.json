@@ -20,8 +20,8 @@
     "build": "vite build; npm run types; npm run build-website",
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
-    "types": "tsc",
     "lint": "biome check --write",
+    "types": "tsc",
     "test": "vitest"
   },
   "dependencies": {
