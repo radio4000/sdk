@@ -15,7 +15,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -24,7 +24,7 @@ jobs:
       - uses: biomejs/setup-biome@v2
         with:
           version: latest
-      - run: npm run lint
+      - run: biome ci
       - run: npm run types
       - run: npm run build
       - uses: JS-DevTools/npm-publish@v3

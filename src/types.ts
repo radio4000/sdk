@@ -41,8 +41,9 @@ export interface UpdateTrackParams {
 	mentions?: string[]
 }
 
-// Firebase legacy channel type (different from Database Channel)
+// A channel as it looks in our v1 Firebase legacy database
 export interface FirebaseChannel {
+	id: string
 	body?: string
 	channelPublic?: string
 	coordinatesLatitude?: number
@@ -69,6 +70,7 @@ export interface SDK {
 	users: typeof import('./users.js')
 	channels: typeof import('./channels.js')
 	tracks: typeof import('./tracks.js')
+	firebase: typeof import('./firebase.js')
 	browse: typeof import('./browse.js')
 	supabase: import('@supabase/supabase-js').SupabaseClient<Database>
 }

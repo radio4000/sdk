@@ -1,10 +1,11 @@
+import * as firebase from './firebase.js'
 import {supabase} from './main.js'
 import {readUser} from './users.js'
 
 /**
- * @typedef {import('./types.d.ts').CreateChannelParams} CreateChannelParams
- * @typedef {import('./types.d.ts').UpdateChannelParams} UpdateChannelParams
- * @typedef {import('./types.d.ts').FirebaseChannelResult} FirebaseChannelResult
+ * @typedef {import('./types.ts').CreateChannelParams} CreateChannelParams
+ * @typedef {import('./types.ts').UpdateChannelParams} UpdateChannelParams
+ * @typedef {import('./types.ts').FirebaseChannelResult} FirebaseChannelResult
  */
 
 /**
@@ -13,7 +14,7 @@ import {readUser} from './users.js'
  */
 export const createChannel = async ({name, slug, userId}) => {
 	// Throw an error if the slug is in use by the old Firebase database.
-	const {data: isSlugTaken} = await readFirebaseChannel(slug)
+	const {data: isSlugTaken} = await firebase.readChannel(slug)
 	if (isSlugTaken)
 		return {
 			error: {
@@ -99,22 +100,6 @@ export const readChannels = async (limit = 1000) => {
 		.select('*')
 		.limit(limit)
 		.order('created_at', {ascending: true})
-}
-
-/**
- * Find a Firebase channel by "slug" property
- * @param {string} slug
- * @returns {Promise<FirebaseChannelResult>}
- */
-export async function readFirebaseChannel(slug) {
-	const res = await fetch(
-		`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`
-	)
-	const json = await res.json()
-	if (json.error) return {error: {message: json.error}}
-	// Since we only expect a single record, we can do this.
-	const channel = Object.values(json)[0] || null
-	return {data: channel}
 }
 
 /** Lists all channels from current user */

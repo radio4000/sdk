@@ -2,8 +2,8 @@ import {supabase} from './main.js'
 import {readUser} from './users.js'
 
 /**
- * @typedef {import('./types.d.ts').CreateTrackParams} CreateTrackParams
- * @typedef {import('./types.d.ts').UpdateTrackParams} UpdateTrackParams
+ * @typedef {import('./types.ts').CreateTrackParams} CreateTrackParams
+ * @typedef {import('./types.ts').UpdateTrackParams} UpdateTrackParams
  */
 
 /**

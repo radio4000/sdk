@@ -4,7 +4,7 @@
 
 A JavaScript SDK to interact with [Radio4000](https://radio4000.com) via a browser or node.js.  
 
-It offers authentication as well as full create, read, update and delete of users, channels and tracks
+It offers authentication as well as full create, read, update and delete of users, channels and tracks. While the SDK offers many convenient functions, but remember you can always do `sdk.supabase` and use the Supabase JS SDK directly as well.
 
 ## Browser usage via CDN
 
@@ -16,7 +16,8 @@ This example can be copy pasted into any HTML page. We read the latest five chan
 
   const {data: channels, error} = await sdk.channels.readChannels(5)
   if (error) throw new Error(error.message)
-  console.log(channels)
+  console.log(channels.map(c => c.name))
+  // [object Array] (5) ["Radio Oskar","ko002","Radio Maretto","Samro","Good Time Radio"]
 </script>
 ```
 
@@ -56,9 +57,7 @@ console.log(channels)
 
 ### Using your own Supabase instance
 
-You're not limited to use the default Radio4000 supabase database. 
-
-Supply your own like this:
+The SDK by default connects to the main PostgreSQL maintained by Radio4000 (see `.env`). You can however use whichever you like. Note that the Supabase URL + (anon) Key are public, because we have postgres row policies in place.
 
 ```js
 import {createClient} from '@supabase/supabase-js'
@@ -78,8 +77,6 @@ cd radio4000-sdk
 npm install
 npm start
 ```
-
-Further development tips at the bottom.
 
 ## Overview
 
@@ -105,7 +102,6 @@ Further development tips at the bottom.
   │   ├── readChannels(limit?) → Promise<SupabaseResponse>
   │   ├── readChannelTracks(slug, limit?) → Promise<SupabaseResponse>
   │   ├── readUserChannels() → Promise
-  │   ├── readFirebaseChannel(slug) → Promise<SupabaseResponse>
   │   ├── canEditChannel(slug) → Promise<Boolean>
   │   ├── createImage(file, tags?) → Promise
   │   ├── followChannel(followerId, channelId) → Promise<SupabaseResponse>
@@ -120,6 +116,12 @@ Further development tips at the bottom.
   │   ├── readTrack(id) → Promise<SupabaseResponse>
   │   └── canEditTrack(track_id) → Promise<Boolean>
   │
+  ├── firebase/
+  │   ├── readChannel(slug) → Promise<{data?, error?}>
+  │   ├── readTracks({slug?, firebaseId?}) → Promise<{data?, error?}>
+  │   ├── parseChannel(rawChannel) → v2Channel
+  │   └── parseTrack(rawTrack, channelId, channelSlug) → v2Track
+  │
   ├── search/
   │   ├── searchChannels(query, {limit?}) → Promise<{data?, error?}>
   │   ├── searchTracks(query, {limit?}) → Promise<{data?, error?}>
@@ -130,22 +132,13 @@ Further development tips at the bottom.
   │   ├── supabaseOperators: Array<string>
   │   └── supabaseOperatorsTable: Object
   │
+  ├── utils/
+  │   └── extractTokens(str) → {mentions: string[], tags: string[]}
+  │
   └── supabase (Supabase client instance)
 
-  Types:
-    • Channel: {name: string, slug: string, userId?: string, description?: string}
-    • Track: {url: string, title: string, description?: string, discogs_url?: string}
-    • SupabaseResponse: {data?: Object, error?: {code?: string, message: string}} (properly typed via Supabase)
+  Almost every method returns the {data, error} format
 ```
-
-### Environment variables
-
-This SDK connects to the main Radio4000 PostgreSQL database via Supabase. 
-
-1. `cp .env.example .env`
-2. Fill out the `.env` file
-
-> Note that the Supabase URL + (anon) Key are public, because we have postgres row policies in place.
 
 ### Generate types from database schema
 
@@ -156,13 +149,12 @@ npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID > src/databas
 
 ### Build system
 
-We use [vite](https://vitejs.dev/) in library mode to bundle the project. We output two files:
+We use [vite](https://vitejs.dev/) in library mode to bundle the project. The only reason we bundle is for usage directly in a browser environment without a bundler.
 
-- dist/sdk.js (esm, good for browsers and newer node.js)
+- dist/sdk.js (esm, good for browsers and newer node.js, dont want to bother with cjs legacy)
 
 Our package.json defines the `main`, `module` and `exports` fields to specify which file should be loaded in which environment. 
 
 ## How to release a new version
 
-Create a new, tagged release via the github.com website UI. That will trigger the GitHub action to publish to NPM.
-
+Create a new, tagged release via the github.com website UI. This will trigger our GitHub workflow and publish to npm.
