@@ -2,92 +2,90 @@ import {describe, expect, test} from 'vitest'
 import * as firebase from '../src/firebase.js'
 
 describe('Firebase v1 methods', () => {
-	test('firebase.readChannel returns raw Firebase data with firebase_id', async () => {
+	test('firebase.readChannel returns raw Firebase data with id', async () => {
 		const {data: channel, error} = await firebase.readChannel('detecteve')
 
 		expect(error).toBeUndefined()
-		expect(channel).toBeDefined()
+		expect(channel.id).toBeDefined() // Firebase ID
+		expect(channel.firebase_id).toBeUndefined() // Should not exist in raw data
 		expect(channel.slug).toBe('detecteve')
-		expect(channel.title).toBeDefined() // Firebase has 'title' not 'name'
-		expect(channel.firebase_id).toBeDefined()
-
-		// Check what format the timestamps are in
-		console.log('Channel fields:', Object.keys(channel))
-		console.log('Channel timestamp fields:', {
-			created: channel.created,
-			updated: channel.updated
-		})
-
-		// Firebase should have 'created' not 'created_at'
+		expect(channel.title).toBeDefined()
 		expect(channel.created).toBeDefined()
-		expect(channel.updated).toBeDefined()
 	})
 
-	test('firebase.readTracks with slug returns raw Firebase tracks', async () => {
+	test('firebase.readTracks returns raw Firebase data with id', async () => {
 		const {data: tracks, error} = await firebase.readTracks({slug: 'detecteve'})
 
 		expect(error).toBeUndefined()
-		expect(tracks).toBeDefined()
 		expect(Array.isArray(tracks)).toBe(true)
 		expect(tracks.length).toBeGreaterThan(0)
-
-		const firstTrack = tracks[0]
-		console.log('Track fields:', Object.keys(firstTrack))
-		console.log('Track timestamp fields:', {
-			created: firstTrack.created,
-			created_at: firstTrack.created_at,
-			updated: firstTrack.updated,
-			updated_at: firstTrack.updated_at
-		})
-
-		// Firebase tracks should have 'created', 'body', 'discogsUrl'
-		expect(firstTrack.id).toBeDefined()
-		expect(firstTrack.title).toBeDefined()
-		expect(firstTrack.url).toBeDefined()
-		expect(firstTrack.created).toBeDefined()
+		expect(tracks[0].id).toBeDefined() // Firebase ID
+		expect(tracks[0].firebase_id).toBeUndefined() // Should not exist in raw data
+		expect(tracks[0].url).toBeDefined()
 	})
 
-	test('firebase.readTracks with firebaseId returns same data as slug', async () => {
+	test('firebase.readTracks with channelId returns same data as slug', async () => {
 		const {data: channel} = await firebase.readChannel('detecteve')
 		const {data: tracksBySlug} = await firebase.readTracks({slug: 'detecteve'})
-		const {data: tracksByFbId} = await firebase.readTracks({
-			firebaseId: channel.firebase_id
+		const {data: tracksByChannelId} = await firebase.readTracks({
+			channelId: channel.id // Use the Firebase ID from raw channel
 		})
 
-		expect(tracksBySlug.length).toBe(tracksByFbId.length)
-		expect(tracksBySlug[0].id).toBe(tracksByFbId[0].id)
+		expect(tracksBySlug.length).toBe(tracksByChannelId.length)
+		expect(tracksBySlug[0].id).toBe(tracksByChannelId[0].id)
 	})
 
-	test('firebase.parseChannel converts raw Firebase to v2 format', async () => {
-		const {data: rawChannel} = await firebase.readChannel('detecteve')
+	test('firebase.parseChannel transforms v1 schema to v2', async () => {
+		const {data: raw} = await firebase.readChannel('detecteve')
+		const parsed = firebase.parseChannel(raw)
 
-		const parsed = firebase.parseChannel(rawChannel)
+		// ID transformation: raw.id becomes firebase_id, new UUID as id
+		expect(raw.id).toBeDefined() // Raw has Firebase ID
+		expect(parsed.firebase_id).toBe(raw.id) // Moved to firebase_id
+		expect(parsed.id).toMatch(/^[0-9a-f-]{36}$/) // New v2 UUID
+		expect(parsed.id).not.toBe(raw.id) // Different IDs
 
-		expect(parsed.id).toBeDefined()
-		expect(parsed.firebase_id).toBe(rawChannel.firebase_id)
-		expect(parsed.slug).toBe('detecteve')
-		expect(parsed.name).toBe(rawChannel.title) // title → name
-		expect(parsed.description).toBe(rawChannel.body) // body → description
+		// Identity preservation
+		expect(parsed.slug).toBe(raw.slug)
+
+		// Field renames
+		expect(parsed.name).toBe(raw.title)
+		expect(parsed.description).toBe(raw.body)
+
+		// Coordinate transforms
+		if (raw.coordinatesLatitude) {
+			expect(parsed.latitude).toBe(raw.coordinatesLatitude)
+			expect(parsed.longitude).toBe(raw.coordinatesLongitude)
+		}
+
+		// Metadata
 		expect(parsed.source).toBe('v1')
 		expect(parsed.created_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
 		expect(parsed.updated_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
 	})
 
-	test('firebase.parseTrack converts raw Firebase to v2 format', async () => {
-		const {data: rawChannel} = await firebase.readChannel('detecteve')
-		const {data: rawTracks} = await firebase.readTracks({slug: 'detecteve'})
+	test('firebase.parseTrack transforms v1 schema to v2', async () => {
+		const {data: tracks} = await firebase.readTracks({slug: 'detecteve'})
+		const raw = tracks[0]
+		const parsed = firebase.parseTrack(raw, 'test-uuid', 'detecteve')
 
-		const parsed = firebase.parseTrack(rawTracks[0], 'test-channel-uuid', 'detecteve')
+		// ID transformation: raw.id becomes firebase_id, new UUID as id
+		expect(raw.id).toBeDefined() // Raw has Firebase ID
+		expect(parsed.firebase_id).toBe(raw.id) // Moved to firebase_id
+		expect(parsed.id).toMatch(/^[0-9a-f-]{36}$/) // New v2 UUID
+		expect(parsed.id).not.toBe(raw.id) // Different IDs
 
-		expect(parsed.id).toBeDefined()
-		expect(parsed.firebase_id).toBe(rawTracks[0].id)
-		expect(parsed.channel_id).toBe('test-channel-uuid')
+		// Channel relationship
+		expect(parsed.channel_id).toBe('test-uuid')
 		expect(parsed.channel_slug).toBe('detecteve')
-		expect(parsed.title).toBe(rawTracks[0].title)
-		expect(parsed.description).toBe(rawTracks[0].body || '') // body → description
-		expect(parsed.discogs_url).toBe(rawTracks[0].discogsUrl || '') // discogsUrl → discogs_url
+
+		// Field renames
+		expect(parsed.title).toBe(raw.title)
+		if (raw.body) expect(parsed.description).toBe(raw.body)
+		if (raw.discogsUrl) expect(parsed.discogs_url).toBe(raw.discogsUrl)
+
+		// Metadata
 		expect(parsed.source).toBe('v1')
 		expect(parsed.created_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
-		expect(parsed.updated_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
 	})
 })

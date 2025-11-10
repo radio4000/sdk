@@ -1,8 +1,6 @@
-/**
- * @typedef {import('./types.ts').FirebaseChannelResult} FirebaseChannelResult
- */
-
 import {extractTokens} from './utils.js'
+
+/** @typedef {import('./types.ts').FirebaseChannelResult} FirebaseChannelResult */
 
 /**
  * Find a Firebase channel by "slug" property
@@ -15,34 +13,32 @@ export async function readChannel(slug) {
 	)
 	const json = await res.json()
 	if (json.error) return {error: {message: json.error}}
-	// Preserve the firebase_id (the key in the response object)
+	// Preserve the Firebase ID (the key in the response object)
 	const entries = Object.entries(json || {})
 	if (!entries.length) return {data: null}
 	const [firebaseId, channelData] = entries[0]
-	return {data: {...channelData, firebase_id: firebaseId}}
+	return {data: {...channelData, id: firebaseId}}
 }
 
 /**
  * Find Firebase tracks by either firebase channel ID or slug
  * @param {Object} params
- * @param {string} [params.firebaseId] - Firebase channel ID
+ * @param {string} [params.channelId] - Firebase channel ID
  * @param {string} [params.slug] - Channel slug
  * @returns {Promise<{data?: Array, error?: Object}>}
  */
-export async function readTracks({firebaseId, slug}) {
-	// If slug provided, fetch channel first to get firebase_id
-	if (slug && !firebaseId) {
+export async function readTracks({channelId, slug}) {
+	// If slug provided, fetch channel first to get Firebase ID
+	if (slug && !channelId) {
 		const {data: channel, error} = await readChannel(slug)
 		if (error) return {error}
 		if (!channel) return {data: []}
-		firebaseId = channel.firebase_id
+		channelId = channel.id
 	}
 
-	if (!firebaseId) {
-		return {error: {message: 'Either slug or firebaseId is required'}}
-	}
+	if (!channelId) return {error: {message: 'Either slug or channelId is required'}}
 
-	const url = `https://radio4000.firebaseio.com/tracks.json?orderBy="channel"&startAt="${firebaseId}"&endAt="${firebaseId}"`
+	const url = `https://radio4000.firebaseio.com/tracks.json?orderBy="channel"&startAt="${channelId}"&endAt="${channelId}"`
 	const res = await fetch(url)
 	const json = await res.json()
 	if (json?.error) return {error: {message: json.error}}
@@ -57,13 +53,13 @@ export async function readTracks({firebaseId, slug}) {
 
 /**
  * Parse a Firebase v1 channel into v2 schema
- * @param {Object} firebaseChannel - Raw Firebase channel with {title, body, created, updated, slug, ...}
- * @returns {Object} v2 channel with {name, description, created_at, updated_at, firebase_id, source: 'v1', ...}
+ * @param {Object} firebaseChannel - Raw Firebase channel with {id, title, body, created, updated, slug, ...}
+ * @returns {Object} v2 channel with {id: UUID, firebase_id, name, description, created_at, updated_at, source: 'v1', ...}
  */
 export function parseChannel(firebaseChannel) {
 	return {
 		id: crypto.randomUUID(),
-		firebase_id: firebaseChannel.firebase_id,
+		firebase_id: firebaseChannel.id,
 		slug: firebaseChannel.slug,
 		name: firebaseChannel.title || firebaseChannel.name || '', // Firebase uses 'title'
 		description: firebaseChannel.body || firebaseChannel.description || '',

@@ -41,7 +41,7 @@ export interface UpdateTrackParams {
 	mentions?: string[]
 }
 
-// Firebase legacy channel type (different from Database Channel)
+// A channel as it looks in our v1 Firebase legacy database
 export interface FirebaseChannel {
 	body?: string
 	channelPublic?: string
