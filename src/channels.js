@@ -1,38 +1,26 @@
+import * as firebase from './firebase.js'
 import {supabase} from './main.js'
 import {readUser} from './users.js'
 
 /**
- * A channel
- * @typedef {object} Channel
- * @property {string} name
- * @property {string} slug - unique
- * @property {string} [userId] - if not passed in we try to read the current user
- * @property {string} [description]
- */
-
-/**
- * This is the type all async functions should return.
- * @typedef {object} ReturnObj
- * @property {Object} [data]
- * @property {object} [error]
- * @property {string} [error.code]
- * @property {string} error.message
+ * @typedef {import('./types.ts').CreateChannelParams} CreateChannelParams
+ * @typedef {import('./types.ts').UpdateChannelParams} UpdateChannelParams
+ * @typedef {import('./types.ts').FirebaseChannelResult} FirebaseChannelResult
  */
 
 /**
  * Creates a new radio channel and connects it to a user
- * @param {Channel} fields
- * @returns {Promise<ReturnObj>}
+ * @param {CreateChannelParams} fields
  */
 export const createChannel = async ({name, slug, userId}) => {
 	// Throw an error if the slug is in use by the old Firebase database.
-	const {data: isSlugTaken} = await readFirebaseChannel(slug)
+	const {data: isSlugTaken} = await firebase.readChannel(slug)
 	if (isSlugTaken)
 		return {
 			error: {
 				code: 'slug-exists-firebase',
-				message: 'Sorry. This channel slug is already taken by someone else.',
-			},
+				message: 'Sorry. This channel slug is already taken by someone else.'
+			}
 		}
 
 	// If we don't have a user, try to read it from the current session.
@@ -45,8 +33,8 @@ export const createChannel = async ({name, slug, userId}) => {
 		return {
 			error: {
 				code: 'user-required',
-				message: 'A user is required to create a new channel',
-			},
+				message: 'A user is required to create a new channel'
+			}
 		}
 	}
 
@@ -58,7 +46,10 @@ export const createChannel = async ({name, slug, userId}) => {
 
 	// Create junction table
 	const channel_id = channelRes.data.id
-	const userChannelRes = await supabase.from('user_channel').insert({user_id: userId, channel_id}).single()
+	const userChannelRes = await supabase
+		.from('user_channel')
+		.insert({user_id: userId, channel_id})
+		.single()
 	if (userChannelRes.error) return userChannelRes
 
 	// Return both records of the channel
@@ -68,14 +59,7 @@ export const createChannel = async ({name, slug, userId}) => {
 /**
  * Updates a channel
  * @param {string} id
- * @param {object} changes - optional fields to update
- * @param {string} [changes.name]
- * @param {string} [changes.slug]
- * @param {string} [changes.description]
- * @param {string} [changes.url]
- * @param {number} [changes.longitude]
- * @param {number} [changes.latitude]
- * @returns {Promise<ReturnObj>}
+ * @param {UpdateChannelParams} changes - optional fields to update
  */
 export const updateChannel = async (id, changes) => {
 	// Extract the keys so we're sure which fields update.
@@ -84,6 +68,7 @@ export const updateChannel = async (id, changes) => {
 		.from('channels')
 		.update({name, slug, description, url, longitude, latitude})
 		.eq('id', id)
+		.select()
 	return response
 }
 
@@ -100,33 +85,21 @@ export const deleteChannel = async (id) => {
 /**
  * Finds a channel by slug
  * @param {string} slug
- * @returns {Promise<ReturnObj>}
  */
 export const readChannel = async (slug) => {
-	return supabase.from('channels').select(`*`).eq('slug', slug).single()
+	return supabase.from('channels_with_tracks').select('*').eq('slug', slug).single()
 }
 
 /**
  * Returns a list of channels.
  * @param {number} limit
- * @returns {Promise<ReturnObj>}
  */
 export const readChannels = async (limit = 1000) => {
-	return supabase.from('channels').select('*').limit(limit).order('created_at', {ascending: true})
-}
-
-/**
- * Find a Firebase channel by "slug" property
- * @param {string} slug
- * @returns {Promise<ReturnObj>}
- */
-export async function readFirebaseChannel(slug) {
-	const res = await fetch(`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`)
-	const json = await res.json()
-	if (json.error) return {error: {message: json.error}}
-	// Since we only expect a single record, we can do this.
-	const channel = Object.values(json)[0] || null
-	return {data: channel}
+	return supabase
+		.from('channels_with_tracks')
+		.select('*')
+		.limit(limit)
+		.order('created_at', {ascending: true})
 }
 
 /** Lists all channels from current user */
@@ -142,42 +115,34 @@ export const readUserChannels = async () => {
 /**
  * Fetches tracks by channel slug
  * @param {string} slug
- * @returns {Promise<ReturnObj>}
+ * @param {number} limit - default 5000
  */
-export async function readChannelTracks(slug) {
+export async function readChannelTracks(slug, limit = 5000) {
 	if (!slug) return {error: {message: 'Missing channel slug'}}
-	const {data, error} = await supabase
-		.from('channel_track')
-		.select(
-			`
-			channel_id!inner(
-				slug
-			),
-			track_id(
-				id, created_at, updated_at, title, url, description
-			)
-		`
-		)
-		.eq('channel_id.slug', slug)
+	return supabase
+		.from('channel_tracks')
+		.select('*')
+		.eq('slug', slug)
 		.order('created_at', {ascending: false})
-		.limit(5000)
-	const tracks = data.map((t) => t.track_id)
-	return {data: tracks, error}
+		.limit(limit)
 }
 
 /**
- * Checks if current user can edit a channel
+ * Checks if the local session user can edit a channel
  * @param {string} slug
  * @returns {Promise<Boolean>}
  */
 export async function canEditChannel(slug) {
-	const {data: user} = await readUser()
-	if (!user) return false
+	const {
+		data: {session}
+	} = await supabase.auth.getSession()
+	if (!session?.user) return false
+	// const {data: user} = await readUser()
 	const {data} = await supabase
 		.from('user_channel')
 		.select('user_id, channel_id!inner ( name, slug )')
 		.eq('channel_id.slug', slug)
-		.eq('user_id', user.id)
+		.eq('user_id', session.user.id)
 	if (data?.length > 0) return true
 	return false
 }
@@ -199,7 +164,7 @@ export async function createImage(file, tags) {
 
 	return fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/auto/upload`, {
 		method: 'POST',
-		body: formData,
+		body: formData
 	})
 }
 
@@ -207,10 +172,11 @@ export async function createImage(file, tags) {
  * Make a channel follow another channel
  * @param {string} followerId - ID of the channel following another channel
  * @param {string} channelId - ID of the channel being followed
- * @returns {Promise<ReturnObj>}
  */
 export const followChannel = async (followerId, channelId) => {
-	const response = await supabase.from('followers').insert([{follower_id: followerId, channel_id: channelId}])
+	const response = await supabase
+		.from('followers')
+		.insert([{follower_id: followerId, channel_id: channelId}])
 	return response
 }
 
@@ -218,17 +184,19 @@ export const followChannel = async (followerId, channelId) => {
  * Make a channel unfollow another channel
  * @param {string} followerId - ID of the channel unfollowing another channel
  * @param {string} channelId - ID of the channel being unfollowed
- * @returns {Promise<ReturnObj>}
  */
 export const unfollowChannel = async (followerId, channelId) => {
-	const response = await supabase.from('followers').delete().eq('follower_id', followerId).eq('channel_id', channelId)
+	const response = await supabase
+		.from('followers')
+		.delete()
+		.eq('follower_id', followerId)
+		.eq('channel_id', channelId)
 	return response
 }
 
 /**
  * Get a list of channels following a specific channel
  * @param {string} channelId - ID of the channel to get the list of followers
- * @returns {Promise<ReturnObj>}
  */
 export const readFollowers = async (channelId) => {
 	const select = `
@@ -247,7 +215,6 @@ export const readFollowers = async (channelId) => {
 /**
  * Get a list of channels that a specific channel follows
  * @param {string} channelId - ID of the channel to get the list of followed channels
- * @returns {Promise<ReturnObj>}
  */
 export const readFollowings = async (channelId) => {
 	const select = `
@@ -266,14 +233,13 @@ export const readFollowings = async (channelId) => {
 /**
  * When doing joins, supabase returns an array of objects with the table name as property.
  * This function unwraps the response and returns an array of the property values.
- * @param {ReturnObj} response - response from supabase
+ * @param {object} response - response from supabase
  * @param {string} prop - property to unwrap, or take, on each item
- * @returns {ReturnObj}
  */
 function unwrapResponse(response, prop) {
 	if (!response.error && response.data.length) {
 		return {
-			data: response.data.map((item) => item[prop]),
+			data: response.data.map((item) => item[prop])
 		}
 	}
 	return response

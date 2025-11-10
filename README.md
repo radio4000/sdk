@@ -4,11 +4,9 @@
 
 A JavaScript SDK to interact with [Radio4000](https://radio4000.com) via a browser or node.js.  
 
-It offers authentication as well as full create, read, update and delete of users, channels and tracks
+It offers authentication as well as full create, read, update and delete of users, channels and tracks. While the SDK offers many convenient functions, but remember you can always do `sdk.supabase` and use the Supabase JS SDK directly as well.
 
-## Usage 
-
-### With browser via CDN
+## Browser usage via CDN
 
 This example can be copy pasted into any HTML page. We read the latest five channels created.
 
@@ -18,7 +16,8 @@ This example can be copy pasted into any HTML page. We read the latest five chan
 
   const {data: channels, error} = await sdk.channels.readChannels(5)
   if (error) throw new Error(error.message)
-  console.log(channels)
+  console.log(channels.map(c => c.name))
+  // [object Array] (5) ["Radio Oskar","ko002","Radio Maretto","Samro","Good Time Radio"]
 </script>
 ```
 
@@ -46,7 +45,7 @@ Here's another, where we sign in (use your own credentials), create a channel an
 </script>
 ```
 
-### With build system and npm
+## Usage with a build system
 
 ```js
 import {sdk} from '@radio4000/sdk'
@@ -58,9 +57,7 @@ console.log(channels)
 
 ### Using your own Supabase instance
 
-You're not limited to use the default Radio4000 supabase database. 
-
-Supply your own like this:
+The SDK by default connects to the main PostgreSQL maintained by Radio4000 (see `.env`). You can however use whichever you like. Note that the Supabase URL + (anon) Key are public, because we have postgres row policies in place.
 
 ```js
 import {createClient} from '@supabase/supabase-js'
@@ -81,14 +78,67 @@ npm install
 npm start
 ```
 
-### Environment variables
+## Overview
 
-This SDK connects to the main Radio4000 PostgreSQL database via Supabase. 
+```
+ Radio4000 SDK
+  │
+  ├── createSdk(supabaseClient) → SDK
+  │
+  ├── auth/
+  │   ├── signUp({email, password, options?}) → Promise
+  │   ├── signIn({email, password, options?}) → Promise
+  │   └── signOut() → Promise
+  │
+  ├── users/
+  │   ├── readUser(jwtToken?) → Promise<{data?, error?}>
+  │   └── deleteUser() → Promise
+  │
+  ├── channels/
+  │   ├── createChannel({name, slug, userId?}) → Promise<SupabaseResponse>
+  │   ├── updateChannel(id, changes) → Promise<SupabaseResponse>
+  │   ├── deleteChannel(id) → Promise
+  │   ├── readChannel(slug) → Promise<SupabaseResponse>
+  │   ├── readChannels(limit?) → Promise<SupabaseResponse>
+  │   ├── readChannelTracks(slug, limit?) → Promise<SupabaseResponse>
+  │   ├── readUserChannels() → Promise
+  │   ├── canEditChannel(slug) → Promise<Boolean>
+  │   ├── createImage(file, tags?) → Promise
+  │   ├── followChannel(followerId, channelId) → Promise<SupabaseResponse>
+  │   ├── unfollowChannel(followerId, channelId) → Promise<SupabaseResponse>
+  │   ├── readFollowers(channelId) → Promise<SupabaseResponse>
+  │   └── readFollowings(channelId) → Promise<SupabaseResponse>
+  │
+  ├── tracks/
+  │   ├── createTrack(channelId, fields) → Promise<SupabaseResponse>
+  │   ├── updateTrack(id, changes) → Promise<SupabaseResponse>
+  │   ├── deleteTrack(id) → Promise
+  │   ├── readTrack(id) → Promise<SupabaseResponse>
+  │   └── canEditTrack(track_id) → Promise<Boolean>
+  │
+  ├── firebase/
+  │   ├── readChannel(slug) → Promise<{data?, error?}>
+  │   ├── readTracks({slug?, firebaseId?}) → Promise<{data?, error?}>
+  │   ├── parseChannel(rawChannel) → v2Channel
+  │   └── parseTrack(rawTrack, channelId, channelSlug) → v2Track
+  │
+  ├── search/
+  │   ├── searchChannels(query, {limit?}) → Promise<{data?, error?}>
+  │   ├── searchTracks(query, {limit?}) → Promise<{data?, error?}>
+  │   └── searchAll(query, {limit?}) → Promise<{data: {channels, tracks}, error?}>
+  │
+  ├── browse/
+  │   ├── query({page?, limit?, table?, select?, orderBy?, orderConfig?, filters?}) → Promise
+  │   ├── supabaseOperators: Array<string>
+  │   └── supabaseOperatorsTable: Object
+  │
+  ├── utils/
+  │   └── extractTokens(str) → {mentions: string[], tags: string[]}
+  │
+  └── supabase (Supabase client instance)
 
-1. `cp .env.example .env`
-2. Fill out the `.env` file
-
-> Note that the Supabase URL + (anon) Key are public, because we have postgres row policies in place.
+  Almost every method returns the {data, error} format
+```
 
 ### Generate types from database schema
 
@@ -99,12 +149,12 @@ npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID > src/databas
 
 ### Build system
 
-We use [vite](https://vitejs.dev/) in library mode to bundle the project. We output two files:
+We use [vite](https://vitejs.dev/) in library mode to bundle the project. The only reason we bundle is for usage directly in a browser environment without a bundler.
 
-- dist/sdk.js (esm, good for browsers and newer node.js)
+- dist/sdk.js (esm, good for browsers and newer node.js, dont want to bother with cjs legacy)
 
 Our package.json defines the `main`, `module` and `exports` fields to specify which file should be loaded in which environment. 
 
 ## How to release a new version
 
-Create a new, tagged release via the github.com website UI. That will trigger the GitHub action to publish to NPM.
+Create a new, tagged release via the github.com website UI. This will trigger our GitHub workflow and publish to npm.

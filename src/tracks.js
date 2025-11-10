@@ -2,21 +2,14 @@ import {supabase} from './main.js'
 import {readUser} from './users.js'
 
 /**
- * A track
- * @typedef {Object} Track
- * @property {string} url
- * @property {string} title
- * @property {string} [updated_at]
- * @property {string} [created_at]
- * @property {string} [description]
- * @property {string} [discogs_url]
+ * @typedef {import('./types.ts').CreateTrackParams} CreateTrackParams
+ * @typedef {import('./types.ts').UpdateTrackParams} UpdateTrackParams
  */
 
 /**
  * Creates a track and connects it to a user and channel.
  * @param {string} channelId
- * @param {Track} fields
- * @return {Promise<import('./channels.js').ReturnObj>}
+ * @param {CreateTrackParams} fields
  */
 export const createTrack = async (channelId, fields) => {
 	const {url, title, description, discogs_url} = fields
@@ -38,7 +31,7 @@ export const createTrack = async (channelId, fields) => {
 		.insert({
 			track_id: track.id,
 			channel_id: channelId,
-			user_id: user.id,
+			user_id: user.id
 		})
 		.single()
 	if (error2) return {error}
@@ -49,12 +42,15 @@ export const createTrack = async (channelId, fields) => {
 /**
  * Updates a track
  * @param {string} id
- * @param {Track} changes
- * @return {Promise<import('./channels.js').ReturnObj>}
+ * @param {UpdateTrackParams} changes
  */
 export const updateTrack = async (id, changes) => {
 	const {url, title, description, discogs_url} = changes
-	return supabase.from('tracks').update({url, title, description, discogs_url}).eq('id', id)
+	return supabase
+		.from('tracks')
+		.update({url, title, description, discogs_url})
+		.eq('id', id)
+		.select()
 }
 
 /**
@@ -69,10 +65,9 @@ export const deleteTrack = async (id) => {
 /**
  * Finds a track by id
  * @param {string} id
- * @returns {Promise<{ data?: Track, error? }>}
  */
 export const readTrack = async (id) => {
-	return supabase.from('tracks').select('*').eq('id', id).single()
+	return supabase.from('channel_tracks').select('*').eq('id', id).single()
 }
 
 /**
@@ -83,7 +78,10 @@ export const readTrack = async (id) => {
 export async function canEditTrack(track_id) {
 	const {data: user} = await readUser()
 	if (!user) return false
-	const {data} = await supabase.from('channel_track').select('track_id, user_id').match({user_id: user.id, track_id})
+	const {data} = await supabase
+		.from('channel_track')
+		.select('track_id, user_id')
+		.match({user_id: user.id, track_id})
 	if (data.length > 0) return true
 	return false
 }

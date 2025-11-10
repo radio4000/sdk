@@ -1,22 +1,28 @@
 import * as auth from './auth.js'
-import * as users from './users.js'
-import * as channels from './channels.js'
-import * as tracks from './tracks.js'
 import * as browse from './browse.js'
+import * as channels from './channels.js'
+import * as firebase from './firebase.js'
+import * as search from './search.js'
+import * as tracks from './tracks.js'
+import * as users from './users.js'
 
+/** @typedef {import('@supabase/supabase-js').SupabaseClient<import('./database.types.js').Database>} SupabaseClient */
+
+/** @type {SupabaseClient} */
 export let supabase
-
-/** @typedef {import('@supabase/supabase-js').SupabaseClient} SupabaseClient */
 
 /** @typedef {Object} SDK
  * @property {typeof auth} auth
  * @property {typeof users} users
  * @property {typeof channels} channels
  * @property {typeof tracks} tracks
+ * @property {typeof search} search
+ * @property {typeof firebase} firebase
  * @property {SupabaseClient} supabase
  * @property {Object} browse
+ */
 
-	 /**
+/**
  * Creates a new SDK instance with the given Supabase client.
  * @param {SupabaseClient} supabaseClient
  * @returns {SDK}
@@ -31,7 +37,9 @@ export function createSdk(supabaseClient) {
 		users,
 		channels,
 		tracks,
+		search,
+		firebase,
 		supabase,
-		browse,
+		browse
 	}
 }

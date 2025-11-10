@@ -28,13 +28,13 @@ export const supabaseOperatorsTable = {
 	textSearch: {
 		config: {
 			type: 'websearch',
-			config: 'english',
-		},
+			config: 'english'
+		}
 	},
 	match: {},
 	not: {},
 	or: {},
-	filter: {},
+	filter: {}
 }
 
 export const supabaseOperators = Object.keys(supabaseOperatorsTable)
@@ -50,10 +50,10 @@ export async function query({
 	select = '',
 	orderBy = '',
 	orderConfig = {},
-	filters = [],
+	filters = []
 }) {
 	const {from, to, limitResults} = getBrowseParams({page, limit})
-	let query = supabase.from(table).select(select)
+	let query = supabase.from(/** @type {any} */ (table)).select(select)
 
 	/*
 		 add filters to the query,
@@ -81,7 +81,10 @@ export async function query({
 			if (filter.operator === 'filter') {
 				query = query.filter(filter.operator, filter.column, filter.value || null)
 			} else if (['contains', 'containedBy'].includes(filter.operator)) {
-				query = query[filter.operator](filter.column, valueJson || [filter.value.split(',')] || null)
+				query = query[filter.operator](
+					filter.column,
+					valueJson || [filter.value.split(',')] || null
+				)
 			} else {
 				query = query[filter.operator](filter.column, filter.value || null)
 			}
