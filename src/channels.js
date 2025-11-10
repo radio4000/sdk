@@ -199,12 +199,15 @@ export const unfollowChannel = async (followerId, channelId) => {
  * @param {string} channelId - ID of the channel to get the list of followers
  */
 export const readFollowers = async (channelId) => {
-	const select = `
-		follower_id (
-			id, name, slug, description, created_at, image, url
-		)
-	`
-	const response = await supabase.from('followers').select(select).eq('channel_id', channelId)
+	const response = await supabase
+		.from('followers')
+		.select(`
+			follower_id (
+				id, name, slug, description, created_at, updated_at, image, url
+			)
+		`)
+		.eq('channel_id', channelId)
+		.order('follower_id(updated_at)', {ascending: false})
 	return unwrapResponse(response, 'follower_id')
 }
 
@@ -213,12 +216,15 @@ export const readFollowers = async (channelId) => {
  * @param {string} channelId - ID of the channel to get the list of followed channels
  */
 export const readFollowings = async (channelId) => {
-	const select = `
-		channel_id (
-			id, name, slug, description, created_at, image, url
-		)
-	`
-	const response = await supabase.from('followers').select(select).eq('follower_id', channelId)
+	const response = await supabase
+		.from('followers')
+		.select(`
+    	channel_id (
+    		id, name, slug, description, created_at, updated_at, image, url
+    	)
+		`)
+		.eq('follower_id', channelId)
+		.order('channel_id(updated_at)', {ascending: false})
 	return unwrapResponse(response, 'channel_id')
 }
 
