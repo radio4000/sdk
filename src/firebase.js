@@ -2,22 +2,42 @@ import {extractTokens} from './utils.js'
 
 /** @typedef {import('./types.ts').FirebaseChannelResult} FirebaseChannelResult */
 
+const firebaseHost = 'https://radio4000.firebaseio.com'
+
 /**
  * Find a Firebase channel by "slug" property
  * @param {string} slug
  * @returns {Promise<FirebaseChannelResult>}
  */
 export async function readChannel(slug) {
-	const res = await fetch(
-		`https://radio4000.firebaseio.com/channels.json?orderBy="slug"&equalTo="${slug}"`
-	)
+	const res = await fetch(`${firebaseHost}/channels.json?orderBy="slug"&equalTo="${slug}"`)
 	const json = await res.json()
 	if (json.error) return {error: {message: json.error}}
-	// Preserve the Firebase ID (the key in the response object)
+
 	const entries = Object.entries(json || {})
 	if (!entries.length) return {data: null}
 	const [firebaseId, channelData] = entries[0]
+
 	return {data: {...channelData, id: firebaseId}}
+}
+
+/**
+ * Read all Firebase channels (useful for migration)
+ * Note: Firebase REST API doesn't support server-side pagination, so this fetches all channels
+ * @param {Object} [options]
+ * @param {number} [options.limit] - Client-side limit on number of channels returned
+ * @returns {Promise<{data?: Array, error?: Object}>}
+ */
+export async function readChannels({limit} = {}) {
+	const res = await fetch(`${firebaseHost}/channels.json`)
+	const json = await res.json()
+	if (json?.error) return {error: {message: json.error}}
+
+	const channels = Object.entries(json || {})
+		.map(([id, channel]) => ({...channel, id}))
+		.sort((a, b) => (a.created || 0) - (b.created || 0))
+
+	return {data: limit ? channels.slice(0, limit) : channels}
 }
 
 /**
@@ -38,7 +58,7 @@ export async function readTracks({channelId, slug}) {
 
 	if (!channelId) return {error: {message: 'Either slug or channelId is required'}}
 
-	const url = `https://radio4000.firebaseio.com/tracks.json?orderBy="channel"&startAt="${channelId}"&endAt="${channelId}"`
+	const url = `${firebaseHost}/tracks.json?orderBy="channel"&startAt="${channelId}"&endAt="${channelId}"`
 	const res = await fetch(url)
 	const json = await res.json()
 	if (json?.error) return {error: {message: json.error}}

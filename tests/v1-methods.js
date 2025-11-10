@@ -13,6 +13,25 @@ describe('Firebase v1 methods', () => {
 		expect(channel.created).toBeDefined()
 	})
 
+	test('firebase.readChannels returns all Firebase channels', async () => {
+		const {data: channels, error} = await firebase.readChannels()
+
+		console.log(`Total Firebase channels: ${channels.length}`)
+
+		expect(error).toBeUndefined()
+		expect(Array.isArray(channels)).toBe(true)
+		expect(channels.length).toBeGreaterThan(0)
+		expect(channels[0].id).toBeDefined()
+		expect(channels[0].slug).toBeDefined()
+	})
+
+	test('firebase.readChannels respects limit parameter', async () => {
+		const {data: channels} = await firebase.readChannels({limit: 5})
+
+		expect(channels.length).toBe(5)
+		expect(channels[0].id).toBeDefined()
+	})
+
 	test('firebase.readTracks returns raw Firebase data with id', async () => {
 		const {data: tracks, error} = await firebase.readTracks({slug: 'detecteve'})
 
