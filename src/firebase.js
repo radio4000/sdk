@@ -113,7 +113,7 @@ export function parseTrack(firebaseTrack, channelId, channelSlug) {
 		id: crypto.randomUUID(),
 		firebase_id: firebaseTrack.id,
 		channel_id: channelId,
-		channel_slug: channelSlug,
+		slug: channelSlug,
 		url: firebaseTrack.url,
 		title: firebaseTrack.title,
 		description: firebaseTrack.body || firebaseTrack.description || '',

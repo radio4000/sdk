@@ -13,14 +13,12 @@ describe('Firebase v1 methods', () => {
 		expect(channel.created).toBeDefined()
 	})
 
-	test('firebase.readChannels returns all Firebase channels', async () => {
-		const {data: channels, error} = await firebase.readChannels()
-
-		console.log(`Total Firebase channels: ${channels.length}`)
+	test('firebase.readChannels returns Firebase channels', async () => {
+		const {data: channels, error} = await firebase.readChannels({limit: 30})
 
 		expect(error).toBeUndefined()
 		expect(Array.isArray(channels)).toBe(true)
-		expect(channels.length).toBeGreaterThan(0)
+		expect(channels.length).toBe(30)
 		expect(channels[0].id).toBeDefined()
 		expect(channels[0].slug).toBeDefined()
 	})
@@ -96,7 +94,7 @@ describe('Firebase v1 methods', () => {
 
 		// Channel relationship
 		expect(parsed.channel_id).toBe('test-uuid')
-		expect(parsed.channel_slug).toBe('detecteve')
+		expect(parsed.slug).toBe('detecteve')
 
 		// Field renames
 		expect(parsed.title).toBe(raw.title)
