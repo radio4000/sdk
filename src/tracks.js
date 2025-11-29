@@ -12,14 +12,14 @@ import {readUser} from './users.js'
  * @param {CreateTrackParams} fields
  */
 export const createTrack = async (channelId, fields) => {
-	const {url, title, description, discogs_url} = fields
+	const {id, url, title, description, discogs_url} = fields
 
 	if (!channelId) throw Error('Missing channel id')
 
-	// Create track
+	// Create track (id is optional - if provided, uses client UUID; otherwise Postgres generates one)
 	const {data: track, error} = await supabase
 		.from('tracks')
-		.insert({url, title, description, discogs_url})
+		.insert({id, url, title, description, discogs_url})
 		.select()
 		.single()
 	if (error) return {error}

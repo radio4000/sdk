@@ -5,6 +5,7 @@ export type {Database}
 
 // Function parameter types that are more user-friendly
 export interface CreateChannelParams {
+	id?: string
 	name: string
 	slug: string
 	userId?: string
@@ -24,6 +25,7 @@ export interface UpdateChannelParams {
 }
 
 export interface CreateTrackParams {
+	id?: string
 	title: string
 	url: string
 	description?: string

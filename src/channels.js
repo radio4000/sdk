@@ -12,7 +12,7 @@ import {readUser} from './users.js'
  * Creates a new radio channel and connects it to a user
  * @param {CreateChannelParams} fields
  */
-export const createChannel = async ({name, slug, userId}) => {
+export const createChannel = async ({id, name, slug, userId}) => {
 	// Throw an error if the slug is in use by the old Firebase database.
 	const {data: isSlugTaken} = await firebase.readChannel(slug)
 	if (isSlugTaken)
@@ -38,8 +38,8 @@ export const createChannel = async ({name, slug, userId}) => {
 		}
 	}
 
-	// Create channel
-	const channelRes = await supabase.from('channels').insert({name, slug}).select().single()
+	// Create channel (id is optional - if provided, uses client UUID; otherwise Postgres generates one)
+	const channelRes = await supabase.from('channels').insert({id, name, slug}).select().single()
 
 	// Stop if the first query failed.
 	if (channelRes.error) return channelRes
