@@ -77,6 +77,13 @@ export async function readTracks({channelId, slug}) {
  * @returns {Object} v2 channel with {id: UUID, firebase_id, name, description, created_at, updated_at, source: 'v1', ...}
  */
 export function parseChannel(firebaseChannel) {
+	const updatedAt = new Date(
+		firebaseChannel.updated ||
+			firebaseChannel.updated_at ||
+			firebaseChannel.created ||
+			firebaseChannel.created_at
+	).toISOString()
+
 	return {
 		id: crypto.randomUUID(),
 		firebase_id: firebaseChannel.id,
@@ -90,12 +97,8 @@ export function parseChannel(firebaseChannel) {
 		track_count: firebaseChannel.track_count || 0,
 		source: 'v1',
 		created_at: new Date(firebaseChannel.created || firebaseChannel.created_at).toISOString(),
-		updated_at: new Date(
-			firebaseChannel.updated ||
-				firebaseChannel.updated_at ||
-				firebaseChannel.created ||
-				firebaseChannel.created_at
-		).toISOString()
+		updated_at: updatedAt,
+		latest_track_at: updatedAt // In Firebase, channel.updated reflects last track added
 	}
 }
 
