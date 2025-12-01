@@ -13,9 +13,7 @@
 	</head>
 	<body>
 		<article>
-			<h1>
-				@radio4000/sdk<span id="gitsha"></span>
-			</h1>
+			<h1>@radio4000/sdk@%PKG_VERSION%</h1>
 			<p>
 				Try it out in the browser console under <code>window.sdk</code><br />
 				Find the entire API in the
@@ -37,10 +35,9 @@
 			// const sdk = createSdk(supabaseClient)
 
 			// Or we can use the one we provide as convenience.
-			import { gitInfo, sdk } from "./src/main.js";
+			import { sdk } from "./src/main.js";
 
 			// For debugging
-			document.querySelector("#gitsha").textContent = `@${gitInfo.version}`;
 			window.sdk = sdk;
 			console.log("The sdk is now available under window.sdk");
 
