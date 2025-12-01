@@ -1,5 +1,5 @@
-import {resolve} from 'path'
 import {execSync} from 'child_process'
+import {resolve} from 'path'
 import {defineConfig} from 'vite'
 import pkg from './package.json' with {type: 'json'}
 
@@ -22,6 +22,12 @@ function getGitInfo() {
 		return {sha, branch, date, remoteUrl, version: pkg.version}
 	} catch (e) {
 		console.warn('Failed to get git info:', e.message)
-		return {sha: 'unknown', branch: 'unknown', date: 'unknown', remoteUrl: 'unknown', version: pkg.version}
+		return {
+			sha: 'unknown',
+			branch: 'unknown',
+			date: 'unknown',
+			remoteUrl: 'unknown',
+			version: pkg.version
+		}
 	}
 }
