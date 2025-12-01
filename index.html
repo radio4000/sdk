@@ -25,75 +25,75 @@
 		<ul id="channels"></ul>
 
 		<script type="module">
-			// We can set up our own sdk, if we want.
-			// import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
-			// import {createSdk} from './src/main.js'
-			// const supabaseClient = createClient(
-			// 	'https://myjhnqgfwqtcicnvcwcj.supabase.co',
-			// 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTQxNTQ3MiwiZXhwIjoxOTU2OTkxNDcyfQ.gySR3Lv-m_CIj2Eyx6kfyOdwwMXEOFOgeHSjADqcM4Y'
-			// )
-			// const sdk = createSdk(supabaseClient)
+		// We can set up our own sdk, if we want.
+		// import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+		// import {createSdk} from './src/main.js'
+		// const supabaseClient = createClient(
+		// 	'https://myjhnqgfwqtcicnvcwcj.supabase.co',
+		// 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTQxNTQ3MiwiZXhwIjoxOTU2OTkxNDcyfQ.gySR3Lv-m_CIj2Eyx6kfyOdwwMXEOFOgeHSjADqcM4Y'
+		// )
+		// const sdk = createSdk(supabaseClient)
 
-			// Or we can use the one we provide as convenience.
-			import {sdk} from './src/main.js'
+		// Or we can use the one we provide as convenience.
+		import {sdk} from './src/main.js'
 
-			// For debugging
-			window.sdk = sdk
-			console.log('The sdk is now available under window.sdk')
+		// For debugging
+		window.sdk = sdk
+		console.log('The sdk is now available under window.sdk')
 
-			// Fetch and render some channels to test.
-			const ul = document.querySelector('#channels')
-			sdk.channels.readChannels(2).then((response) => {
-				console.log('channels response', response)
-				if (!response?.data) return
-				for (const c of response.data) {
-					const li = document.createElement('li')
-					const input = document.createElement('input')
-					input.value = c.id
-					li.textContent = c.name + ' @' + c.slug
-					li.append(input)
-					ul.appendChild(li)
-				}
-				// Testing it worked
-				sdk.channels.readChannel(response.data[0].slug).then((res) => console.log(res))
+		// Fetch and render some channels to test.
+		const ul = document.querySelector('#channels')
+		sdk.channels.readChannels(2).then((response) => {
+			console.log('channels response', response)
+			if (!response?.data) return
+			for (const c of response.data) {
+				const li = document.createElement('li')
+				const input = document.createElement('input')
+				input.value = c.id
+				li.textContent = c.name + ' @' + c.slug
+				li.append(input)
+				ul.appendChild(li)
+			}
+			// Testing it worked
+			sdk.channels.readChannel(response.data[0].slug).then((res) => console.log(res))
+		})
+
+		/**
+		 * Tests a few SDK methods by running and chaining them. This should always work.
+		 * Creates a new channel, queries it by slug, updates the name and validates it worked.
+		 * For now you need to pass it a user email and password.
+		 *
+		 * @param {string} slug - a new, unique slug for the channel to be created
+		 */
+		async function sdkTest(slug, email, password) {
+			console.log('testing')
+
+			const {
+				data: {user}
+			} = await sdk.auth.signIn({email, password})
+
+			await sdk.channels.createChannel({name: 'Radio Test', slug: slug})
+
+			const {data: channel} = await sdk.channels.readChannel(slug)
+
+			await sdk.channels.updateChannel(channel.id, {name: 'updated'})
+
+			const {data: updatedChannel} = await sdk.channels.readChannel(slug)
+
+			console.log('same channel', channel.id === updatedChannel.id)
+			console.log('name field was updated', updatedChannel.name === 'updated')
+
+			const {data: track} = await sdk.tracks.createTrack(channel.id, {
+				url: 'https://www.youtube.com/watch?v=dA55o_18a-g',
+				title: 'My new track'
 			})
 
-			/**
-			 * Tests a few SDK methods by running and chaining them. This should always work.
-			 * Creates a new channel, queries it by slug, updates the name and validates it worked.
-			 * For now you need to pass it a user email and password.
-			 *
-			 * @param {string} slug - a new, unique slug for the channel to be created
-			 */
-			async function sdkTest(slug, email, password) {
-				console.log('testing')
+			console.log('track was created', track.title === 'My new track')
 
-				const {
-					data: {user}
-				} = await sdk.auth.signIn({email, password})
-
-				await sdk.channels.createChannel({name: 'Radio Test', slug: slug})
-
-				const {data: channel} = await sdk.channels.readChannel(slug)
-
-				await sdk.channels.updateChannel(channel.id, {name: 'updated'})
-
-				const {data: updatedChannel} = await sdk.channels.readChannel(slug)
-
-				console.log('same channel', channel.id === updatedChannel.id)
-				console.log('name field was updated', updatedChannel.name === 'updated')
-
-				const {data: track} = await sdk.tracks.createTrack(channel.id, {
-					url: 'https://www.youtube.com/watch?v=dA55o_18a-g',
-					title: 'My new track'
-				})
-
-				console.log('track was created', track.title === 'My new track')
-
-				// @todo delete the channel and track + user
-				//await sdk.channels.delete(channel.id)
-			}
-			window.sdkTest = sdkTest
+			// @todo delete the channel and track + user
+			//await sdk.channels.delete(channel.id)
+		}
+		window.sdkTest = sdkTest
 		</script>
 	</body>
 </html>
