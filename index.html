@@ -1,24 +1,24 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>@radio4000/sdk</title>
-		<link rel="icon" href="data:;base64,ivborw0kggo=" />
+		<link rel="icon" href="data:;base64,ivborw0kggo=">
 		<style>
-			html {
-				font-family: system-ui, sans-serif;
-			}
+		html {
+			font-family: system-ui, sans-serif;
+		}
 		</style>
 	</head>
 	<body>
 		<article>
 			<h1>@radio4000/sdk@%PKG_VERSION%</h1>
 			<p>
-				Try it out in the browser console under <code>window.sdk</code><br />
+				Try it out in the browser console under <code>window.sdk</code>
+				<br>
 				Find the entire API in the
-				<a href="https://github.com/radio4000/sdk?tab=readme-ov-file#overview"
-					>readme</a>.
+				<a href="https://github.com/radio4000/sdk?tab=readme-ov-file#overview">readme</a>.
 			</p>
 		</article>
 
@@ -35,30 +35,28 @@
 			// const sdk = createSdk(supabaseClient)
 
 			// Or we can use the one we provide as convenience.
-			import { sdk } from "./src/main.js";
+			import {sdk} from './src/main.js'
 
 			// For debugging
-			window.sdk = sdk;
-			console.log("The sdk is now available under window.sdk");
+			window.sdk = sdk
+			console.log('The sdk is now available under window.sdk')
 
 			// Fetch and render some channels to test.
-			const ul = document.querySelector("#channels");
+			const ul = document.querySelector('#channels')
 			sdk.channels.readChannels(2).then((response) => {
-				console.log("channels response", response);
-				if (!response?.data) return;
+				console.log('channels response', response)
+				if (!response?.data) return
 				for (const c of response.data) {
-					const li = document.createElement("li");
-					const input = document.createElement("input");
-					input.value = c.id;
-					li.textContent = c.name + " @" + c.slug;
-					li.append(input);
-					ul.appendChild(li);
+					const li = document.createElement('li')
+					const input = document.createElement('input')
+					input.value = c.id
+					li.textContent = c.name + ' @' + c.slug
+					li.append(input)
+					ul.appendChild(li)
 				}
 				// Testing it worked
-				sdk.channels
-					.readChannel(response.data[0].slug)
-					.then((res) => console.log(res));
-			});
+				sdk.channels.readChannel(response.data[0].slug).then((res) => console.log(res))
+			})
 
 			/**
 			 * Tests a few SDK methods by running and chaining them. This should always work.
@@ -68,37 +66,34 @@
 			 * @param {string} slug - a new, unique slug for the channel to be created
 			 */
 			async function sdkTest(slug, email, password) {
-				console.log("testing");
+				console.log('testing')
 
 				const {
-					data: { user },
-				} = await sdk.auth.signIn({ email, password });
+					data: {user}
+				} = await sdk.auth.signIn({email, password})
 
-				await sdk.channels.createChannel({ name: "Radio Test", slug: slug });
+				await sdk.channels.createChannel({name: 'Radio Test', slug: slug})
 
-				const { data: channel } = await sdk.channels.readChannel(slug);
+				const {data: channel} = await sdk.channels.readChannel(slug)
 
-				await sdk.channels.updateChannel(channel.id, { name: "updated" });
+				await sdk.channels.updateChannel(channel.id, {name: 'updated'})
 
-				const { data: updatedChannel } = await sdk.channels.readChannel(slug);
+				const {data: updatedChannel} = await sdk.channels.readChannel(slug)
 
-				console.log("same channel", channel.id === updatedChannel.id);
-				console.log(
-					"name field was updated",
-					updatedChannel.name === "updated",
-				);
+				console.log('same channel', channel.id === updatedChannel.id)
+				console.log('name field was updated', updatedChannel.name === 'updated')
 
-				const { data: track } = await sdk.tracks.createTrack(channel.id, {
-					url: "https://www.youtube.com/watch?v=dA55o_18a-g",
-					title: "My new track",
-				});
+				const {data: track} = await sdk.tracks.createTrack(channel.id, {
+					url: 'https://www.youtube.com/watch?v=dA55o_18a-g',
+					title: 'My new track'
+				})
 
-				console.log("track was created", track.title === "My new track");
+				console.log('track was created', track.title === 'My new track')
 
 				// @todo delete the channel and track + user
 				//await sdk.channels.delete(channel.id)
 			}
-			window.sdkTest = sdkTest;
+			window.sdkTest = sdkTest
 		</script>
 	</body>
 </html>

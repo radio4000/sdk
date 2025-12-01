@@ -17,6 +17,12 @@
 			"recommended": false
 		}
 	},
+	"html": {
+		"experimentalFullSupportEnabled": true,
+		"formatter": {
+			"enabled": true
+		}
+	},
 	"javascript": {
 		"formatter": {
 			"bracketSameLine": false,
