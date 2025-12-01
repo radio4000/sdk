@@ -1,16 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>@radio4000/sdk</title>
-		<link rel="icon" href="data:;base64,ivborw0kggo=" />
+		<link rel="icon" href="data:;base64,ivborw0kggo=">
+		<style>
+		html {
+			font-family: system-ui, sans-serif;
+		}
+		</style>
 	</head>
 	<body>
 		<article>
+			<h1>@radio4000/sdk@%PKG_VERSION%</h1>
 			<p>
-				Testing the <a href="https://github.com/radio4000/sdk">@radio4000/sdk</a>. Try it out in the browser console
-				under `window.sdk`.
+				Try it out in the browser console under <code>window.sdk</code>
+				<br>
+				Find the entire API in the
+				<a href="https://github.com/radio4000/sdk?tab=readme-ov-file#overview">readme</a>.
 			</p>
 		</article>
 
@@ -35,12 +43,9 @@
 
 			// Fetch and render some channels to test.
 			const ul = document.querySelector('#channels')
-			sdk.channels.readChannels(100).then((response) => {
-				console.log(response)
-
-				if (!response?.data) {
-					return
-				}
+			sdk.channels.readChannels(2).then((response) => {
+				console.log('channels response', response)
+				if (!response?.data) return
 				for (const c of response.data) {
 					const li = document.createElement('li')
 					const input = document.createElement('input')
@@ -64,7 +69,7 @@
 				console.log('testing')
 
 				const {
-					data: {user},
+					data: {user}
 				} = await sdk.auth.signIn({email, password})
 
 				await sdk.channels.createChannel({name: 'Radio Test', slug: slug})
@@ -80,7 +85,7 @@
 
 				const {data: track} = await sdk.tracks.createTrack(channel.id, {
 					url: 'https://www.youtube.com/watch?v=dA55o_18a-g',
-					title: 'My new track',
+					title: 'My new track'
 				})
 
 				console.log('track was created', track.title === 'My new track')
@@ -90,7 +95,5 @@
 			}
 			window.sdkTest = sdkTest
 		</script>
-
-		<p>See the <a href="/docs">full documentation</a>.</p>
 	</body>
 </html>
