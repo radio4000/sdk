@@ -14,7 +14,6 @@ describe.skipIf(!hasTestCredentials)('Track fields (playback_error, duration)', 
 	const testSlug = `test-channel-${Date.now()}`
 
 	beforeAll(async () => {
-
 		// Sign in
 		const {error: authError} = await supabase.auth.signInWithPassword({
 			email: TEST_EMAIL,
