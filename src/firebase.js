@@ -1,8 +1,12 @@
+import {v5 as uuidv5} from 'uuid'
 import {extractTokens} from './utils.js'
 
 /** @typedef {import('./types.ts').FirebaseChannelResult} FirebaseChannelResult */
 
 const firebaseHost = 'https://radio4000.firebaseio.com'
+
+// Deterministic namespace for converting Firebase IDs to UUIDs
+const R4_NAMESPACE = uuidv5('r4_firebase_random_ids', uuidv5.DNS)
 
 /**
  * Find a Firebase channel by "slug" property
@@ -85,7 +89,7 @@ export function parseChannel(firebaseChannel) {
 	).toISOString()
 
 	return {
-		id: crypto.randomUUID(),
+		id: uuidv5(firebaseChannel.id, R4_NAMESPACE),
 		firebase_id: firebaseChannel.id,
 		slug: firebaseChannel.slug,
 		name: firebaseChannel.title || firebaseChannel.name || '', // Firebase uses 'title'
@@ -113,7 +117,7 @@ export function parseTrack(firebaseTrack, channelId, channelSlug) {
 	const {mentions, tags} = extractTokens(firebaseTrack.body || firebaseTrack.description)
 
 	return {
-		id: crypto.randomUUID(),
+		id: uuidv5(firebaseTrack.id, R4_NAMESPACE),
 		firebase_id: firebaseTrack.id,
 		channel_id: channelId,
 		slug: channelSlug,
