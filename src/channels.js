@@ -26,7 +26,7 @@ export const createChannel = async ({id, name, slug, userId}) => {
 	// If we don't have a user, try to read it from the current session.
 	if (!userId) {
 		const {data} = await readUser()
-		userId = data.user.id
+		userId = data?.id
 	}
 
 	if (!userId) {
