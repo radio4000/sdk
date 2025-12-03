@@ -41,6 +41,8 @@ export interface UpdateTrackParams {
 	discogs_url?: string
 	tags?: string[]
 	mentions?: string[]
+	playback_error?: string
+	duration?: number
 }
 
 // A channel as it looks in our v1 Firebase legacy database

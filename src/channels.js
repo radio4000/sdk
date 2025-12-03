@@ -84,6 +84,7 @@ export const deleteChannel = async (id) => {
 
 /**
  * Finds a channel by slug
+ * the "channels_with_tracks" is a view that contains a few extra, useful fields
  * @param {string} slug
  */
 export const readChannel = async (slug) => {
