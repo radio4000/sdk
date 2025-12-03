@@ -52,57 +52,65 @@ describe('Firebase v1 methods', () => {
 		expect(tracksBySlug[0].id).toBe(tracksByChannelId[0].id)
 	})
 
-	test('firebase.parseChannel transforms v1 schema to v2', async () => {
+	test('firebase.parseChannel transforms v1 schema to v2 with deterministic UUID', async () => {
 		const {data: raw} = await firebase.readChannel('detecteve')
-		const parsed = firebase.parseChannel(raw)
+		const parsed1 = firebase.parseChannel(raw)
+		const parsed2 = firebase.parseChannel(raw)
 
-		// ID transformation: raw.id becomes firebase_id, new UUID as id
+		// ID transformation: raw.id becomes firebase_id, deterministic UUID as id
 		expect(raw.id).toBeDefined() // Raw has Firebase ID
-		expect(parsed.firebase_id).toBe(raw.id) // Moved to firebase_id
-		expect(parsed.id).toMatch(/^[0-9a-f-]{36}$/) // New v2 UUID
-		expect(parsed.id).not.toBe(raw.id) // Different IDs
+		expect(parsed1.firebase_id).toBe(raw.id) // Moved to firebase_id
+		expect(parsed1.id).toMatch(/^[0-9a-f-]{36}$/) // v2 UUID format
+		expect(parsed1.id).not.toBe(raw.id) // Different from Firebase ID
+
+		// Deterministic: same input → same UUID
+		expect(parsed1.id).toBe(parsed2.id)
 
 		// Identity preservation
-		expect(parsed.slug).toBe(raw.slug)
+		expect(parsed1.slug).toBe(raw.slug)
 
 		// Field renames
-		expect(parsed.name).toBe(raw.title)
-		expect(parsed.description).toBe(raw.body)
+		expect(parsed1.name).toBe(raw.title)
+		expect(parsed1.description).toBe(raw.body)
 
 		// Coordinate transforms
 		if (raw.coordinatesLatitude) {
-			expect(parsed.latitude).toBe(raw.coordinatesLatitude)
-			expect(parsed.longitude).toBe(raw.coordinatesLongitude)
+			expect(parsed1.latitude).toBe(raw.coordinatesLatitude)
+			expect(parsed1.longitude).toBe(raw.coordinatesLongitude)
 		}
 
 		// Metadata
-		expect(parsed.source).toBe('v1')
-		expect(parsed.created_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
-		expect(parsed.updated_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
+		expect(parsed1.source).toBe('v1')
+		expect(parsed1.created_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
+		expect(parsed1.updated_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
 	})
 
-	test('firebase.parseTrack transforms v1 schema to v2', async () => {
+	test('firebase.parseTrack transforms v1 schema to v2 with deterministic UUID', async () => {
 		const {data: tracks} = await firebase.readTracks({slug: 'detecteve'})
 		const raw = tracks[0]
-		const parsed = firebase.parseTrack(raw, 'test-uuid', 'detecteve')
+		const parsed1 = firebase.parseTrack(raw, 'test-uuid', 'detecteve')
+		const parsed2 = firebase.parseTrack(raw, 'test-uuid', 'detecteve')
 
-		// ID transformation: raw.id becomes firebase_id, new UUID as id
+		// ID transformation: raw.id becomes firebase_id, deterministic UUID as id
 		expect(raw.id).toBeDefined() // Raw has Firebase ID
-		expect(parsed.firebase_id).toBe(raw.id) // Moved to firebase_id
-		expect(parsed.id).toMatch(/^[0-9a-f-]{36}$/) // New v2 UUID
-		expect(parsed.id).not.toBe(raw.id) // Different IDs
+		expect(parsed1.firebase_id).toBe(raw.id) // Moved to firebase_id
+		expect(parsed1.id).toMatch(/^[0-9a-f-]{36}$/) // v2 UUID format
+		expect(parsed1.id).not.toBe(raw.id) // Different from Firebase ID
+
+		// Deterministic: same input → same UUID
+		expect(parsed1.id).toBe(parsed2.id)
 
 		// Channel relationship
-		expect(parsed.channel_id).toBe('test-uuid')
-		expect(parsed.slug).toBe('detecteve')
+		expect(parsed1.channel_id).toBe('test-uuid')
+		expect(parsed1.slug).toBe('detecteve')
 
 		// Field renames
-		expect(parsed.title).toBe(raw.title)
-		if (raw.body) expect(parsed.description).toBe(raw.body)
-		if (raw.discogsUrl) expect(parsed.discogs_url).toBe(raw.discogsUrl)
+		expect(parsed1.title).toBe(raw.title)
+		if (raw.body) expect(parsed1.description).toBe(raw.body)
+		if (raw.discogsUrl) expect(parsed1.discogs_url).toBe(raw.discogsUrl)
 
 		// Metadata
-		expect(parsed.source).toBe('v1')
-		expect(parsed.created_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
+		expect(parsed1.source).toBe('v1')
+		expect(parsed1.created_at).toMatch(/^\d{4}-\d{2}-\d{2}T/)
 	})
 })
