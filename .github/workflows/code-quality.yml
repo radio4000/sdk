@@ -33,3 +33,6 @@ jobs:
 
       - name: Run tests
         run: npm test
+        env:
+          VITE_SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          VITE_SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
