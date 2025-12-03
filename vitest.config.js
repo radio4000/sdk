@@ -1,13 +1,12 @@
-import {defineConfig} from 'vitest/config'
+import {defineConfig, loadEnv} from 'vite'
 
-export default defineConfig({
-	test: {
-		include: ['tests/**/*.js'],
-		exclude: ['tests/_*.js'],
-		env: {
-			// Load environment variables from .env file
-			// Vitest will automatically load .env files
+export default defineConfig(({mode}) => {
+	const env = loadEnv(mode, process.cwd(), '')
+	return {
+		test: {
+			include: ['tests/**/*.js'],
+			exclude: ['tests/_*.js'],
+			env
 		}
-	},
-	envDir: '.'
+	}
 })
