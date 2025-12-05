@@ -95,7 +95,7 @@ npm start
   │   └── deleteUser() → Promise
   │
   ├── channels/
-  │   ├── createChannel({name, slug, userId?}) → Promise<SupabaseResponse>
+  │   ├── createChannel({id?, name, slug, userId?}) → Promise<SupabaseResponse>
   │   ├── updateChannel(id, changes) → Promise<SupabaseResponse>
   │   ├── deleteChannel(id) → Promise
   │   ├── readChannel(slug) → Promise<SupabaseResponse>
@@ -118,7 +118,8 @@ npm start
   │
   ├── firebase/
   │   ├── readChannel(slug) → Promise<{data?, error?}>
-  │   ├── readTracks({slug?, firebaseId?}) → Promise<{data?, error?}>
+  │   ├── readChannels({limit?}) → Promise<{data?, error?}>
+  │   ├── readTracks({channelId?, slug?}) → Promise<{data?, error?}>
   │   ├── parseChannel(rawChannel) → v2Channel
   │   └── parseTrack(rawTrack, channelId, channelSlug) → v2Track
   │

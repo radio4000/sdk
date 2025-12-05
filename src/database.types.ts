@@ -1,7 +1,7 @@
 export type Json = string | number | boolean | null | {[key: string]: Json | undefined} | Json[]
 
 export type Database = {
-	// Allows to automatically instanciate createClient with right options
+	// Allows to automatically instantiate createClient with right options
 	// instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
 	__InternalSupabase: {
 		PostgrestVersion: '12.0.2 (a4e00ff)'
@@ -80,7 +80,28 @@ export type Database = {
 						foreignKeyName: 'broadcast_channel_id_fkey'
 						columns: ['channel_id']
 						isOneToOne: true
+						referencedRelation: 'channels_with_tracks_v1'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'broadcast_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: true
+						referencedRelation: 'channels_with_tracks_v2'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'broadcast_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: true
 						referencedRelation: 'orphaned_channels'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'broadcast_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: true
+						referencedRelation: 'random_channels_with_tracks'
 						referencedColumns: ['id']
 					},
 					{
@@ -154,7 +175,28 @@ export type Database = {
 						foreignKeyName: 'channel_track_channel_id_fkey'
 						columns: ['channel_id']
 						isOneToOne: false
+						referencedRelation: 'channels_with_tracks_v1'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'channel_track_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: false
+						referencedRelation: 'channels_with_tracks_v2'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'channel_track_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: false
 						referencedRelation: 'orphaned_channels'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'channel_track_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: false
+						referencedRelation: 'random_channels_with_tracks'
 						referencedColumns: ['id']
 					},
 					{
@@ -182,13 +224,13 @@ export type Database = {
 			}
 			channels: {
 				Row: {
-					coordinates: unknown | null
+					coordinates: unknown
 					created_at: string | null
 					description: string | null
 					favorites: string[] | null
 					firebase_id: string | null
 					followers: string[] | null
-					fts: unknown | null
+					fts: unknown
 					id: string
 					image: string | null
 					latitude: number | null
@@ -199,13 +241,13 @@ export type Database = {
 					url: string | null
 				}
 				Insert: {
-					coordinates?: unknown | null
+					coordinates?: unknown
 					created_at?: string | null
 					description?: string | null
 					favorites?: string[] | null
 					firebase_id?: string | null
 					followers?: string[] | null
-					fts?: unknown | null
+					fts?: unknown
 					id?: string
 					image?: string | null
 					latitude?: number | null
@@ -216,13 +258,13 @@ export type Database = {
 					url?: string | null
 				}
 				Update: {
-					coordinates?: unknown | null
+					coordinates?: unknown
 					created_at?: string | null
 					description?: string | null
 					favorites?: string[] | null
 					firebase_id?: string | null
 					followers?: string[] | null
-					fts?: unknown | null
+					fts?: unknown
 					id?: string
 					image?: string | null
 					latitude?: number | null
@@ -276,7 +318,28 @@ export type Database = {
 						foreignKeyName: 'followers_channel_id_fkey'
 						columns: ['channel_id']
 						isOneToOne: false
+						referencedRelation: 'channels_with_tracks_v1'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'followers_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: false
+						referencedRelation: 'channels_with_tracks_v2'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'followers_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: false
 						referencedRelation: 'orphaned_channels'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'followers_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: false
+						referencedRelation: 'random_channels_with_tracks'
 						referencedColumns: ['id']
 					},
 					{
@@ -304,7 +367,28 @@ export type Database = {
 						foreignKeyName: 'followers_follower_id_fkey'
 						columns: ['follower_id']
 						isOneToOne: false
+						referencedRelation: 'channels_with_tracks_v1'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'followers_follower_id_fkey'
+						columns: ['follower_id']
+						isOneToOne: false
+						referencedRelation: 'channels_with_tracks_v2'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'followers_follower_id_fkey'
+						columns: ['follower_id']
+						isOneToOne: false
 						referencedRelation: 'orphaned_channels'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'followers_follower_id_fkey'
+						columns: ['follower_id']
+						isOneToOne: false
+						referencedRelation: 'random_channels_with_tracks'
 						referencedColumns: ['id']
 					}
 				]
@@ -314,9 +398,11 @@ export type Database = {
 					created_at: string | null
 					description: string | null
 					discogs_url: string | null
-					fts: unknown | null
+					duration: number | null
+					fts: unknown
 					id: string
 					mentions: string[] | null
+					playback_error: string | null
 					tags: string[] | null
 					title: string
 					updated_at: string | null
@@ -326,9 +412,11 @@ export type Database = {
 					created_at?: string | null
 					description?: string | null
 					discogs_url?: string | null
-					fts?: unknown | null
+					duration?: number | null
+					fts?: unknown
 					id?: string
 					mentions?: string[] | null
+					playback_error?: string | null
 					tags?: string[] | null
 					title: string
 					updated_at?: string | null
@@ -338,9 +426,11 @@ export type Database = {
 					created_at?: string | null
 					description?: string | null
 					discogs_url?: string | null
-					fts?: unknown | null
+					duration?: number | null
+					fts?: unknown
 					id?: string
 					mentions?: string[] | null
+					playback_error?: string | null
 					tags?: string[] | null
 					title?: string
 					updated_at?: string | null
@@ -393,7 +483,28 @@ export type Database = {
 						foreignKeyName: 'user_channel_channel_id_fkey'
 						columns: ['channel_id']
 						isOneToOne: false
+						referencedRelation: 'channels_with_tracks_v1'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'user_channel_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: false
+						referencedRelation: 'channels_with_tracks_v2'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'user_channel_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: false
 						referencedRelation: 'orphaned_channels'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'user_channel_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: false
+						referencedRelation: 'random_channels_with_tracks'
 						referencedColumns: ['id']
 					}
 				]
@@ -405,9 +516,11 @@ export type Database = {
 					created_at: string | null
 					description: string | null
 					discogs_url: string | null
-					fts: unknown | null
+					duration: number | null
+					fts: unknown
 					id: string | null
 					mentions: string[] | null
+					playback_error: string | null
 					slug: string | null
 					tags: string[] | null
 					title: string | null
@@ -418,13 +531,13 @@ export type Database = {
 			}
 			channels_explore: {
 				Row: {
-					coordinates: unknown | null
+					coordinates: unknown
 					created_at: string | null
 					description: string | null
 					favorites: string[] | null
 					firebase_id: string | null
 					followers: string[] | null
-					fts: unknown | null
+					fts: unknown
 					id: string | null
 					image: string | null
 					latitude: number | null
@@ -439,19 +552,63 @@ export type Database = {
 			}
 			channels_with_tracks: {
 				Row: {
-					coordinates: unknown | null
+					coordinates: unknown
 					created_at: string | null
 					description: string | null
 					favorites: string[] | null
 					firebase_id: string | null
 					followers: string[] | null
-					fts: unknown | null
+					fts: unknown
+					id: string | null
+					image: string | null
+					latest_track_at: string | null
+					latitude: number | null
+					longitude: number | null
+					name: string | null
+					slug: string | null
+					track_count: number | null
+					updated_at: string | null
+					url: string | null
+				}
+				Relationships: []
+			}
+			channels_with_tracks_v1: {
+				Row: {
+					coordinates: unknown
+					created_at: string | null
+					description: string | null
+					favorites: string[] | null
+					firebase_id: string | null
+					followers: string[] | null
+					fts: unknown
 					id: string | null
 					image: string | null
 					latitude: number | null
 					longitude: number | null
 					name: string | null
 					slug: string | null
+					track_count: number | null
+					updated_at: string | null
+					url: string | null
+				}
+				Relationships: []
+			}
+			channels_with_tracks_v2: {
+				Row: {
+					coordinates: unknown
+					created_at: string | null
+					description: string | null
+					favorites: string[] | null
+					firebase_id: string | null
+					followers: string[] | null
+					fts: unknown
+					id: string | null
+					image: string | null
+					latitude: number | null
+					longitude: number | null
+					name: string | null
+					slug: string | null
+					track_count: number | null
 					updated_at: string | null
 					url: string | null
 				}
@@ -459,13 +616,13 @@ export type Database = {
 			}
 			orphaned_channels: {
 				Row: {
-					coordinates: unknown | null
+					coordinates: unknown
 					created_at: string | null
 					description: string | null
 					favorites: string[] | null
 					firebase_id: string | null
 					followers: string[] | null
-					fts: unknown | null
+					fts: unknown
 					id: string | null
 					image: string | null
 					latitude: number | null
@@ -476,13 +633,13 @@ export type Database = {
 					url: string | null
 				}
 				Insert: {
-					coordinates?: unknown | null
+					coordinates?: unknown
 					created_at?: string | null
 					description?: string | null
 					favorites?: string[] | null
 					firebase_id?: string | null
 					followers?: string[] | null
-					fts?: unknown | null
+					fts?: unknown
 					id?: string | null
 					image?: string | null
 					latitude?: number | null
@@ -493,13 +650,13 @@ export type Database = {
 					url?: string | null
 				}
 				Update: {
-					coordinates?: unknown | null
+					coordinates?: unknown
 					created_at?: string | null
 					description?: string | null
 					favorites?: string[] | null
 					firebase_id?: string | null
 					followers?: string[] | null
-					fts?: unknown | null
+					fts?: unknown
 					id?: string | null
 					image?: string | null
 					latitude?: number | null
@@ -516,7 +673,7 @@ export type Database = {
 					created_at: string | null
 					description: string | null
 					discogs_url: string | null
-					fts: unknown | null
+					fts: unknown
 					id: string | null
 					mentions: string[] | null
 					tags: string[] | null
@@ -528,7 +685,7 @@ export type Database = {
 					created_at?: string | null
 					description?: string | null
 					discogs_url?: string | null
-					fts?: unknown | null
+					fts?: unknown
 					id?: string | null
 					mentions?: string[] | null
 					tags?: string[] | null
@@ -540,7 +697,7 @@ export type Database = {
 					created_at?: string | null
 					description?: string | null
 					discogs_url?: string | null
-					fts?: unknown | null
+					fts?: unknown
 					id?: string | null
 					mentions?: string[] | null
 					tags?: string[] | null
@@ -550,12 +707,31 @@ export type Database = {
 				}
 				Relationships: []
 			}
+			random_channels_with_tracks: {
+				Row: {
+					coordinates: unknown
+					created_at: string | null
+					description: string | null
+					favorites: string[] | null
+					firebase_id: string | null
+					followers: string[] | null
+					fts: unknown
+					id: string | null
+					image: string | null
+					latest_track_at: string | null
+					latitude: number | null
+					longitude: number | null
+					name: string | null
+					slug: string | null
+					track_count: number | null
+					updated_at: string | null
+					url: string | null
+				}
+				Relationships: []
+			}
 		}
 		Functions: {
-			delete_user: {
-				Args: Record<PropertyKey, never>
-				Returns: undefined
-			}
+			delete_user: {Args: never; Returns: undefined}
 			parse_tokens: {
 				Args: {content: string; prefix: string}
 				Returns: string[]
