@@ -39,21 +39,24 @@ export const createChannel = async ({id, name, slug, userId}) => {
 	}
 
 	// Create channel (id is optional - if provided, uses client UUID; otherwise Postgres generates one)
-	const channelRes = await supabase.from('channels').insert({id, name, slug}).select().single()
+	const {data: channel, error: channelError} = await supabase
+		.from('channels')
+		.insert({id, name, slug})
+		.select()
+		.single()
 
 	// Stop if the first query failed.
-	if (channelRes.error) return channelRes
+	if (channelError) return {error: channelError}
 
 	// Create junction table
-	const channel_id = channelRes.data.id
-	const userChannelRes = await supabase
+	const {error: userChannelError} = await supabase
 		.from('user_channel')
-		.insert({user_id: userId, channel_id})
+		.insert({user_id: userId, channel_id: channel.id})
 		.single()
-	if (userChannelRes.error) return userChannelRes
+	if (userChannelError) return {error: userChannelError}
 
-	// Return both records of the channel
-	return {data: channelRes.data}
+	// Return the channel
+	return {data: channel}
 }
 
 /**

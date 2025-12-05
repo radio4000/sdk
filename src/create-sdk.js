@@ -6,7 +6,7 @@ import * as search from './search.js'
 import * as tracks from './tracks.js'
 import * as users from './users.js'
 
-/** @typedef {import('@supabase/supabase-js').SupabaseClient<import('./database.types.js').Database>} SupabaseClient */
+/** @typedef {import('@supabase/supabase-js').SupabaseClient<import('./database.types.ts').Database>} SupabaseClient */
 
 /** @type {SupabaseClient} */
 export let supabase
