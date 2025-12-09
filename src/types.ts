@@ -43,8 +43,6 @@ export interface CreateTrackParams {
 	url: string
 	description?: string
 	discogs_url?: string
-	tags?: string[]
-	mentions?: string[]
 }
 
 export interface UpdateTrackParams {
@@ -52,8 +50,6 @@ export interface UpdateTrackParams {
 	url?: string
 	description?: string
 	discogs_url?: string
-	tags?: string[]
-	mentions?: string[]
 	playback_error?: string
 	duration?: number
 }
