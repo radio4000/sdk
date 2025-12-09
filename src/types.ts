@@ -91,4 +91,3 @@ export interface FirebaseChannel {
 export type FirebaseChannelResult =
 	| {data: FirebaseChannel | null; error?: never}
 	| {data?: never; error: {message: string}}
-
