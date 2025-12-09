@@ -1,4 +1,4 @@
-import {supabase} from './main.js'
+import {supabase} from './create-sdk.js'
 
 /**
  * Fetches the currently signed in user

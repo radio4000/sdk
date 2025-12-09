@@ -1,4 +1,4 @@
-import {supabase} from './main.js'
+import {supabase} from './create-sdk.js'
 import {readUser} from './users.js'
 
 /**

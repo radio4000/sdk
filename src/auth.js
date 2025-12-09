@@ -1,4 +1,4 @@
-import {supabase} from './main.js'
+import {supabase} from './create-sdk.js'
 
 // Three wrappers around the auth methods from Supabase.
 

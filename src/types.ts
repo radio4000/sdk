@@ -1,7 +1,20 @@
-import type {Database} from './database.types'
+import type {Database, Tables} from './database.types'
 
 // Export the Database type for use when creating Supabase clients
 export type {Database}
+
+// Named type aliases for what the SDK methods return
+// These come from database views, not base tables
+
+/** A channel with track_count and latest_track_at from "channels_with_tracks" view */
+export type Channel = Tables<'channels_with_tracks'>
+
+/** A track with channel slug from "channel_tracks" view */
+export type ChannelTrack = Tables<'channel_tracks'>
+
+// Base table types (for when you need the raw table shape)
+export type ChannelRow = Tables<'channels'>
+export type TrackRow = Tables<'tracks'>
 
 // Function parameter types that are more user-friendly
 export interface CreateChannelParams {

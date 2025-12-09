@@ -1,5 +1,5 @@
 import * as firebase from './firebase.js'
-import {supabase} from './main.js'
+import {supabase} from './create-sdk.js'
 import {readUser} from './users.js'
 
 /**
