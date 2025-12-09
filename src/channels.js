@@ -12,7 +12,16 @@ import {readUser} from './users.js'
  * Creates a new radio channel and connects it to a user
  * @param {CreateChannelParams} fields
  */
-export const createChannel = async ({id, name, slug, userId, description, url, latitude, longitude}) => {
+export const createChannel = async ({
+	id,
+	name,
+	slug,
+	userId,
+	description,
+	url,
+	latitude,
+	longitude
+}) => {
 	// Throw an error if the slug is in use by the old Firebase database.
 	const {data: isSlugTaken} = await firebase.readChannel(slug)
 	if (isSlugTaken)

@@ -13,5 +13,5 @@ export type {
 	CreateChannelParams,
 	UpdateChannelParams,
 	CreateTrackParams,
-	UpdateTrackParams,
+	UpdateTrackParams
 } from './types'
