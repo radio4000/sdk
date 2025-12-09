@@ -17,7 +17,7 @@
   "private": false,
   "scripts": {
     "dev": "vite --port 3999 --config vite-website.config.js",
-    "build": "vite build; bun run types; bun run build-website",
+    "build": "vite build; npm run types; npm run build-website",
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
     "format": "biome format --write",
