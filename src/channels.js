@@ -75,10 +75,10 @@ export const createChannel = async ({
  */
 export const updateChannel = async (id, changes) => {
 	// Extract the keys so we're sure which fields update.
-	const {name, slug, description, url, longitude, latitude} = changes
+	const {name, slug, description, url, image, longitude, latitude} = changes
 	const response = await supabase
 		.from('channels')
-		.update({name, slug, description, url, longitude, latitude})
+		.update({name, slug, description, url, image, longitude, latitude})
 		.eq('id', id)
 		.select()
 	return response

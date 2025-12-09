@@ -3,24 +3,30 @@ import type {Database, Tables} from './database.types'
 // Export the Database type for use when creating Supabase clients
 export type {Database}
 
-// Named type aliases for what the SDK methods return
-// These come from database views, not base tables
+// ---------------------------------------------------------------------------
+// Read types - what SDK methods return (from database views)
+// ---------------------------------------------------------------------------
 
-/** A channel with track_count and latest_track_at from "channels_with_tracks" view */
+/** Channel with computed fields: track_count, latest_track_at */
 export type Channel = Tables<'channels_with_tracks'>
 
-/** A track with channel slug from "channel_tracks" view */
+/** Track with its channel slug included */
 export type ChannelTrack = Tables<'channel_tracks'>
 
-// Base table types (for when you need the raw table shape)
+// Base table types (raw table shape without computed fields)
 export type ChannelRow = Tables<'channels'>
 export type TrackRow = Tables<'tracks'>
 
-// Function parameter types that are more user-friendly
+// ---------------------------------------------------------------------------
+// Write types - parameters for create/update operations
+// ---------------------------------------------------------------------------
+
 export interface CreateChannelParams {
+	/** Optional client-side UUID. If omitted, Postgres generates one. */
 	id?: string
 	name: string
 	slug: string
+	/** Owner user ID. If omitted, uses current session user. */
 	userId?: string
 	description?: string
 	url?: string
@@ -33,11 +39,14 @@ export interface UpdateChannelParams {
 	slug?: string
 	description?: string
 	url?: string
+	/** Cloudinary image URL. Set to null to remove. */
+	image?: string | null
 	latitude?: number
 	longitude?: number
 }
 
 export interface CreateTrackParams {
+	/** Optional client-side UUID. If omitted, Postgres generates one. */
 	id?: string
 	title: string
 	url: string
@@ -50,11 +59,17 @@ export interface UpdateTrackParams {
 	url?: string
 	description?: string
 	discogs_url?: string
+	/** Error message if playback failed */
 	playback_error?: string
+	/** Duration in seconds */
 	duration?: number
 }
 
-// A channel as it looks in our v1 Firebase legacy database
+// ---------------------------------------------------------------------------
+// Legacy Firebase v1 types
+// ---------------------------------------------------------------------------
+
+/** Channel schema from the legacy Firebase v1 database */
 export interface FirebaseChannel {
 	id: string
 	body?: string
@@ -72,18 +87,8 @@ export interface FirebaseChannel {
 	updated: number
 }
 
-// Return type for Firebase operations
+/** Internal result type for Firebase operations */
 export type FirebaseChannelResult =
 	| {data: FirebaseChannel | null; error?: never}
 	| {data?: never; error: {message: string}}
 
-// SDK instance type
-export interface SDK {
-	auth: typeof import('./auth.js')
-	users: typeof import('./users.js')
-	channels: typeof import('./channels.js')
-	tracks: typeof import('./tracks.js')
-	firebase: typeof import('./firebase.js')
-	browse: typeof import('./browse.js')
-	supabase: import('@supabase/supabase-js').SupabaseClient<Database>
-}
