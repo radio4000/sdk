@@ -156,7 +156,9 @@ export const readUserChannels = async () => {
 		.order('updated_at', {ascending: true})
 
 	if (error) return {data: null, error}
-	return {data, error: null}
+	// Strip the user_channel join data to return clean ChannelRow objects
+	const channels = data.map(({user_channel, ...channel}) => channel)
+	return {data: channels, error: null}
 }
 
 /**
@@ -181,7 +183,7 @@ export async function readChannelTracks(slug, limit = 5000) {
 /**
  * Checks if the local session user can edit a channel
  * @param {string} slug
- * @returns {Promise<Boolean>}
+ * @returns {Promise<boolean>}
  */
 export async function canEditChannel(slug) {
 	const {
@@ -223,26 +225,30 @@ export async function createImage(file, tags) {
  * Make a channel follow another channel
  * @param {string} followerId - ID of the channel following another channel
  * @param {string} channelId - ID of the channel being followed
+ * @returns {Promise<SdkResult<null>>}
  */
 export const followChannel = async (followerId, channelId) => {
-	const response = await supabase
+	const {error} = await supabase
 		.from('followers')
 		.insert([{follower_id: followerId, channel_id: channelId}])
-	return response
+	if (error) return {data: null, error}
+	return {data: null, error: null}
 }
 
 /**
  * Make a channel unfollow another channel
  * @param {string} followerId - ID of the channel unfollowing another channel
  * @param {string} channelId - ID of the channel being unfollowed
+ * @returns {Promise<SdkResult<null>>}
  */
 export const unfollowChannel = async (followerId, channelId) => {
-	const response = await supabase
+	const {error} = await supabase
 		.from('followers')
 		.delete()
 		.eq('follower_id', followerId)
 		.eq('channel_id', channelId)
-	return response
+	if (error) return {data: null, error}
+	return {data: null, error: null}
 }
 
 /**
@@ -257,10 +263,9 @@ export const readFollowers = async (channelId) => {
 		.eq('channel_id', channelId)
 
 	if (error) return {data: null, error}
-	return {
-		data: data.map((item) => item.channels),
-		error: null
-	}
+	// Filter out any potential nulls from the join
+	const channels = data.map((item) => item.channels).filter(Boolean)
+	return {data: channels, error: null}
 }
 
 /**
@@ -275,8 +280,7 @@ export const readFollowings = async (channelId) => {
 		.eq('follower_id', channelId)
 
 	if (error) return {data: null, error}
-	return {
-		data: data.map((item) => item.channels),
-		error: null
-	}
+	// Filter out any potential nulls from the join
+	const channels = data.map((item) => item.channels).filter(Boolean)
+	return {data: channels, error: null}
 }

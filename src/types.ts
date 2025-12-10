@@ -62,8 +62,7 @@ export interface CreateTrackParams {
 	url: string
 	description?: string
 	discogs_url?: string
-	tags?: string[]
-	mentions?: string[]
+	// Note: tags and mentions are computed by PostgreSQL from the description field
 }
 
 export interface UpdateTrackParams {
@@ -75,8 +74,7 @@ export interface UpdateTrackParams {
 	playback_error?: string
 	/** Duration in seconds */
 	duration?: number
-	tags?: string[]
-	mentions?: string[]
+	// Note: tags and mentions are computed by PostgreSQL from the description field
 }
 
 // ---------------------------------------------------------------------------

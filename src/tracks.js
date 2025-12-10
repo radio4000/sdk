@@ -92,7 +92,7 @@ export const readTrack = async (id) => {
 /**
  * Checks if current user can edit a track
  * @param {string} track_id
- * @returns {Promise<Boolean>}
+ * @returns {Promise<boolean>}
  */
 export async function canEditTrack(track_id) {
 	const {data: user} = await readUser()
