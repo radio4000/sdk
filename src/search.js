@@ -1,6 +1,9 @@
 import {supabase} from './create-sdk.js'
 
 /**
+ * @typedef {import('./types').ChannelRow} ChannelRow
+ * @typedef {import('./types').ChannelTrack} ChannelTrack
+ */
  * Search channels by query using full-text search
  * @param {string} query - search query
  * @param {object} [options] - search options

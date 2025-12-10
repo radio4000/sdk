@@ -19,7 +19,7 @@ export let supabase
  * @property {typeof search} search
  * @property {typeof firebase} firebase
  * @property {SupabaseClient} supabase
- * @property {Object} browse
+ * @property {typeof browse} browse
  */
 
 /**
