@@ -1,5 +1,5 @@
 import {describe, expect, test, beforeAll, afterAll} from 'vitest'
-import {supabase} from '../src/main.js'
+import {supabase} from '../src/main.ts'
 import {createTrack, updateTrack, deleteTrack} from '../src/tracks.js'
 import {createChannel, deleteChannel, readChannelTracks} from '../src/channels.js'
 
