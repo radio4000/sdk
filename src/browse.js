@@ -39,9 +39,16 @@ export const supabaseOperatorsTable = {
 
 export const supabaseOperators = Object.keys(supabaseOperatorsTable)
 
-/* browse the list (of db table) like it is paginated;
-	 (query params ->) components-attributes -> supbase-query
-	 this does not render the list, just browses it
+/**
+ * Browse the list (of db table) like it is paginated
+ * @param {object} options
+ * @param {number} [options.page]
+ * @param {number} [options.limit]
+ * @param {string} [options.table]
+ * @param {string} [options.select]
+ * @param {string} [options.orderBy]
+ * @param {object} [options.orderConfig]
+ * @param {Array<{operator: string, column: string, value: string}>} [options.filters]
  */
 export async function query({
 	page = 1,
@@ -81,11 +88,13 @@ export async function query({
 			if (filter.operator === 'filter') {
 				query = query.filter(filter.operator, filter.column, filter.value || null)
 			} else if (['contains', 'containedBy'].includes(filter.operator)) {
+				// @ts-ignore - dynamic operator call
 				query = query[filter.operator](
 					filter.column,
 					valueJson || [filter.value.split(',')] || null
 				)
 			} else {
+				// @ts-ignore - dynamic operator call
 				query = query[filter.operator](filter.column, filter.value || null)
 			}
 		})
@@ -96,10 +105,9 @@ export async function query({
 	return query
 }
 
-/*
-	 converts web component attributes, to supabase sdk query parameters:
-	 -> page="1" limit="1"
-	 -> from[0] to to[0] limit[0]
+/**
+ * Converts web component attributes to supabase sdk query parameters
+ * @param {{page: number, limit: number}} params
  */
 function getBrowseParams({page, limit}) {
 	let from, to, limitResults
