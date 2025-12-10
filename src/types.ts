@@ -8,14 +8,24 @@ export type {Database}
 // ---------------------------------------------------------------------------
 
 /** Channel with computed fields: track_count, latest_track_at */
-export type Channel = Tables<'channels_with_tracks'>
+export type Channel = Tables<'channels_with_tracks'> & {
+	source?: 'v1' | 'v2'
+}
 
-/** Track with its channel slug included */
-export type ChannelTrack = Tables<'channel_tracks'>
+/** Track from the channel_tracks view (includes channel slug) */
+export type Track = Tables<'channel_tracks'> & {
+	firebase_id?: string
+	channel_id?: string
+	source?: 'v1' | 'v2'
+}
 
 // Base table types (raw table shape without computed fields)
 export type ChannelRow = Tables<'channels'>
 export type TrackRow = Tables<'tracks'>
+
+export type SdkError = {message: string}
+
+export type SdkResult<T> = {data: T; error: null} | {data: null; error: SdkError}
 
 // ---------------------------------------------------------------------------
 // Write types - parameters for create/update operations
@@ -52,6 +62,8 @@ export interface CreateTrackParams {
 	url: string
 	description?: string
 	discogs_url?: string
+	tags?: string[]
+	mentions?: string[]
 }
 
 export interface UpdateTrackParams {
@@ -63,6 +75,8 @@ export interface UpdateTrackParams {
 	playback_error?: string
 	/** Duration in seconds */
 	duration?: number
+	tags?: string[]
+	mentions?: string[]
 }
 
 // ---------------------------------------------------------------------------
@@ -87,7 +101,14 @@ export interface FirebaseChannel {
 	updated: number
 }
 
-/** Internal result type for Firebase operations */
-export type FirebaseChannelResult =
-	| {data: FirebaseChannel | null; error?: never}
-	| {data?: never; error: {message: string}}
+/** Track schema from the legacy Firebase v1 database */
+export interface FirebaseTrack {
+	id: string
+	channel: string
+	url: string
+	title: string
+	body?: string
+	discogsUrl?: string
+	created: number
+	updated?: number
+}
