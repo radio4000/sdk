@@ -6,7 +6,7 @@ export {sdk, SUPABASE_KEY, SUPABASE_URL}
 // Types
 export type {
 	Channel,
-	ChannelTrack,
+	Track,
 	ChannelRow,
 	TrackRow,
 	Database,

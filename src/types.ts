@@ -23,7 +23,7 @@ export type Track = Tables<'channel_tracks'> & {
 export type ChannelRow = Tables<'channels'>
 export type TrackRow = Tables<'tracks'>
 
-export type SdkError = {message: string}
+export type SdkError = {message: string; code?: string}
 
 export type SdkResult<T> = {data: T; error: null} | {data: null; error: SdkError}
 
