@@ -1,5 +1,5 @@
 import {describe, expect, test, beforeAll, afterAll} from 'vitest'
-import {supabase} from '../src/main.js'
+import {supabase} from '../src/main.ts'
 import {createTrack, updateTrack, deleteTrack} from '../src/tracks.js'
 import {createChannel, deleteChannel, readChannelTracks} from '../src/channels.js'
 
@@ -43,7 +43,7 @@ describe.skipIf(!hasTestCredentials)('Track fields (playback_error, duration)', 
 			url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 		})
 
-		expect(error).toBeUndefined()
+		expect(error).toBeNull()
 		expect(track).toBeDefined()
 		expect(track.id).toBeDefined()
 		expect(track.title).toBe('Test Track')
@@ -57,7 +57,7 @@ describe.skipIf(!hasTestCredentials)('Track fields (playback_error, duration)', 
 
 		expect(error).toBeNull()
 		expect(data).toBeDefined()
-		expect(data[0].playback_error).toBe('Video unavailable')
+		expect(data.playback_error).toBe('Video unavailable')
 	})
 
 	test('updateTrack can set duration', async () => {
@@ -67,7 +67,7 @@ describe.skipIf(!hasTestCredentials)('Track fields (playback_error, duration)', 
 
 		expect(error).toBeNull()
 		expect(data).toBeDefined()
-		expect(data[0].duration).toBe(212)
+		expect(data.duration).toBe(212)
 	})
 
 	test('updateTrack can set both playback_error and duration', async () => {
@@ -78,8 +78,8 @@ describe.skipIf(!hasTestCredentials)('Track fields (playback_error, duration)', 
 
 		expect(error).toBeNull()
 		expect(data).toBeDefined()
-		expect(data[0].playback_error).toBe('Geo-restricted')
-		expect(data[0].duration).toBe(180)
+		expect(data.playback_error).toBe('Geo-restricted')
+		expect(data.duration).toBe(180)
 	})
 
 	test('readChannelTracks returns tracks with playback_error and duration', async () => {

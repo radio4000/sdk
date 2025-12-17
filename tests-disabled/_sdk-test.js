@@ -1,5 +1,5 @@
 import {createClient} from '@supabase/supabase-js'
-import {createSdk} from '../src/main.js'
+import {createSdk} from '../src/main.ts'
 
 // Create a Supabase client connected to the "R4" test database.
 const url = 'https://dwjepbmqjtijxhrassfo.supabase.co'

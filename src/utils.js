@@ -10,7 +10,9 @@
 export function extractTokens(str) {
 	// Matches #hashtag or @mention (word boundary to word boundary)
 	const ENTITY_REGEX = /(?:^|\s)(#[\w-]+|@[\w-]+)(?=\s|$)/g
+	/** @type {string[]} */
 	const mentions = []
+	/** @type {string[]} */
 	const tags = []
 
 	if (!str) return {mentions, tags}
