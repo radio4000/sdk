@@ -102,9 +102,14 @@ export async function readTracks({channelId, slug}) {
 export function parseChannel(firebaseChannel) {
 	const updatedAt = new Date(firebaseChannel.updated || firebaseChannel.created).toISOString()
 
-	return /** @type {Channel} */ ({
+	/** @type {Channel} */
+	const channel = {
+		coordinates: null,
 		id: uuidv5(firebaseChannel.id, R4_NAMESPACE),
+		favorites: null,
 		firebase_id: firebaseChannel.id,
+		followers: null,
+		fts: null,
 		slug: firebaseChannel.slug,
 		name: firebaseChannel.title || '',
 		description: firebaseChannel.body || '',
@@ -117,7 +122,8 @@ export function parseChannel(firebaseChannel) {
 		created_at: new Date(firebaseChannel.created).toISOString(),
 		updated_at: updatedAt,
 		latest_track_at: null
-	})
+	}
+	return channel
 }
 
 /**
@@ -130,19 +136,24 @@ export function parseChannel(firebaseChannel) {
 export function parseTrack(firebaseTrack, channelId, channelSlug) {
 	const {mentions, tags} = extractTokens(firebaseTrack.body || '')
 
-	return /** @type {Track} */ ({
+	/** @type {Track} */
+	const track = {
+		created_at: new Date(firebaseTrack.created).toISOString(),
+		description: firebaseTrack.body || '',
+		discogs_url: firebaseTrack.discogsUrl || '',
+		duration: null,
+		fts: null,
 		id: uuidv5(firebaseTrack.id, R4_NAMESPACE),
-		firebase_id: firebaseTrack.id,
 		channel_id: channelId,
+		firebase_id: firebaseTrack.id,
 		slug: channelSlug,
 		url: firebaseTrack.url,
 		title: firebaseTrack.title,
-		description: firebaseTrack.body || '',
-		discogs_url: firebaseTrack.discogsUrl || '',
-		source: 'v1',
 		tags: tags.length > 0 ? tags : null,
 		mentions: mentions.length > 0 ? mentions : null,
-		created_at: new Date(firebaseTrack.created).toISOString(),
+		playback_error: null,
+		source: 'v1',
 		updated_at: new Date(firebaseTrack.updated || firebaseTrack.created).toISOString()
-	})
+	}
+	return track
 }
