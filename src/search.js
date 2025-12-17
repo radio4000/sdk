@@ -11,7 +11,11 @@ export async function searchChannels(query, {limit = 100} = {}) {
 	if (!query || query.trim().length === 0) {
 		return {data: [], error: null}
 	}
-	return supabase.from('channels').select('*').textSearch('fts', `${query}:*`).limit(limit)
+	return supabase
+		.from('channels_with_tracks')
+		.select('*')
+		.textSearch('fts', query, {type: 'websearch'})
+		.limit(limit)
 }
 
 /**
@@ -25,7 +29,11 @@ export async function searchTracks(query, {limit = 100} = {}) {
 	if (!query || query.trim().length === 0) {
 		return {data: [], error: null}
 	}
-	return supabase.from('channel_tracks').select('*').textSearch('fts', `${query}:*`).limit(limit)
+	return supabase
+		.from('channel_tracks')
+		.select('*')
+		.textSearch('fts', query, {type: 'websearch'})
+		.limit(limit)
 }
 
 /**
