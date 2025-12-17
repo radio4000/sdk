@@ -264,7 +264,7 @@ export const readFollowers = async (channelId) => {
 
 	if (error) return {data: null, error}
 	// Filter out any potential nulls from the join
-	const channels = data.map((item) => item.channels).filter(Boolean)
+	const channels = data.flatMap((item) => (item.channels ? [item.channels] : []))
 	return {data: channels, error: null}
 }
 
@@ -281,6 +281,6 @@ export const readFollowings = async (channelId) => {
 
 	if (error) return {data: null, error}
 	// Filter out any potential nulls from the join
-	const channels = data.map((item) => item.channels).filter(Boolean)
+	const channels = data.flatMap((item) => (item.channels ? [item.channels] : []))
 	return {data: channels, error: null}
 }
