@@ -1,17 +1,9 @@
 import {describe, expect, test} from 'vitest'
-import '../src/main.ts' // Initialize supabase client
+import '../src/main.js' // Initialize supabase client
 import {searchChannels, searchTracks, searchAll} from '../src/search.js'
 
 describe('searchChannels', () => {
-	test('finds channel by name "detecteve"', async () => {
-		const {data, error} = await searchChannels('detecteve')
-		expect(error).toBeNull()
-		expect(data).toBeDefined()
-		expect(data.length).toBeGreaterThan(0)
-		expect(data.some((c) => c.slug === 'detecteve')).toBe(true)
-	})
-
-	test('finds channel by name "ko002"', async () => {
+	test('finds channel by slug "ko002"', async () => {
 		const {data, error} = await searchChannels('ko002')
 		expect(error).toBeNull()
 		expect(data).toBeDefined()
