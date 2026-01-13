@@ -94,7 +94,7 @@ export function parseChannel(firebaseChannel) {
 		slug: firebaseChannel.slug,
 		name: firebaseChannel.title || firebaseChannel.name || '', // Firebase uses 'title'
 		description: firebaseChannel.body || firebaseChannel.description || '',
-		url: firebaseChannel.url || '',
+		url: firebaseChannel.link || '',
 		image: firebaseChannel.image || '',
 		latitude: firebaseChannel.coordinatesLatitude || firebaseChannel.latitude,
 		longitude: firebaseChannel.coordinatesLongitude || firebaseChannel.longitude,
