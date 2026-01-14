@@ -5,7 +5,7 @@ describe('Firebase v1 methods', () => {
 	test('firebase.readChannel returns raw Firebase data with id', async () => {
 		const {data: channel, error} = await firebase.readChannel('detecteve')
 
-		expect(error).toBeUndefined()
+		expect(error).toBeNull()
 		expect(channel.id).toBeDefined() // Firebase ID
 		expect(channel.firebase_id).toBeUndefined() // Should not exist in raw data
 		expect(channel.slug).toBe('detecteve')
@@ -16,7 +16,7 @@ describe('Firebase v1 methods', () => {
 	test('firebase.readChannels returns Firebase channels', async () => {
 		const {data: channels, error} = await firebase.readChannels({limit: 30})
 
-		expect(error).toBeUndefined()
+		expect(error).toBeNull()
 		expect(Array.isArray(channels)).toBe(true)
 		expect(channels.length).toBe(30)
 		expect(channels[0].id).toBeDefined()
@@ -33,7 +33,7 @@ describe('Firebase v1 methods', () => {
 	test('firebase.readTracks returns raw Firebase data with id', async () => {
 		const {data: tracks, error} = await firebase.readTracks({slug: 'detecteve'})
 
-		expect(error).toBeUndefined()
+		expect(error).toBeNull()
 		expect(Array.isArray(tracks)).toBe(true)
 		expect(tracks.length).toBeGreaterThan(0)
 		expect(tracks[0].id).toBeDefined() // Firebase ID

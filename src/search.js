@@ -1,47 +1,58 @@
 import {supabase} from './create-sdk.js'
 
 /**
+ * @typedef {import('./types').Channel} Channel
+ * @typedef {import('./types').Track} Track
+ */
+
+/**
+ * @template T
+ * @typedef {import('./types').SdkResult<T>} SdkResult
+ */
+
+/**
  * Search channels by query using full-text search
- * @param {string} query - search query
- * @param {object} [options] - search options
- * @param {number} [options.limit=100] - maximum number of results
- * @returns {Promise<{data: Array|null, error: object|null}>}
+ * @param {string} query
+ * @param {{limit?: number}} [options]
+ * @returns {Promise<SdkResult<Channel[]>>}
  */
 export async function searchChannels(query, {limit = 100} = {}) {
 	if (!query || query.trim().length === 0) {
 		return {data: [], error: null}
 	}
-	return supabase
+	const {data, error} = await supabase
 		.from('channels_with_tracks')
 		.select('*')
 		.textSearch('fts', query, {type: 'websearch'})
 		.limit(limit)
+	if (error) return {data: null, error}
+	return {data: /** @type {Channel[]} */ (data ?? []), error: null}
 }
 
 /**
  * Search tracks by query using full-text search
- * @param {string} query - search query
- * @param {object} [options] - search options
- * @param {number} [options.limit=100] - maximum number of results
- * @returns {Promise<{data: Array|null, error: object|null}>}
+ * @param {string} query
+ * @param {{limit?: number}} [options]
+ * @returns {Promise<SdkResult<Track[]>>}
  */
 export async function searchTracks(query, {limit = 100} = {}) {
 	if (!query || query.trim().length === 0) {
 		return {data: [], error: null}
 	}
-	return supabase
+	const {data, error} = await supabase
 		.from('channel_tracks')
 		.select('*')
 		.textSearch('fts', query, {type: 'websearch'})
 		.limit(limit)
+	if (error) return {data: null, error}
+	return {data: data ?? [], error: null}
 }
 
 /**
  * Search both channels and tracks
- * @param {string} query - search query
- * @param {object} [options] - search options
- * @param {number} [options.limit=100] - maximum number of results per type
- * @returns {Promise<{data: {channels: Array, tracks: Array}|null, error: object|null}>}
+ * @param {string} query
+ * @param {{limit?: number}} [options]
+ * @returns {Promise<SdkResult<{channels: Channel[], tracks: Track[]}>>}
  */
 export async function searchAll(query, options = {}) {
 	if (!query || query.trim().length === 0) {
@@ -53,14 +64,13 @@ export async function searchAll(query, options = {}) {
 		searchTracks(query, options)
 	])
 
-	// If either failed, return the first error
 	if (channelsRes.error) return {data: null, error: channelsRes.error}
 	if (tracksRes.error) return {data: null, error: tracksRes.error}
 
 	return {
 		data: {
-			channels: channelsRes.data,
-			tracks: tracksRes.data
+			channels: channelsRes.data ?? [],
+			tracks: tracksRes.data ?? []
 		},
 		error: null
 	}

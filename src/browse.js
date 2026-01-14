@@ -1,4 +1,4 @@
-import {supabase} from './main.js'
+import {supabase} from './create-sdk.js'
 
 /*
 	 all known supabase query filter operators
@@ -39,9 +39,17 @@ export const supabaseOperatorsTable = {
 
 export const supabaseOperators = Object.keys(supabaseOperatorsTable)
 
-/* browse the list (of db table) like it is paginated;
-	 (query params ->) components-attributes -> supbase-query
-	 this does not render the list, just browses it
+/**
+ * Browse the list (of db table) like it is paginated.
+ * Returns a Supabase query builder - await the result to execute the query.
+ * @param {object} options
+ * @param {number} [options.page]
+ * @param {number} [options.limit]
+ * @param {string} [options.table]
+ * @param {string} [options.select]
+ * @param {string} [options.orderBy]
+ * @param {object} [options.orderConfig]
+ * @param {Array<{operator: string, column: string, value: string}>} [options.filters]
  */
 export async function query({
 	page = 1,
@@ -79,14 +87,17 @@ export async function query({
 											(WARNING) otherwise the (raw string) operator is the supabase sdk function invoqued
 										*/
 			if (filter.operator === 'filter') {
-				query = query.filter(filter.operator, filter.column, filter.value || null)
+				query = query.filter(filter.column, filter.operator, filter.value || null)
 			} else if (['contains', 'containedBy'].includes(filter.operator)) {
-				query = query[filter.operator](
-					filter.column,
-					valueJson || [filter.value.split(',')] || null
+				const method = /** @type {(col: string, val: unknown) => typeof query} */ (
+					query[/** @type {keyof typeof query} */ (filter.operator)].bind(query)
 				)
+				query = method(filter.column, valueJson || [filter.value.split(',')] || null)
 			} else {
-				query = query[filter.operator](filter.column, filter.value || null)
+				const method = /** @type {(col: string, val: unknown) => typeof query} */ (
+					query[/** @type {keyof typeof query} */ (filter.operator)].bind(query)
+				)
+				query = method(filter.column, filter.value || null)
 			}
 		})
 
@@ -96,10 +107,9 @@ export async function query({
 	return query
 }
 
-/*
-	 converts web component attributes, to supabase sdk query parameters:
-	 -> page="1" limit="1"
-	 -> from[0] to to[0] limit[0]
+/**
+ * Converts web component attributes to supabase sdk query parameters
+ * @param {{page: number, limit: number}} params
  */
 function getBrowseParams({page, limit}) {
 	let from, to, limitResults

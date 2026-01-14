@@ -1,22 +1,27 @@
-import {supabase} from './main.js'
+import {supabase} from './create-sdk.js'
+
+/**
+ * @typedef {import('@supabase/supabase-js').User} User
+ * @typedef {import('./types').SdkResult<User | null>} UserResult
+ */
 
 /**
  * Fetches the currently signed in user
- * @param {string} [jwtToken]
- * @returns {Promise<{ data?: object, error?: object }>}
+ * @returns {Promise<UserResult>}
  */
-export async function readUser(jwtToken) {
-	const {
-		data: {user},
-		error
-	} = await supabase.auth.getUser(jwtToken)
-	return {data: user, error}
+export async function readUser() {
+	const {data, error} = await supabase.auth.getUser()
+
+	if (error) return {data: null, error: {message: error.message, code: error.code}}
+	return {data: data?.user ?? null, error: null}
 }
 
 /**
- * Will delete the currently authenticated user's "auth user" and any "user channels".
- * The function is defined in https://github.com/radio4000/supabase/blob/main/04-radio4000.sql
+ * Deletes the currently authenticated user and their channels.
+ * @returns {Promise<import('./types').SdkResult<null>>}
  */
 export const deleteUser = async () => {
-	return supabase.rpc('delete_user')
+	const {error} = await supabase.rpc('delete_user')
+	if (error) return {data: null, error: {message: error.message, code: error.code}}
+	return {data: null, error: null}
 }

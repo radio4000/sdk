@@ -1,19 +1,22 @@
-import {supabase} from './main.js'
-
-// Three wrappers around the auth methods from Supabase.
+import {supabase} from './create-sdk.js'
 
 /**
- * @param {{email: string, password: string, options: object}} param0
+ * @typedef {import('@supabase/supabase-js').SignUpWithPasswordCredentials} SignUpWithPasswordCredentials
+ * @typedef {import('@supabase/supabase-js').SignInWithPasswordCredentials} SignInWithPasswordCredentials
  */
-export const signUp = async ({email, password, options = {}}) => {
-	return supabase.auth.signUp({email, password, options})
+
+/**
+ * @param {SignUpWithPasswordCredentials} params
+ */
+export const signUp = async (params) => {
+	return supabase.auth.signUp(params)
 }
 
 /**
- * @param {{email: string, password: string, options: object}} param0
+ * @param {SignInWithPasswordCredentials} params
  */
-export const signIn = async ({email, password, options = {}}) => {
-	return supabase.auth.signInWithPassword({email, password, options})
+export const signIn = async (params) => {
+	return supabase.auth.signInWithPassword(params)
 }
 
 export const signOut = async () => {

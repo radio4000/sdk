@@ -1,13 +1,54 @@
-import type {Database} from './database.types'
+import type {Database, Tables} from './database.types'
+import type {PostgrestError} from '@supabase/postgrest-js'
 
 // Export the Database type for use when creating Supabase clients
 export type {Database}
 
-// Function parameter types that are more user-friendly
+// ---------------------------------------------------------------------------
+// Read types - what SDK methods return (from database views)
+// ---------------------------------------------------------------------------
+
+/**
+ * Channel with computed fields: track_count, latest_track_at
+ * Note: id/name/slug are overridden as non-null because the channels table
+ * has NOT NULL constraints, but Postgres views lose that type information.
+ */
+export type Channel = Omit<
+	Tables<'channels_with_tracks'>,
+	'id' | 'name' | 'slug' | 'coordinates'
+> & {
+	id: string
+	name: string
+	slug: string
+	source?: 'v1' | 'v2'
+}
+
+/** Track from the channel_tracks view (includes channel slug) */
+export type Track = Tables<'channel_tracks'> & {
+	firebase_id?: string
+	channel_id?: string
+	source?: 'v1' | 'v2'
+}
+
+// Base table types (raw table shape without computed fields)
+// Note: omit coordinates to discourage usage in SDK clients.
+export type ChannelRow = Omit<Tables<'channels'>, 'coordinates'>
+export type TrackRow = Tables<'tracks'>
+
+export type SdkError = {message: string; code?: string} | PostgrestError
+
+export type SdkResult<T> = {data: T; error: null} | {data: null; error: SdkError}
+
+// ---------------------------------------------------------------------------
+// Write types - parameters for create/update operations
+// ---------------------------------------------------------------------------
+
 export interface CreateChannelParams {
+	/** Optional client-side UUID. If omitted, Postgres generates one. */
 	id?: string
 	name: string
 	slug: string
+	/** Owner user ID. If omitted, uses current session user. */
 	userId?: string
 	description?: string
 	url?: string
@@ -20,18 +61,20 @@ export interface UpdateChannelParams {
 	slug?: string
 	description?: string
 	url?: string
+	/** Cloudinary image URL. Set to null to remove. */
+	image?: string | null
 	latitude?: number
 	longitude?: number
 }
 
 export interface CreateTrackParams {
+	/** Optional client-side UUID. If omitted, Postgres generates one. */
 	id?: string
 	title: string
 	url: string
 	description?: string
 	discogs_url?: string
-	tags?: string[]
-	mentions?: string[]
+	// Note: tags and mentions are computed by PostgreSQL from the description field
 }
 
 export interface UpdateTrackParams {
@@ -39,13 +82,18 @@ export interface UpdateTrackParams {
 	url?: string
 	description?: string
 	discogs_url?: string
-	tags?: string[]
-	mentions?: string[]
+	/** Error message if playback failed */
 	playback_error?: string
+	/** Duration in seconds */
 	duration?: number
+	// Note: tags and mentions are computed by PostgreSQL from the description field
 }
 
-// A channel as it looks in our v1 Firebase legacy database
+// ---------------------------------------------------------------------------
+// Legacy Firebase v1 types
+// ---------------------------------------------------------------------------
+
+/** Channel schema from the legacy Firebase v1 database */
 export interface FirebaseChannel {
 	id: string
 	body?: string
@@ -57,24 +105,20 @@ export interface FirebaseChannel {
 	image?: string
 	isFeatured?: boolean
 	isPremium?: boolean
+	link?: string
 	slug: string
 	title: string
 	tracks?: Record<string, boolean>
-	updated: number
+	updated?: number
 }
 
-// Return type for Firebase operations
-export type FirebaseChannelResult =
-	| {data: FirebaseChannel | null; error?: never}
-	| {data?: never; error: {message: string}}
-
-// SDK instance type
-export interface SDK {
-	auth: typeof import('./auth.js')
-	users: typeof import('./users.js')
-	channels: typeof import('./channels.js')
-	tracks: typeof import('./tracks.js')
-	firebase: typeof import('./firebase.js')
-	browse: typeof import('./browse.js')
-	supabase: import('@supabase/supabase-js').SupabaseClient<Database>
+/** Track schema from the legacy Firebase v1 database */
+export interface FirebaseTrack {
+	id: string
+	channel: string
+	url: string
+	title: string
+	body?: string
+	discogsUrl?: string
+	created: number
 }

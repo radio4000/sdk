@@ -17,24 +17,25 @@
   "private": false,
   "scripts": {
     "dev": "vite --port 3999 --config vite-website.config.js",
-    "build": "vite build; npm run types; npm run build-website",
+    "build": "vite build && bun run build-website",
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
-    "lint": "biome check --write",
+    "check": "biome check --write && tsc",
     "types": "tsc",
-    "test": "vitest"
+    "test": "vitest",
+    "pull-db-types": "bunx supabase gen types typescript --project-id oupgudlkspsmzkmeovlh --schema public > src/database.types.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.87.0",
+    "@supabase/supabase-js": "^2.90.1",
     "media-url-parser": "^0.2.4",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.8",
-    "@types/node": "^24.10.2",
+    "@biomejs/biome": "2.3.11",
+    "@types/node": "^25.0.8",
     "typescript": "^5.9.3",
-    "vite": "^7.2.7",
-    "vitest": "^4.0.15"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.17"
   },
   "author": "radio4000",
   "license": "GPL-3.0-or-later",
