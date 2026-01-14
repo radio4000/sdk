@@ -4,7 +4,17 @@
 
 A JavaScript SDK to interact with [Radio4000](https://radio4000.com) via a browser or node.js.  
 
-It offers authentication as well as full create, read, update and delete of users, channels and tracks. While the SDK offers many convenient functions, but remember you can always do `sdk.supabase` and use the Supabase JS SDK directly as well.
+It offers authentication as well as full create, read, update and delete of users, channels and tracks. While the SDK has many methods, remember you can always use `sdk.supabase` directly.
+
+## Usage with a build system
+
+```js
+import {sdk} from '@radio4000/sdk'
+
+const {data: channels, error} = await sdk.channels.readChannels()
+if (error) throw new Error(error)
+console.log(channels)
+```
 
 ## Browser usage via CDN
 
@@ -26,9 +36,9 @@ Here's another, where we sign in (use your own credentials), create a channel an
 ```html
 <script type="module">
   import {sdk} from 'https://cdn.jsdelivr.net/npm/@radio4000/sdk/+esm'
-	
-  sdk.auth.signIn({email: '', password: '')}
-	
+
+  await sdk.auth.signIn({email: '', password: ''})
+
   const {data: channel, error} = await sdk.channels.createChannel({
     name: 'My radio',
     slug: 'my-radio',
@@ -36,23 +46,13 @@ Here's another, where we sign in (use your own credentials), create a channel an
   })
 
   if (error) throw new Error(error.message)
-	
+
   const {data: track} = await sdk.tracks.createTrack(channel.id, {
     url: 'http://...',
     title: 'Artist - Title',
     description: '...'
   })
 </script>
-```
-
-## Usage with a build system
-
-```js
-import {sdk} from '@radio4000/sdk'
-
-const {data: channels, error} = await sdk.channels.readChannels()
-if (error) throw new Error(error)
-console.log(channels)
 ```
 
 ### Using your own Supabase instance
@@ -88,10 +88,13 @@ npm start
   ├── auth/
   │   ├── signUp({email, password, options?}) → Promise
   │   ├── signIn({email, password, options?}) → Promise
-  │   └── signOut() → Promise
+  │   ├── signOut() → Promise
+  │   └── via sdk.supabase.auth:
+  │       ├── signInWithOtp({email}) → Promise (magic link)
+  │       └── signInWithOAuth({provider}) → Promise (google or facebook)
   │
   ├── users/
-  │   ├── readUser(jwtToken?) → Promise<{data?, error?}>
+  │   ├── readUser() → Promise<{data?, error?}>
   │   └── deleteUser() → Promise
   │
   ├── channels/
@@ -152,7 +155,7 @@ npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID > src/databas
 
 We use [vite](https://vitejs.dev/) in library mode to bundle the project. The only reason we bundle is for usage directly in a browser environment without a bundler.
 
-- dist/sdk.js (esm, good for browsers and newer node.js, dont want to bother with cjs legacy)
+- dist/sdk.js (esm, good for browsers and newer node.js after cjs legacy)
 
 Our package.json defines the `main`, `module` and `exports` fields to specify which file should be loaded in which environment. 
 
