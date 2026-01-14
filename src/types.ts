@@ -101,6 +101,7 @@ export interface FirebaseChannel {
 	image?: string
 	isFeatured?: boolean
 	isPremium?: boolean
+	link?: string
 	slug: string
 	title: string
 	tracks?: Record<string, boolean>
@@ -116,5 +117,4 @@ export interface FirebaseTrack {
 	body?: string
 	discogsUrl?: string
 	created: number
-	updated?: number
 }

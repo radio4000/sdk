@@ -153,7 +153,7 @@ export function parseTrack(firebaseTrack, channelId, channelSlug) {
 		mentions: mentions.length > 0 ? mentions : null,
 		playback_error: null,
 		source: 'v1',
-		updated_at: new Date(firebaseTrack.updated || firebaseTrack.created).toISOString()
+		updated_at: new Date(firebaseTrack.created).toISOString()
 	}
 	return track
 }
