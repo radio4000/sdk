@@ -96,7 +96,7 @@ export interface FirebaseChannel {
 	slug: string
 	title: string
 	tracks?: Record<string, boolean>
-	updated: number
+	updated?: number
 }
 
 /** Track schema from the legacy Firebase v1 database */
