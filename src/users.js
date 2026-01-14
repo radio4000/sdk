@@ -10,13 +10,10 @@ import {supabase} from './create-sdk.js'
  * @returns {Promise<UserResult>}
  */
 export async function readUser() {
-	const {
-		data: {user},
-		error
-	} = await supabase.auth.getUser()
+	const {data, error} = await supabase.auth.getUser()
 
 	if (error) return {data: null, error: {message: error.message, code: error.code}}
-	return {data: user, error: null}
+	return {data: data?.user ?? null, error: null}
 }
 
 /**

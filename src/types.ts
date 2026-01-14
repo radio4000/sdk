@@ -1,4 +1,5 @@
 import type {Database, Tables} from './database.types'
+import type {PostgrestError} from '@supabase/postgrest-js'
 
 // Export the Database type for use when creating Supabase clients
 export type {Database}
@@ -7,8 +8,15 @@ export type {Database}
 // Read types - what SDK methods return (from database views)
 // ---------------------------------------------------------------------------
 
-/** Channel with computed fields: track_count, latest_track_at */
-export type Channel = Tables<'channels_with_tracks'> & {
+/**
+ * Channel with computed fields: track_count, latest_track_at
+ * Note: id/name/slug are overridden as non-null because the channels table
+ * has NOT NULL constraints, but Postgres views lose that type information.
+ */
+export type Channel = Omit<Tables<'channels_with_tracks'>, 'id' | 'name' | 'slug'> & {
+	id: string
+	name: string
+	slug: string
 	source?: 'v1' | 'v2'
 }
 
@@ -23,7 +31,7 @@ export type Track = Tables<'channel_tracks'> & {
 export type ChannelRow = Tables<'channels'>
 export type TrackRow = Tables<'tracks'>
 
-export type SdkError = {message: string; code?: string}
+export type SdkError = {message: string; code?: string} | PostgrestError
 
 export type SdkResult<T> = {data: T; error: null} | {data: null; error: SdkError}
 

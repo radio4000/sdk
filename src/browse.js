@@ -40,7 +40,8 @@ export const supabaseOperatorsTable = {
 export const supabaseOperators = Object.keys(supabaseOperatorsTable)
 
 /**
- * Browse the list (of db table) like it is paginated
+ * Browse the list (of db table) like it is paginated.
+ * Returns a Supabase query builder - await the result to execute the query.
  * @param {object} options
  * @param {number} [options.page]
  * @param {number} [options.limit]

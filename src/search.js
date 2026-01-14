@@ -26,7 +26,7 @@ export async function searchChannels(query, {limit = 100} = {}) {
 		.textSearch('fts', query, {type: 'websearch'})
 		.limit(limit)
 	if (error) return {data: null, error}
-	return {data: data ?? [], error: null}
+	return {data: /** @type {Channel[]} */ (data ?? []), error: null}
 }
 
 /**

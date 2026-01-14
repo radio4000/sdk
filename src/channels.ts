@@ -1,24 +1,17 @@
 import * as firebase from './firebase.js'
 import {supabase} from './create-sdk.js'
 import {readUser} from './users.js'
-
-/**
- * @typedef {import('./types').CreateChannelParams} CreateChannelParams
- * @typedef {import('./types').UpdateChannelParams} UpdateChannelParams
- * @typedef {import('./types').Channel} Channel
- * @typedef {import('./types').ChannelRow} ChannelRow
- * @typedef {import('./types').Track} Track
- */
-
-/**
- * @template T
- * @typedef {import('./types').SdkResult<T>} SdkResult
- */
+import type {
+	CreateChannelParams,
+	UpdateChannelParams,
+	Channel,
+	ChannelRow,
+	Track,
+	SdkResult
+} from './types'
 
 /**
  * Creates a new radio channel and connects it to a user
- * @param {CreateChannelParams} fields
- * @returns {Promise<SdkResult<ChannelRow>>}
  */
 export const createChannel = async ({
 	id,
@@ -29,7 +22,7 @@ export const createChannel = async ({
 	url,
 	latitude,
 	longitude
-}) => {
+}: CreateChannelParams): Promise<SdkResult<ChannelRow>> => {
 	// Throw an error if the slug is in use by the old Firebase database.
 	const {data: isSlugTaken} = await firebase.readChannel(slug)
 	if (isSlugTaken) {
@@ -43,12 +36,13 @@ export const createChannel = async ({
 	}
 
 	// If we don't have a user, try to read it from the current session.
-	if (!userId) {
+	let resolvedUserId = userId
+	if (!resolvedUserId) {
 		const {data} = await readUser()
-		userId = data?.id
+		resolvedUserId = data?.id
 	}
 
-	if (!userId) {
+	if (!resolvedUserId) {
 		return {
 			data: null,
 			error: {
@@ -71,7 +65,7 @@ export const createChannel = async ({
 	// Create junction table
 	const {error: userChannelError} = await supabase
 		.from('user_channel')
-		.insert({user_id: userId, channel_id: channel.id})
+		.insert({user_id: resolvedUserId, channel_id: channel.id})
 		.single()
 	if (userChannelError) return {data: null, error: userChannelError}
 
@@ -81,11 +75,11 @@ export const createChannel = async ({
 
 /**
  * Updates a channel
- * @param {string} id
- * @param {UpdateChannelParams} changes - optional fields to update
- * @returns {Promise<SdkResult<ChannelRow>>}
  */
-export const updateChannel = async (id, changes) => {
+export const updateChannel = async (
+	id: string,
+	changes: UpdateChannelParams
+): Promise<SdkResult<ChannelRow>> => {
 	// Extract the keys so we're sure which fields update.
 	const {name, slug, description, url, image, longitude, latitude} = changes
 	const {data, error} = await supabase
@@ -101,10 +95,8 @@ export const updateChannel = async (id, changes) => {
 
 /**
  * Deletes a channel
- * @param {string} id
- * @returns {Promise<SdkResult<null>>}
  */
-export const deleteChannel = async (id) => {
+export const deleteChannel = async (id: string): Promise<SdkResult<null>> => {
 	if (!id) return {data: null, error: {message: 'Missing ID to delete channel'}}
 	const {error} = await supabase.from('channels').delete().eq('id', id)
 	if (error) return {data: null, error}
@@ -114,38 +106,34 @@ export const deleteChannel = async (id) => {
 /**
  * Finds a channel by slug
  * the "channels_with_tracks" is a view that contains a few extra, useful fields
- * @param {string} slug
- * @returns {Promise<SdkResult<Channel>>}
  */
-export const readChannel = async (slug) => {
+export const readChannel = async (slug: string): Promise<SdkResult<Channel>> => {
 	const {data, error} = await supabase
 		.from('channels_with_tracks')
 		.select('*')
 		.eq('slug', slug)
 		.single()
 	if (error) return {data: null, error}
-	return {data, error: null}
+	return {data: data as Channel, error: null}
 }
 
 /**
  * Returns a list of channels.
- * @param {number} limit
- * @returns {Promise<SdkResult<Channel[]>>}
  */
-export const readChannels = async (limit = 1000) => {
+export const readChannels = async (limit = 1000): Promise<SdkResult<Channel[]>> => {
 	const {data, error} = await supabase
 		.from('channels_with_tracks')
 		.select('*')
 		.limit(limit)
 		.order('created_at', {ascending: true})
 	if (error) return {data: null, error}
-	return {data, error: null}
+	return {data: data as Channel[], error: null}
 }
 
-/** Lists all channels from current user
- * @returns {Promise<SdkResult<ChannelRow[]>>}
+/**
+ * Lists all channels from current user
  */
-export const readUserChannels = async () => {
+export const readUserChannels = async (): Promise<SdkResult<ChannelRow[]>> => {
 	const {data: user} = await readUser()
 	if (!user) return {data: null, error: {message: 'User not found'}}
 
@@ -158,16 +146,13 @@ export const readUserChannels = async () => {
 	if (error) return {data: null, error}
 	// Strip the user_channel join data to return clean ChannelRow objects
 	const channels = data.map(({user_channel, ...channel}) => channel)
-	return {data: channels, error: null}
+	return {data: channels as ChannelRow[], error: null}
 }
 
 /**
  * Fetches tracks by channel slug
- * @param {string} slug
- * @param {number} limit - default 5000
- * @returns {Promise<SdkResult<Track[]>>}
  */
-export async function readChannelTracks(slug, limit = 5000) {
+export async function readChannelTracks(slug: string, limit = 5000): Promise<SdkResult<Track[]>> {
 	if (!slug) return {data: null, error: {message: 'Missing channel slug'}}
 	const {data, error} = await supabase
 		.from('channel_tracks')
@@ -182,15 +167,12 @@ export async function readChannelTracks(slug, limit = 5000) {
 
 /**
  * Checks if the local session user can edit a channel
- * @param {string} slug
- * @returns {Promise<boolean>}
  */
-export async function canEditChannel(slug) {
+export async function canEditChannel(slug: string): Promise<boolean> {
 	const {
 		data: {session}
 	} = await supabase.auth.getSession()
 	if (!session?.user) return false
-	// const {data: user} = await readUser()
 	const {data} = await supabase
 		.from('user_channel')
 		.select('user_id, channel_id!inner ( name, slug )')
@@ -202,11 +184,8 @@ export async function canEditChannel(slug) {
 
 /**
  * Uploads an image file to Cloudinary
- * @param {string} file
- * @param {string} [tags]
- * @returns {Promise<Response>}
  */
-export async function createImage(file, tags) {
+export async function createImage(file: string, tags?: string): Promise<Response> {
 	const cloudinaryCloudName = 'radio4000'
 	const cloudinaryUploadPreset = 'tc44ivjo'
 
@@ -223,11 +202,11 @@ export async function createImage(file, tags) {
 
 /**
  * Make a channel follow another channel
- * @param {string} followerId - ID of the channel following another channel
- * @param {string} channelId - ID of the channel being followed
- * @returns {Promise<SdkResult<null>>}
  */
-export const followChannel = async (followerId, channelId) => {
+export const followChannel = async (
+	followerId: string,
+	channelId: string
+): Promise<SdkResult<null>> => {
 	const {error} = await supabase
 		.from('followers')
 		.insert([{follower_id: followerId, channel_id: channelId}])
@@ -237,11 +216,11 @@ export const followChannel = async (followerId, channelId) => {
 
 /**
  * Make a channel unfollow another channel
- * @param {string} followerId - ID of the channel unfollowing another channel
- * @param {string} channelId - ID of the channel being unfollowed
- * @returns {Promise<SdkResult<null>>}
  */
-export const unfollowChannel = async (followerId, channelId) => {
+export const unfollowChannel = async (
+	followerId: string,
+	channelId: string
+): Promise<SdkResult<null>> => {
 	const {error} = await supabase
 		.from('followers')
 		.delete()
@@ -253,10 +232,8 @@ export const unfollowChannel = async (followerId, channelId) => {
 
 /**
  * Get a list of channels following a specific channel
- * @param {string} channelId - ID of the channel to get the list of followers
- * @returns {Promise<SdkResult<ChannelRow[]>>}
  */
-export const readFollowers = async (channelId) => {
+export const readFollowers = async (channelId: string): Promise<SdkResult<ChannelRow[]>> => {
 	const {data, error} = await supabase
 		.from('followers')
 		.select(`channels!follower_id (*)`)
@@ -264,16 +241,14 @@ export const readFollowers = async (channelId) => {
 
 	if (error) return {data: null, error}
 	// Filter out any potential nulls from the join
-	const channels = data.flatMap((item) => (item.channels ? [item.channels] : []))
+	const channels: ChannelRow[] = data.flatMap((item) => (item.channels ? [item.channels] : []))
 	return {data: channels, error: null}
 }
 
 /**
  * Get a list of channels that a specific channel follows
- * @param {string} channelId - ID of the channel to get the list of followed channels
- * @returns {Promise<SdkResult<ChannelRow[]>>}
  */
-export const readFollowings = async (channelId) => {
+export const readFollowings = async (channelId: string): Promise<SdkResult<ChannelRow[]>> => {
 	const {data, error} = await supabase
 		.from('followers')
 		.select(`channels!channel_id (*)`)
@@ -281,6 +256,6 @@ export const readFollowings = async (channelId) => {
 
 	if (error) return {data: null, error}
 	// Filter out any potential nulls from the join
-	const channels = data.flatMap((item) => (item.channels ? [item.channels] : []))
+	const channels: ChannelRow[] = data.flatMap((item) => (item.channels ? [item.channels] : []))
 	return {data: channels, error: null}
 }
