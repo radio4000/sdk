@@ -17,12 +17,10 @@
   "private": false,
   "scripts": {
     "dev": "vite --port 3999 --config vite-website.config.js",
-    "build": "vite build; npm run types; npm run build-website",
+    "build": "vite build && bun run build-website",
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
-    "format": "biome format --write",
-    "lint": "biome lint --write",
-    "check": "biome check --write",
+    "check": "biome check --write && tsc",
     "types": "tsc",
     "test": "vitest",
     "pull-db-types": "bunx supabase gen types typescript --project-id oupgudlkspsmzkmeovlh --schema public > src/database.types.ts"
