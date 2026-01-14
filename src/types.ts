@@ -13,7 +13,10 @@ export type {Database}
  * Note: id/name/slug are overridden as non-null because the channels table
  * has NOT NULL constraints, but Postgres views lose that type information.
  */
-export type Channel = Omit<Tables<'channels_with_tracks'>, 'id' | 'name' | 'slug'> & {
+export type Channel = Omit<
+	Tables<'channels_with_tracks'>,
+	'id' | 'name' | 'slug' | 'coordinates'
+> & {
 	id: string
 	name: string
 	slug: string
@@ -28,7 +31,8 @@ export type Track = Tables<'channel_tracks'> & {
 }
 
 // Base table types (raw table shape without computed fields)
-export type ChannelRow = Tables<'channels'>
+// Note: omit coordinates to discourage usage in SDK clients.
+export type ChannelRow = Omit<Tables<'channels'>, 'coordinates'>
 export type TrackRow = Tables<'tracks'>
 
 export type SdkError = {message: string; code?: string} | PostgrestError

@@ -104,7 +104,6 @@ export function parseChannel(firebaseChannel) {
 
 	/** @type {Channel} */
 	const channel = {
-		coordinates: null,
 		id: uuidv5(firebaseChannel.id, R4_NAMESPACE),
 		favorites: null,
 		firebase_id: firebaseChannel.id,
