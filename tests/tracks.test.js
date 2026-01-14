@@ -1,6 +1,6 @@
 import {describe, expect, test, beforeAll, afterAll} from 'vitest'
 import {supabase} from '../src/main.ts'
-import {createTrack, updateTrack, deleteTrack} from '../src/tracks.js'
+import {createTrack, updateTrack, deleteTrack, readTrack, canEditTrack} from '../src/tracks.js'
 import {createChannel, deleteChannel, readChannelTracks} from '../src/channels.js'
 
 const TEST_EMAIL = process.env.TEST_USER_EMAIL
@@ -93,5 +93,62 @@ describe.skipIf(!hasTestCredentials)('Track fields (playback_error, duration)', 
 		expect(track).toBeDefined()
 		expect(track.playback_error).toBe('Geo-restricted')
 		expect(track.duration).toBe(180)
+	})
+})
+
+// Tests that don't require authentication
+describe('readTrack', () => {
+	// Use a known track from @oskar channel with duration and discogs_url
+	const TEST_TRACK_ID = 'daf60e6f-f0d4-45e7-bdae-35d8a82fade6'
+
+	test('returns SdkResult with data and null error on success', async () => {
+		const result = await readTrack(TEST_TRACK_ID)
+
+		// Verify SdkResult shape
+		expect(result).toHaveProperty('data')
+		expect(result).toHaveProperty('error')
+		expect(result.error).toBeNull()
+		expect(result.data).not.toBeNull()
+	})
+
+	test('returns track with expected fields', async () => {
+		const {data, error} = await readTrack(TEST_TRACK_ID)
+
+		expect(error).toBeNull()
+		expect(data).toBeDefined()
+		expect(data.id).toBe(TEST_TRACK_ID)
+		expect(data.slug).toBe('oskar')
+		expect(data.title).toBeDefined()
+		expect(data.url).toBeDefined()
+		// This track has duration and discogs_url
+		expect(typeof data.duration).toBe('number')
+		expect(data.discogs_url).toContain('discogs.com')
+	})
+
+	test('returns SdkResult with error and null data on failure', async () => {
+		const result = await readTrack('00000000-0000-0000-0000-000000000000')
+
+		// Verify SdkResult shape on error
+		expect(result).toHaveProperty('data')
+		expect(result).toHaveProperty('error')
+		expect(result.data).toBeNull()
+		expect(result.error).not.toBeNull()
+	})
+})
+
+describe('canEditTrack', () => {
+	test('returns false when not authenticated', async () => {
+		// Get a valid track ID first
+		const {data: tracks} = await readChannelTracks('ko002', 1)
+		expect(tracks).toBeDefined()
+		expect(tracks.length).toBeGreaterThan(0)
+
+		const result = await canEditTrack(tracks[0].id)
+		expect(result).toBe(false)
+	})
+
+	test('returns false for non-existent track', async () => {
+		const result = await canEditTrack('00000000-0000-0000-0000-000000000000')
+		expect(result).toBe(false)
 	})
 })

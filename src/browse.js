@@ -87,15 +87,15 @@ export async function query({
 											(WARNING) otherwise the (raw string) operator is the supabase sdk function invoqued
 										*/
 			if (filter.operator === 'filter') {
-				query = query.filter(filter.operator, filter.column, filter.value || null)
+				query = query.filter(filter.column, filter.operator, filter.value || null)
 			} else if (['contains', 'containedBy'].includes(filter.operator)) {
 				const method = /** @type {(col: string, val: unknown) => typeof query} */ (
-					query[/** @type {keyof typeof query} */ (filter.operator)]
+					query[/** @type {keyof typeof query} */ (filter.operator)].bind(query)
 				)
 				query = method(filter.column, valueJson || [filter.value.split(',')] || null)
 			} else {
 				const method = /** @type {(col: string, val: unknown) => typeof query} */ (
-					query[/** @type {keyof typeof query} */ (filter.operator)]
+					query[/** @type {keyof typeof query} */ (filter.operator)].bind(query)
 				)
 				query = method(filter.column, filter.value || null)
 			}
