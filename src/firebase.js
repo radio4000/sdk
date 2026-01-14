@@ -113,7 +113,7 @@ export function parseChannel(firebaseChannel) {
 		slug: firebaseChannel.slug,
 		name: firebaseChannel.title || '',
 		description: firebaseChannel.body || '',
-		url: '',
+		url: firebaseChannel.link || '',
 		image: firebaseChannel.image || '',
 		latitude: firebaseChannel.coordinatesLatitude ?? null,
 		longitude: firebaseChannel.coordinatesLongitude ?? null,
