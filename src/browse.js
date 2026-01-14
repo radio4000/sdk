@@ -89,14 +89,15 @@ export async function query({
 			if (filter.operator === 'filter') {
 				query = query.filter(filter.operator, filter.column, filter.value || null)
 			} else if (['contains', 'containedBy'].includes(filter.operator)) {
-				// @ts-ignore - dynamic operator call
-				query = query[filter.operator](
-					filter.column,
-					valueJson || [filter.value.split(',')] || null
+				const method = /** @type {(col: string, val: unknown) => typeof query} */ (
+					query[/** @type {keyof typeof query} */ (filter.operator)]
 				)
+				query = method(filter.column, valueJson || [filter.value.split(',')] || null)
 			} else {
-				// @ts-ignore - dynamic operator call
-				query = query[filter.operator](filter.column, filter.value || null)
+				const method = /** @type {(col: string, val: unknown) => typeof query} */ (
+					query[/** @type {keyof typeof query} */ (filter.operator)]
+				)
+				query = method(filter.column, filter.value || null)
 			}
 		})
 
