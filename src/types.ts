@@ -25,7 +25,15 @@ export type TrackRow = Tables<'tracks'>
  */
 export type Channel = Omit<
 	Tables<'channels_with_tracks'>,
-	'id' | 'name' | 'slug' | 'created_at' | 'updated_at' | 'coordinates' | 'fts' | 'track_count' | 'latest_track_at'
+	| 'id'
+	| 'name'
+	| 'slug'
+	| 'created_at'
+	| 'updated_at'
+	| 'coordinates'
+	| 'fts'
+	| 'track_count'
+	| 'latest_track_at'
 > & {
 	// supabase thinks these are optional, they are not
 	id: string
@@ -46,7 +54,10 @@ export type Channel = Omit<
  * Note: id/title/url/created_at are overridden as non-null because the tracks
  * table has NOT NULL constraints, but Postgres views lose that type information.
  */
-export type Track = Omit<Tables<'channel_tracks'>, 'id' | 'title' | 'url' | 'created_at' | 'updated_at'> & {
+export type Track = Omit<
+	Tables<'channel_tracks'>,
+	'id' | 'title' | 'url' | 'created_at' | 'updated_at'
+> & {
 	// supabase thinks these are optional, they are not.
 	id: string
 	title: string
