@@ -162,7 +162,7 @@ export async function readChannelTracks(slug: string, limit = 5000): Promise<Sdk
 		.limit(limit)
 
 	if (error) return {data: null, error}
-	return {data, error: null}
+	return {data: data as Track[], error: null}
 }
 
 /**
