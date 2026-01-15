@@ -23,8 +23,13 @@ export type Channel = Omit<
 	source?: 'v1' | 'v2'
 }
 
-/** Track from the channel_tracks view (includes channel slug) */
-export type Track = Tables<'channel_tracks'> & {
+/**
+ * Track from the channel_tracks view (includes channel slug)
+ * Note: id is overridden as non-null because the tracks table has NOT NULL
+ * constraint, but Postgres views lose that type information.
+ */
+export type Track = Omit<Tables<'channel_tracks'>, 'id'> & {
+	id: string
 	firebase_id?: string
 	channel_id?: string
 	source?: 'v1' | 'v2'

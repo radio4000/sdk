@@ -1,6 +1,6 @@
 {
   "name": "@radio4000/sdk",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "JavaScript client for Radio4000 for the browser and node",
   "type": "module",
   "files": [
@@ -17,7 +17,7 @@
   "private": false,
   "scripts": {
     "dev": "vite --port 3999 --config vite-website.config.js",
-    "build": "vite build && npm run build-website",
+    "build": "vite build && npm run types && npm run build-website",
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
     "check": "biome check --write && tsc",

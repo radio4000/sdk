@@ -86,7 +86,7 @@ export const deleteTrack = async (id) => {
 export const readTrack = async (id) => {
 	const {data, error} = await supabase.from('channel_tracks').select('*').eq('id', id).single()
 	if (error) return {data: null, error}
-	return {data, error: null}
+	return {data: /** @type {Track} */ (data), error: null}
 }
 
 /**
