@@ -70,7 +70,7 @@ export const createChannel = async ({
 	if (userChannelError) return {data: null, error: userChannelError}
 
 	// Return the channel
-	return {data: channel, error: null}
+	return {data: channel as ChannelRow, error: null}
 }
 
 /**
@@ -90,7 +90,7 @@ export const updateChannel = async (
 		.single()
 
 	if (error) return {data: null, error}
-	return {data, error: null}
+	return {data: data as ChannelRow, error: null}
 }
 
 /**

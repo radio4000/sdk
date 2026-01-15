@@ -1,52 +1,63 @@
 import type {Database, Tables} from './database.types'
 import type {PostgrestError} from '@supabase/postgrest-js'
 
+export type SdkError = {message: string; code?: string} | PostgrestError
+export type SdkResult<T> = {data: T; error: null} | {data: null; error: SdkError}
+
 // Export the Database type for use when creating Supabase clients
 export type {Database}
 
-// ---------------------------------------------------------------------------
-// Read types - what SDK methods return (from database views)
-// ---------------------------------------------------------------------------
+/**
+ * We have types generated from our database schema (npm run pull-db-types),
+ * however they are not always accurate, so we overwrite them as needed here.
+ */
 
 /**
- * Channel with computed fields: track_count, latest_track_at
- * Note: id/name/slug are overridden as non-null because the channels table
- * has NOT NULL constraints, but Postgres views lose that type information.
+ * Base/row types without joins or computed fields
+ */
+
+// Omit coordinates to discourage usage in SDK clients
+export type ChannelRow = Omit<Tables<'channels'>, 'coordinates'>
+export type TrackRow = Tables<'tracks'>
+
+/**
+ * Channel with computed fields
  */
 export type Channel = Omit<
 	Tables<'channels_with_tracks'>,
-	'id' | 'name' | 'slug' | 'coordinates'
+	'id' | 'name' | 'slug' | 'created_at' | 'updated_at' | 'coordinates' | 'fts' | 'track_count' | 'latest_track_at'
 > & {
+	// supabase thinks these are optional, they are not
 	id: string
 	name: string
 	slug: string
+	created_at: string
+	updated_at: string
+	// supabase thinks these are required, they are not.
+	fts?: string | null
+	track_count?: number | null
+	latest_track_at?: string | null
+	// new, computed fields
 	source?: 'v1' | 'v2'
 }
 
 /**
  * Track from the channel_tracks view (includes channel slug)
- * Note: id is overridden as non-null because the tracks table has NOT NULL
- * constraint, but Postgres views lose that type information.
+ * Note: id/title/url/created_at are overridden as non-null because the tracks
+ * table has NOT NULL constraints, but Postgres views lose that type information.
  */
-export type Track = Omit<Tables<'channel_tracks'>, 'id'> & {
+export type Track = Omit<Tables<'channel_tracks'>, 'id' | 'title' | 'url' | 'created_at' | 'updated_at'> & {
+	// supabase thinks these are optional, they are not.
 	id: string
+	title: string
+	url: string
+	created_at: string
+	updated_at: string
+	// new, computed fields
 	firebase_id?: string
 	channel_id?: string
 	source?: 'v1' | 'v2'
 }
-
-// Base table types (raw table shape without computed fields)
-// Note: omit coordinates to discourage usage in SDK clients.
-export type ChannelRow = Omit<Tables<'channels'>, 'coordinates'>
-export type TrackRow = Tables<'tracks'>
-
-export type SdkError = {message: string; code?: string} | PostgrestError
-
-export type SdkResult<T> = {data: T; error: null} | {data: null; error: SdkError}
-
-// ---------------------------------------------------------------------------
-// Write types - parameters for create/update operations
-// ---------------------------------------------------------------------------
 
 export interface CreateChannelParams {
 	/** Optional client-side UUID. If omitted, Postgres generates one. */
