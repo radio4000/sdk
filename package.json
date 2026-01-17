@@ -22,7 +22,7 @@
     "preview": "vite preview",
     "check": "biome check --write && tsc",
     "types": "tsc",
-    "test": "vitest",
+    "test": "vitest run",
     "pull-db-types": "bunx supabase gen types typescript --project-id oupgudlkspsmzkmeovlh --schema public > src/database.types.ts"
   },
   "dependencies": {
