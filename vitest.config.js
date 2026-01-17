@@ -8,7 +8,7 @@ export default defineConfig(({mode}) => {
 			exclude: ['tests/_*.js'],
 			env,
 			reporters: ['dot'],
-			onConsoleLog: () => false,
+			onConsoleLog: () => false
 		}
 	}
 })
