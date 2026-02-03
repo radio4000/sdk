@@ -56,7 +56,7 @@ export type Channel = Omit<
  */
 export type Track = Omit<
 	Tables<'channel_tracks'>,
-	'id' | 'title' | 'url' | 'created_at' | 'updated_at'
+	'id' | 'title' | 'url' | 'created_at' | 'updated_at' | 'media_id' | 'provider'
 > & {
 	// supabase thinks these are optional, they are not.
 	id: string
@@ -64,6 +64,9 @@ export type Track = Omit<
 	url: string
 	created_at: string
 	updated_at: string
+	// supabase thinks these are required, they are not.
+	media_id?: string | null
+	provider?: string | null
 	// new, computed fields
 	firebase_id?: string
 	channel_id?: string

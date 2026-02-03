@@ -188,21 +188,21 @@ export type Database = {
 					{
 						foreignKeyName: 'channel_track_track_id_fkey'
 						columns: ['track_id']
-						isOneToOne: false
+						isOneToOne: true
 						referencedRelation: 'channel_tracks'
 						referencedColumns: ['id']
 					},
 					{
 						foreignKeyName: 'channel_track_track_id_fkey'
 						columns: ['track_id']
-						isOneToOne: false
+						isOneToOne: true
 						referencedRelation: 'orphaned_tracks'
 						referencedColumns: ['id']
 					},
 					{
 						foreignKeyName: 'channel_track_track_id_fkey'
 						columns: ['track_id']
-						isOneToOne: false
+						isOneToOne: true
 						referencedRelation: 'tracks'
 						referencedColumns: ['id']
 					}
@@ -365,6 +365,21 @@ export type Database = {
 					}
 				]
 			}
+			reserved_slugs: {
+				Row: {
+					created_at: string | null
+					slug: string
+				}
+				Insert: {
+					created_at?: string | null
+					slug: string
+				}
+				Update: {
+					created_at?: string | null
+					slug?: string
+				}
+				Relationships: []
+			}
 			tracks: {
 				Row: {
 					created_at: string
@@ -373,8 +388,10 @@ export type Database = {
 					duration: number | null
 					fts: unknown
 					id: string
+					media_id: string | null
 					mentions: string[] | null
 					playback_error: string | null
+					provider: string | null
 					tags: string[] | null
 					title: string
 					updated_at: string
@@ -387,8 +404,10 @@ export type Database = {
 					duration?: number | null
 					fts?: unknown
 					id?: string
+					media_id?: string | null
 					mentions?: string[] | null
 					playback_error?: string | null
+					provider?: string | null
 					tags?: string[] | null
 					title: string
 					updated_at?: string
@@ -401,8 +420,10 @@ export type Database = {
 					duration?: number | null
 					fts?: unknown
 					id?: string
+					media_id?: string | null
 					mentions?: string[] | null
 					playback_error?: string | null
+					provider?: string | null
 					tags?: string[] | null
 					title?: string
 					updated_at?: string
@@ -484,8 +505,10 @@ export type Database = {
 					duration: number | null
 					fts: unknown
 					id: string | null
+					media_id: string | null
 					mentions: string[] | null
 					playback_error: string | null
+					provider: string | null
 					slug: string | null
 					tags: string[] | null
 					title: string | null
@@ -675,7 +698,16 @@ export type Database = {
 			}
 		}
 		Functions: {
+			ban_user: {
+				Args: {ban_until?: string; target_user_id: string}
+				Returns: undefined
+			}
+			ban_user_by_channel_slug: {
+				Args: {ban_until?: string; channel_slug: string}
+				Returns: undefined
+			}
 			delete_user: {Args: never; Returns: undefined}
+			is_banned: {Args: never; Returns: boolean}
 			parse_tokens: {
 				Args: {content: string; prefix: string}
 				Returns: string[]
