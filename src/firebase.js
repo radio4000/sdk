@@ -1,4 +1,5 @@
 import {v5 as uuidv5} from 'uuid'
+import {parseUrl} from 'media-now/parse-url'
 import {extractTokens} from './utils.js'
 
 /**
@@ -134,6 +135,7 @@ export function parseChannel(firebaseChannel) {
  */
 export function parseTrack(firebaseTrack, channelId, channelSlug) {
 	const {mentions, tags} = extractTokens(firebaseTrack.body || '')
+	const parsed = parseUrl(firebaseTrack.url)
 
 	/** @type {Track} */
 	const track = {
@@ -151,6 +153,8 @@ export function parseTrack(firebaseTrack, channelId, channelSlug) {
 		tags: tags.length > 0 ? tags : null,
 		mentions: mentions.length > 0 ? mentions : null,
 		playback_error: null,
+		provider: parsed?.provider ?? null,
+		media_id: parsed?.id ?? null,
 		source: 'v1',
 		updated_at: new Date(firebaseTrack.created).toISOString()
 	}
