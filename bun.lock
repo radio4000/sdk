@@ -6,7 +6,7 @@
       "name": "@radio4000/sdk",
       "dependencies": {
         "@supabase/supabase-js": "^2.94.0",
-        "media-url-parser": "^0.2.4",
+        "media-now": "^2.0.0",
         "uuid": "^13.0.0",
       },
       "devDependencies": {
@@ -208,7 +208,7 @@
 
     "magic-string": ["magic-string@0.30.21", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.5" } }, "sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ=="],
 
-    "media-url-parser": ["media-url-parser@0.2.4", "", {}, "sha512-Yn/hYVFuf8WY1+TCE2iTBKW13j/p3/1YxAXVTiZLNOuIe1yYVq/ZHCyBJQ02n/1j3HrJTx8q2a3I23TZ7gUTQg=="],
+    "media-now": ["media-now@2.0.0", "", {}, "sha512-+9eLoCZDOAA44CoLi2a7rGgNRvTY4u1zA7PyknsWCFTmirk9exJ5HX+8o9lpCiRXNRsDrR5wb2D5lBuKKMtZCw=="],
 
     "nanoid": ["nanoid@3.3.11", "", { "bin": { "nanoid": "bin/nanoid.cjs" } }, "sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w=="],
 

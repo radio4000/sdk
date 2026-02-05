@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.94.0",
-    "media-url-parser": "^0.2.4",
+    "media-now": "^2.0.0",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
