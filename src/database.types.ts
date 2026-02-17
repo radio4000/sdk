@@ -36,21 +36,24 @@ export type Database = {
 				Row: {
 					channel_id: string
 					created_at: string
-					track_id: string
+					decks: Json | null
+					track_id: string | null
 					track_played_at: string
 					updated_at: string
 				}
 				Insert: {
 					channel_id: string
 					created_at?: string
-					track_id: string
+					decks?: Json | null
+					track_id?: string | null
 					track_played_at: string
 					updated_at?: string
 				}
 				Update: {
 					channel_id?: string
 					created_at?: string
-					track_id?: string
+					decks?: Json | null
+					track_id?: string | null
 					track_played_at?: string
 					updated_at?: string
 				}
@@ -95,27 +98,6 @@ export type Database = {
 						columns: ['channel_id']
 						isOneToOne: true
 						referencedRelation: 'random_channels_with_tracks'
-						referencedColumns: ['id']
-					},
-					{
-						foreignKeyName: 'broadcast_track_id_fkey'
-						columns: ['track_id']
-						isOneToOne: false
-						referencedRelation: 'channel_tracks'
-						referencedColumns: ['id']
-					},
-					{
-						foreignKeyName: 'broadcast_track_id_fkey'
-						columns: ['track_id']
-						isOneToOne: false
-						referencedRelation: 'orphaned_tracks'
-						referencedColumns: ['id']
-					},
-					{
-						foreignKeyName: 'broadcast_track_id_fkey'
-						columns: ['track_id']
-						isOneToOne: false
-						referencedRelation: 'tracks'
 						referencedColumns: ['id']
 					}
 				]

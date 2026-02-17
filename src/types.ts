@@ -73,6 +73,35 @@ export type Track = Omit<
 	source?: 'v1' | 'v2'
 }
 
+/**
+ * Broadcast (live radio state)
+ */
+
+export type BroadcastRow = Tables<'broadcast'>
+
+export interface BroadcastDeckState {
+	index: number
+	track_id: string | null
+	track_played_at: string | null
+	is_playing: boolean
+	seeked_at: string | null
+	seek_position: number | null
+	volume: number
+	muted: boolean
+	speed: number
+}
+
+/** Broadcast with typed decks jsonb */
+export type Broadcast = Omit<BroadcastRow, 'decks'> & {
+	decks?: BroadcastDeckState[] | null
+}
+
+export interface UpdateBroadcastParams {
+	track_id?: string | null
+	track_played_at?: string
+	decks?: BroadcastDeckState[]
+}
+
 export interface CreateChannelParams {
 	/** Optional client-side UUID. If omitted, Postgres generates one. */
 	id?: string
