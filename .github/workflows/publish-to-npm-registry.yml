@@ -1,15 +1,13 @@
-# https://github.com/marketplace/actions/npm-publish
 name: Publish Package to npmjs
-on:
-  release:
-    types: [created]
 
-  # Allows you to run this workflow manually from the Actions tab
+on:
+  push:
+    tags:
+      - "[0-9]*"
   workflow_dispatch:
 
-# https://docs.npmjs.com/trusted-publishers#supported-cicd-providers
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write
   contents: read
 
 env:
@@ -18,18 +16,19 @@ env:
 
 jobs:
   publish:
+    name: Publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - uses: biomejs/setup-biome@v2
-        with:
-          version: latest
-      - run: biome ci
-      - run: npm run types
-      - run: npm run build
-      - run: npm publish
+          registry-url: https://registry.npmjs.org
+      - run: bun install --frozen-lockfile
+      - run: bun run check
+      - run: bun run test
+      - run: bun run build
+      - run: npm publish --access public --provenance
