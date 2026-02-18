@@ -154,7 +154,9 @@ Our package.json defines the `main`, `module` and `exports` fields to specify wh
 
 ## How to release a new version
 
-- Update version in package.json in a git commit
-- Git tag the same commit with a version number (no v-prefix)
+```
+npm version [major/minor/patch] # updates version in package.json and creates a commit + tag
+git push && git push --tags
+```
 
 This will trigger our GitHub workflow and publish to npm.
