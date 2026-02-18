@@ -68,7 +68,6 @@ export type Track = Omit<
 	media_id?: string | null
 	provider?: string | null
 	// new, computed fields
-	firebase_id?: string
 	channel_id?: string
 	source?: 'v1' | 'v2'
 }
@@ -146,38 +145,4 @@ export interface UpdateTrackParams {
 	/** Duration in seconds */
 	duration?: number
 	// Note: tags and mentions are computed by PostgreSQL from the description field
-}
-
-// ---------------------------------------------------------------------------
-// Legacy Firebase v1 types
-// ---------------------------------------------------------------------------
-
-/** Channel schema from the legacy Firebase v1 database */
-export interface FirebaseChannel {
-	id: string
-	body?: string
-	channelPublic?: string
-	coordinatesLatitude?: number
-	coordinatesLongitude?: number
-	created: number
-	favoriteChannels?: Record<string, boolean>
-	image?: string
-	isFeatured?: boolean
-	isPremium?: boolean
-	link?: string
-	slug: string
-	title: string
-	tracks?: Record<string, boolean>
-	updated?: number
-}
-
-/** Track schema from the legacy Firebase v1 database */
-export interface FirebaseTrack {
-	id: string
-	channel: string
-	url: string
-	title: string
-	body?: string
-	discogsUrl?: string
-	created: number
 }

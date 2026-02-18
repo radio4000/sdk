@@ -1,4 +1,3 @@
-import * as firebase from './firebase.js'
 import {supabase} from './create-sdk.js'
 import {readUser} from './users.js'
 import type {
@@ -23,18 +22,6 @@ export const createChannel = async ({
 	latitude,
 	longitude
 }: CreateChannelParams): Promise<SdkResult<ChannelRow>> => {
-	// Throw an error if the slug is in use by the old Firebase database.
-	const {data: isSlugTaken} = await firebase.readChannel(slug)
-	if (isSlugTaken) {
-		return {
-			data: null,
-			error: {
-				code: 'slug-exists-firebase',
-				message: 'Sorry. This channel slug is already taken by someone else.'
-			}
-		}
-	}
-
 	// If we don't have a user, try to read it from the current session.
 	let resolvedUserId = userId
 	if (!resolvedUserId) {

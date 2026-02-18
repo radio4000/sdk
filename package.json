@@ -26,9 +26,7 @@
     "pull-db-types": "bunx supabase gen types typescript --project-id oupgudlkspsmzkmeovlh --schema public > src/database.types.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.96.0",
-    "media-now": "^2.2.0",
-    "uuid": "^13.0.0"
+    "@supabase/supabase-js": "^2.96.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.2",

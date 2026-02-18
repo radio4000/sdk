@@ -119,13 +119,6 @@ npm start
   │   ├── readTrack(id) → Promise<SupabaseResponse>
   │   └── canEditTrack(track_id) → Promise<Boolean>
   │
-  ├── firebase/
-  │   ├── readChannel(slug) → Promise<{data?, error?}>
-  │   ├── readChannels({limit?}) → Promise<{data?, error?}>
-  │   ├── readTracks({channelId?, slug?}) → Promise<{data?, error?}>
-  │   ├── parseChannel(rawChannel) → v2Channel
-  │   └── parseTrack(rawTrack, channelId, channelSlug) → v2Track
-  │
   ├── search/
   │   ├── searchChannels(query, {limit?}) → Promise<{data?, error?}>
   │   ├── searchTracks(query, {limit?}) → Promise<{data?, error?}>

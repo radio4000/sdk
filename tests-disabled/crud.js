@@ -100,12 +100,6 @@ test.skip('can delete own user', async (t) => {})
 // 	t.is(data.length, 2)
 // })
 
-test.skip('channel slugs must be unique across supabase+firebase', async () => {
-	const reservedSlug = 'oskar'
-	const {error} = await sdk.channels.createChannel({name: 'Any', slug: reservedSlug})
-	expect(error.code).toBe('slug-exists-firebase')
-})
-
 test.skip('can not write to data we are not supposed to', async () => {
 	const {
 		data: {user}
