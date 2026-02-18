@@ -17,7 +17,5 @@ export type {
 	CreateChannelParams,
 	UpdateChannelParams,
 	CreateTrackParams,
-	UpdateTrackParams,
-	FirebaseChannel,
-	FirebaseTrack
+	UpdateTrackParams
 } from './types'

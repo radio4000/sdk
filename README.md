@@ -119,13 +119,6 @@ npm start
   │   ├── readTrack(id) → Promise<SupabaseResponse>
   │   └── canEditTrack(track_id) → Promise<Boolean>
   │
-  ├── firebase/
-  │   ├── readChannel(slug) → Promise<{data?, error?}>
-  │   ├── readChannels({limit?}) → Promise<{data?, error?}>
-  │   ├── readTracks({channelId?, slug?}) → Promise<{data?, error?}>
-  │   ├── parseChannel(rawChannel) → v2Channel
-  │   └── parseTrack(rawTrack, channelId, channelSlug) → v2Track
-  │
   ├── search/
   │   ├── searchChannels(query, {limit?}) → Promise<{data?, error?}>
   │   ├── searchTracks(query, {limit?}) → Promise<{data?, error?}>
@@ -161,4 +154,9 @@ Our package.json defines the `main`, `module` and `exports` fields to specify wh
 
 ## How to release a new version
 
-Create a new, tagged release via the github.com website UI. This will trigger our GitHub workflow and publish to npm.
+```
+npm version [major/minor/patch] # updates version in package.json and creates a commit + tag
+git push && git push --tags
+```
+
+This will trigger our GitHub workflow and publish to npm.
