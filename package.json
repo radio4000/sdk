@@ -26,12 +26,12 @@
     "pull-db-types": "bunx supabase gen types typescript --project-id oupgudlkspsmzkmeovlh --schema public > src/database.types.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.96.0"
+    "@supabase/supabase-js": "^2.97.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.2",
-    "@types/node": "^25.2.3",
-    "@typescript/native-preview": "^7.0.0-dev.20260217.1",
+    "@types/node": "^25.3.0",
+    "@typescript/native-preview": "^7.0.0-dev.20260220.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"
