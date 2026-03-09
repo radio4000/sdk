@@ -9,6 +9,7 @@ export type {
 	Track,
 	ChannelRow,
 	TrackRow,
+	ChannelBackup,
 	Database,
 	Broadcast,
 	BroadcastRow,

@@ -4,6 +4,7 @@ import type {
 	CreateChannelParams,
 	UpdateChannelParams,
 	Channel,
+	ChannelBackup,
 	ChannelRow,
 	Track,
 	SdkResult
@@ -150,6 +151,17 @@ export async function readChannelTracks(slug: string, limit = 5000): Promise<Sdk
 
 	if (error) return {data: null, error}
 	return {data: data as Track[], error: null}
+}
+
+/**
+ * Creates a backup of a channel and all its tracks
+ */
+export async function createChannelBackup(slug: string): Promise<SdkResult<ChannelBackup>> {
+	const {data: channel, error: channelError} = await readChannel(slug)
+	if (channelError) return {data: null, error: channelError}
+	const {data: tracks, error: tracksError} = await readChannelTracks(slug)
+	if (tracksError) return {data: null, error: tracksError}
+	return {data: {version: 2, created_at: new Date().toISOString(), channel, tracks}, error: null}
 }
 
 /**
