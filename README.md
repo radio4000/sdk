@@ -75,8 +75,11 @@ If you'd like to help out, clone the repository, install dependencies and start 
 git clone git@github.com:radio4000/sdk.git radio4000-sdk
 cd radio4000-sdk
 npm install
+npm test
 npm start
 ```
+
+The `.env` file is committed with the public Supabase anon key, so tests and builds work out of the box. To test CRUD operations, copy `.env.example` to `.env.local` and fill in `TEST_USER_EMAIL` and `TEST_USER_PASSWORD`.
 
 ## Overview
 
