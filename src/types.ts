@@ -101,6 +101,17 @@ export interface UpdateBroadcastParams {
 	decks?: BroadcastDeckState[]
 }
 
+export type ChannelBackup = {
+	version: 2
+	created_at: string
+	channel: Channel
+	tracks: Track[]
+}
+
+// ---------------------------------------------------------------------------
+// Write types - parameters for create/update operations
+// ---------------------------------------------------------------------------
+
 export interface CreateChannelParams {
 	/** Optional client-side UUID. If omitted, Postgres generates one. */
 	id?: string
