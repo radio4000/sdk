@@ -6,7 +6,8 @@ import {
 	readChannelTracks,
 	readFollowers,
 	readFollowings,
-	canEditChannel
+	canEditChannel,
+	createChannelBackup
 } from '../src/channels.js'
 
 describe('readChannel', () => {
@@ -96,6 +97,25 @@ describe('readFollowings', () => {
 		const {data, error} = await readFollowings('00000000-0000-0000-0000-000000000000')
 		expect(error).toBeNull()
 		expect(data).toEqual([])
+	})
+})
+
+describe('createChannelBackup', () => {
+	test('returns backup with correct shape', async () => {
+		const {data, error} = await createChannelBackup('ko002')
+		expect(error).toBeNull()
+		expect(data).toBeDefined()
+		expect(data.version).toBe(2)
+		expect(typeof data.created_at).toBe('string')
+		expect(data.channel).toBeDefined()
+		expect(data.channel.slug).toBe('ko002')
+		expect(Array.isArray(data.tracks)).toBe(true)
+	})
+
+	test('returns error for non-existent slug', async () => {
+		const {data, error} = await createChannelBackup('this-channel-does-not-exist-xyz123')
+		expect(error).toBeDefined()
+		expect(data).toBeNull()
 	})
 })
 
