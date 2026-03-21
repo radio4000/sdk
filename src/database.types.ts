@@ -102,6 +102,67 @@ export type Database = {
 					}
 				]
 			}
+			channel_stats: {
+				Row: {
+					channel_id: string
+					latest_track_at: string | null
+					track_count: number
+				}
+				Insert: {
+					channel_id: string
+					latest_track_at?: string | null
+					track_count?: number
+				}
+				Update: {
+					channel_id?: string
+					latest_track_at?: string | null
+					track_count?: number
+				}
+				Relationships: [
+					{
+						foreignKeyName: 'channel_stats_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: true
+						referencedRelation: 'channels'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'channel_stats_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: true
+						referencedRelation: 'channels_explore'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'channel_stats_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: true
+						referencedRelation: 'channels_with_tracks'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'channel_stats_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: true
+						referencedRelation: 'channels_with_tracks_v1'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'channel_stats_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: true
+						referencedRelation: 'orphaned_channels'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'channel_stats_channel_id_fkey'
+						columns: ['channel_id']
+						isOneToOne: true
+						referencedRelation: 'random_channels_with_tracks'
+						referencedColumns: ['id']
+					}
+				]
+			}
 			channel_track: {
 				Row: {
 					channel_id: string
@@ -359,6 +420,21 @@ export type Database = {
 				Update: {
 					created_at?: string | null
 					slug?: string
+				}
+				Relationships: []
+			}
+			tags: {
+				Row: {
+					count: number
+					tag: string
+				}
+				Insert: {
+					count?: number
+					tag: string
+				}
+				Update: {
+					count?: number
+					tag?: string
 				}
 				Relationships: []
 			}
