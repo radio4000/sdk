@@ -26,15 +26,15 @@
     "pull-db-types": "bunx supabase gen types typescript --project-id oupgudlkspsmzkmeovlh --schema public > src/database.types.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.99.0"
+    "@supabase/supabase-js": "^2.99.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.6",
-    "@types/node": "^25.4.0",
-    "@typescript/native-preview": "^7.0.0-dev.20260309.1",
+    "@biomejs/biome": "2.4.8",
+    "@types/node": "^25.5.0",
+    "@typescript/native-preview": "^7.0.0-dev.20260321.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.0"
   },
   "author": "radio4000",
   "license": "GPL-3.0-or-later",
