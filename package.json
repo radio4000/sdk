@@ -20,8 +20,8 @@
     "build": "vite build && npm run types && npm run build-website",
     "build-website": "vite build --config vite-website.config.js",
     "preview": "vite preview",
-    "check": "biome check --write && tsgo",
-    "types": "tsgo",
+    "check": "biome check --write && tsc",
+    "types": "tsc",
     "test": "vitest run",
     "pull-db-types": "bunx supabase gen types typescript --project-id oupgudlkspsmzkmeovlh --schema public > src/database.types.ts"
   },
@@ -31,8 +31,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
     "@types/node": "^26.6.5",
-    "@typescript/native-preview": "^7.0.0-dev.20260707.2",
-    "typescript": "^5.9.3",
+    "typescript": "^7.0.2",
     "vite": "^8.3.4",
     "vitest": "^5.0.5"
   },
