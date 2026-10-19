@@ -50,12 +50,19 @@ export const createChannel = async ({
 	// Stop if the first query failed.
 	if (channelError) return {data: null, error: channelError}
 
-	// Create junction table
-	const {error: userChannelError} = await supabase
+	// The database adds the owner row itself. Older databases don't, so add it if missing.
+	const {data: owner} = await supabase
 		.from('user_channel')
-		.insert({user_id: resolvedUserId, channel_id: channel.id})
-		.single()
-	if (userChannelError) return {data: null, error: userChannelError}
+		.select('user_id')
+		.match({user_id: resolvedUserId, channel_id: channel.id})
+		.maybeSingle()
+	if (!owner) {
+		const {error: userChannelError} = await supabase
+			.from('user_channel')
+			.insert({user_id: resolvedUserId, channel_id: channel.id})
+			.single()
+		if (userChannelError) return {data: null, error: userChannelError}
+	}
 
 	// Return the channel
 	return {data: channel as ChannelRow, error: null}
