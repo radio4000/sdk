@@ -23,7 +23,7 @@
     "check": "biome check --write && tsc",
     "types": "tsc",
     "test": "vitest run",
-    "pull-db-types": "bunx supabase gen types typescript --project-id oupgudlkspsmzkmeovlh --schema public > src/database.types.ts"
+    "pull-db-types": "bunx supabase gen types typescript --schema public --remote=oupgudlkspsmzkmeovlh > src/database.types.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0"

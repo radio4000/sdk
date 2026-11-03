@@ -144,7 +144,7 @@ The `.env` file is committed with the public Supabase anon key, so tests and bui
 
 ```shell
 npx supabase login
-npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID > src/database.types.ts
+npx supabase gen types typescript --remote=SUPABASE_PROJECT_ID > src/database.types.ts
 ```
 
 ### Build system
