@@ -553,6 +553,24 @@ export type Database = {
 					}
 				]
 			}
+			youtube_duration_fetch: {
+				Row: {
+					media_ids: string[]
+					request_id: number
+					requested_at: string
+				}
+				Insert: {
+					media_ids: string[]
+					request_id: number
+					requested_at?: string
+				}
+				Update: {
+					media_ids?: string[]
+					request_id?: number
+					requested_at?: string
+				}
+				Relationships: []
+			}
 		}
 		Views: {
 			channel_tracks: {
@@ -756,6 +774,7 @@ export type Database = {
 			}
 		}
 		Functions: {
+			apply_youtube_durations: {Args: never; Returns: number}
 			ban_user: {
 				Args: {ban_until?: string; target_user_id: string}
 				Returns: undefined
@@ -765,6 +784,7 @@ export type Database = {
 				Returns: undefined
 			}
 			delete_user: {Args: never; Returns: undefined}
+			fetch_youtube_durations: {Args: {p_chunks?: number}; Returns: number}
 			is_banned: {Args: never; Returns: boolean}
 			parse_tokens: {
 				Args: {content: string; prefix: string}
