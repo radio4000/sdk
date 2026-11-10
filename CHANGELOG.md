@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.9.0
+## v0.9.0 - 2026-11-10
 
 - `searchTracks` finds tracks by any mix of channels, tags, mentions and words, with paging and a true total. It takes a search string like `@ko002 #techno #acid detroit` or `{channels, tags, mentions, text}`, and returns `{tracks, count}`.
 - New `parseQuery` reads a search string into those parts.
