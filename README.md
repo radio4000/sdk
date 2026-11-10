@@ -144,7 +144,7 @@ The `.env` file is committed with the public Supabase anon key, so tests and bui
 
 `searchTracks('@ko002 #techno #acid mention:@alice detroit')` finds tracks from ko002 tagged both techno and acid, mentioning alice, and matching "detroit". `@slug` is a channel, `#tag` a tag, `mention:@slug` a mention, and the remaining words are full-text search. Every part narrows the result, and the database does the matching, paging and counting. Pass `{channels, tags, mentions, text}` instead of a string to skip parsing.
 
-Tags and mentions follow the same rule as the database trigger that fills `tracks.tags` and `tracks.mentions` (`parse_tokens` in [radio4000/supabase](https://github.com/radio4000/supabase)): `#` or `@` at the start or after anything but a letter, digit, `_` or `&`, up to the next space, trailing punctuation cut, lowercased. `extractTokens(text)` applies it in JavaScript. Change both together.
+Tags and mentions follow the same rule as the database trigger that fills `tracks.tags` and `tracks.mentions` (`parse_tokens` in [radio4000/supabase](https://github.com/radio4000/supabase)): `#` or `@` at the start or after anything but a letter, digit, `_`, `&` or `/`. A tag runs to the next space or `#`, with trailing punctuation cut; a mention is a slug (letters, digits, `_`, `-`). Lowercased. `extractTokens(text)` applies it in JavaScript, with plain string steps that mirror the SQL. Change both together.
 
 ### Generate types from database schema
 

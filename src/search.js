@@ -21,11 +21,7 @@ import {extractTokens} from './utils.js'
  */
 
 /** "ko002," → "ko002": what's left of a word once trailing punctuation is cut. */
-const trimSlug = (/** @type {string} */ word) => word.replace(/[^\p{L}\p{N}_-]+$/u, '')
-
-/** "Alice's" → "alice": the leading slug characters, as tracks.mentions stores them. */
-const mentionSlug = (/** @type {string} */ word) =>
-	(word.match(/^[\p{L}\p{N}_-]+/u)?.[0] ?? '').toLowerCase()
+const trimSlug = (/** @type {string} */ word) => word.replace(/[^\p{L}\p{Nd}_-]+$/u, '')
 
 /**
  * Read a search string: `@slug` is a channel, `#tag` a tag, `mention:@slug` a
@@ -44,12 +40,12 @@ export function parseQuery(input) {
 	/** @type {string[]} */ const words = []
 	for (const word of (input ?? '').trim().split(/\s+/).filter(Boolean)) {
 		if (/^mention:@/i.test(word)) {
-			const slug = mentionSlug(word.slice('mention:@'.length))
-			if (slug) mentions.add(slug)
+			// "@Alice's" → "alice", read the way tracks.mentions is filled.
+			for (const m of extractTokens(word.slice('mention:'.length)).mentions) mentions.add(m)
 		} else if (word.startsWith('@')) {
 			const slug = trimSlug(word.slice(1))
 			if (slug) channels.add(slug)
-		} else if (word.startsWith('#') || word.startsWith('＃')) {
+		} else if (word.startsWith('#')) {
 			for (const t of extractTokens(word).tags) tags.add(t)
 		} else {
 			words.push(word)

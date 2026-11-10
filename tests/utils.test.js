@@ -38,10 +38,23 @@ describe('extractTokens', () => {
 		])
 	})
 
-	test('a tag may follow punctuation, but not a letter, digit, _ or &', () => {
+	test('a tag may follow punctuation, but not a letter, digit, _, & or /', () => {
 		expect(tags('(#uk) "#balearic bliss" nice...#chill')).toEqual(['balearic', 'chill', 'uk'])
-		expect(tags('https://x.com/page#top a_#b &#39;')).toEqual([])
+		expect(tags('https://x.com/page#top a_#b &#39; site.com/#about app.com/#/route')).toEqual([])
 		expect(mentions('mail info@shop.com or (@alice)')).toEqual(['alice'])
+		expect(mentions('youtube.com/@ko002/videos medium.com/@alice/post-1')).toEqual([])
+	})
+
+	test('a mention is a slug: letters, digits, _ and -', () => {
+		expect(mentions("@alice's mix by @rádio-latina and @under_score_")).toEqual([
+			'alice',
+			'rádio-latina',
+			'under_score_'
+		])
+	})
+
+	test('underscores stay at the end of a tag', () => {
+		expect(tags('#_under_ #a_')).toEqual(['_under_', 'a_'])
 	})
 
 	test('a tag stops at the next # and a mention at the next @', () => {
@@ -58,8 +71,9 @@ describe('extractTokens', () => {
 		])
 	})
 
-	test('fullwidth hash counts', () => {
-		expect(tags('＃wide')).toEqual(['wide'])
+	test('emoji and astral characters keep positions right', () => {
+		const text = '🔥 #emoji🔥 @ko002'
+		expect(findTokens(text).map((t) => text.slice(t.start, t.end))).toEqual(['#emoji🔥', '@ko002'])
 	})
 
 	test('drops empty and over-long tokens, and duplicates', () => {
