@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.9.0
+
+- `searchTracks` finds tracks by any mix of channels, tags, mentions and words, with paging and a true total. It takes a search string like `@ko002 #techno #acid detroit` or `{channels, tags, mentions, text}`, and returns `{tracks, count}`.
+- New `parseQuery` reads a search string into those parts.
+- `searchChannels` returns `{channels, count}` and takes `offset`. `searchAll` is gone.
+- `extractTokens` follows the database's tag rule, returns tags without `#`, and is exported from the package. `findTokens` also gives each one's position, for rendering links.
+
 ## v0.7.4 - 2026-02-05
 
 - Replace media-url-parser with media-now, and parse v1
