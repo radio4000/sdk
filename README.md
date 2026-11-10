@@ -123,22 +123,29 @@ The `.env` file is committed with the public Supabase anon key, so tests and bui
   │   └── canEditTrack(track_id) → Promise<Boolean>
   │
   ├── search/
-  │   ├── searchChannels(query, {limit?}) → Promise<{data?, error?}>
-  │   ├── searchTracks(query, {limit?}) → Promise<{data?, error?}>
-  │   └── searchAll(query, {limit?}) → Promise<{data: {channels, tracks}, error?}>
+  │   ├── parseQuery(text) → {channels, tags, mentions, text}
+  │   ├── searchTracks(query | text, {limit?, offset?, order?, ascending?}) → Promise<{data: {tracks, count}, error?}>
+  │   ├── searchChannels(text, {limit?, offset?}) → Promise<{data: {channels, count}, error?}>
+  │   └── textSearchFilter(text) → string | null
   │
   ├── browse/
   │   ├── query({page?, limit?, table?, select?, orderBy?, orderConfig?, filters?}) → Promise
   │   ├── supabaseOperators: Array<string>
   │   └── supabaseOperatorsTable: Object
   │
-  ├── utils/
-  │   └── extractTokens(str) → {mentions: string[], tags: string[]}
+  ├── extractTokens(text) → {tags: string[], mentions: string[]}
+  ├── findTokens(text) → [{type, value, start, end}]
   │
   └── supabase (Supabase client instance)
 
   Almost every method returns the {data, error} format
 ```
+
+### Search
+
+`searchTracks('@ko002 #techno #acid mention:@alice detroit')` finds tracks from ko002 tagged both techno and acid, mentioning alice, and matching "detroit". `@slug` is a channel, `#tag` a tag, `mention:@slug` a mention, and the remaining words are full-text search. Every part narrows the result, and the database does the matching, paging and counting. Pass `{channels, tags, mentions, text}` instead of a string to skip parsing.
+
+Tags and mentions follow the same rule as the database trigger that fills `tracks.tags` and `tracks.mentions` (`parse_tokens` in [radio4000/supabase](https://github.com/radio4000/supabase)): `#` or `@` at the start or after anything but a letter, digit, `_` or `&`, up to the next space, trailing punctuation cut, lowercased. `extractTokens(text)` applies it in JavaScript. Change both together.
 
 ### Generate types from database schema
 
