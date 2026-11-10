@@ -1,6 +1,6 @@
 import {describe, expect, test} from 'vitest'
 import '../src/main.js' // Initialize supabase client
-import {parseQuery, searchChannels, searchTracks, textSearchFilter} from '../src/search.js'
+import {parseQuery, searchChannels, searchTracks} from '../src/search.js'
 
 describe('parseQuery', () => {
 	test('splits channels, tags, mentions and text', () => {
@@ -16,8 +16,15 @@ describe('parseQuery', () => {
 		expect(parseQuery('#jazz #dub #ambient').tags).toEqual(['jazz', 'dub', 'ambient'])
 	})
 
-	test('keeps channel slugs as typed', () => {
-		expect(parseQuery('@KO002 @rádio-latina').channels).toEqual(['KO002', 'rádio-latina'])
+	test('keeps channel slugs as typed, minus trailing punctuation', () => {
+		expect(parseQuery('@KO002, @baladas-80-1ToO').channels).toEqual(['KO002', 'baladas-80-1ToO'])
+	})
+
+	test('a mention is its leading slug, lowercased', () => {
+		expect(parseQuery("mention:@Alice's mention:@rádio-latina!").mentions).toEqual([
+			'alice',
+			'rádio-latina'
+		])
 	})
 
 	test('drops empty and duplicate tokens', () => {
@@ -31,21 +38,6 @@ describe('parseQuery', () => {
 
 	test('empty input', () => {
 		expect(parseQuery('')).toEqual({channels: [], tags: [], mentions: [], text: ''})
-	})
-})
-
-describe('textSearchFilter', () => {
-	test('adds prefix matching to plain words', () => {
-		expect(textSearchFilter('miles dav')).toBe('fts.wfts.miles dav,fts.fts.miles:* & dav:*')
-	})
-
-	test('websearch syntax skips prefix matching', () => {
-		expect(textSearchFilter('jazz or funk')).toBe('fts.wfts.jazz or funk')
-	})
-
-	test('strips characters that break the filter', () => {
-		expect(textSearchFilter('a,b (c)')).toBe('fts.wfts.a b c,fts.fts.a:* & b:* & c:*')
-		expect(textSearchFilter(',()')).toBeNull()
 	})
 })
 
@@ -79,6 +71,18 @@ describe('searchTracks', () => {
 	test('text alone, with prefix matching', async () => {
 		const {data, error} = await searchTracks('aphe', {limit: 3})
 		expect(error).toBeNull()
+		expect(data.count).toBeGreaterThan(0)
+	})
+
+	test('websearch syntax and odd characters', async () => {
+		for (const q of ['jazz or funk', 'electronic -techno', '"miles davis"', 'a,b (c)', ',()']) {
+			const {error} = await searchTracks(q, {limit: 1})
+			expect(error, q).toBeNull()
+		}
+	})
+
+	test('slugs with capitals match in any case', async () => {
+		const {data} = await searchTracks('@BALADAS-80-1too', {limit: 1})
 		expect(data.count).toBeGreaterThan(0)
 	})
 

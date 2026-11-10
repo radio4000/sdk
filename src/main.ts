@@ -6,7 +6,7 @@ export {sdk, SUPABASE_KEY, SUPABASE_URL}
 // Pure helpers, usable without a client
 export {extractTokens, findTokens} from './utils.js'
 export type {Token} from './utils.js'
-export {parseQuery, textSearchFilter} from './search.js'
+export {parseQuery} from './search.js'
 export type {TrackQuery} from './search.js'
 
 // Types

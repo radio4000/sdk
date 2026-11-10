@@ -125,8 +125,7 @@ The `.env` file is committed with the public Supabase anon key, so tests and bui
   ├── search/
   │   ├── parseQuery(text) → {channels, tags, mentions, text}
   │   ├── searchTracks(query | text, {limit?, offset?, order?, ascending?}) → Promise<{data: {tracks, count}, error?}>
-  │   ├── searchChannels(text, {limit?, offset?}) → Promise<{data: {channels, count}, error?}>
-  │   └── textSearchFilter(text) → string | null
+  │   └── searchChannels(text, {limit?, offset?}) → Promise<{data: {channels, count}, error?}>
   │
   ├── browse/
   │   ├── query({page?, limit?, table?, select?, orderBy?, orderConfig?, filters?}) → Promise
